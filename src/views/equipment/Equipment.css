@@ -1,0 +1,9 @@
+.nav-link {
+  font-size: 14px;
+}
+.modal-dialog-scrollable .modal-body {
+  height: 77vh;
+}
+label-sm {
+  font-size: smaller;
+}

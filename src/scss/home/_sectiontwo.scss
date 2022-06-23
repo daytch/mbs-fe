@@ -1,0 +1,141 @@
+// Section 2
+.section-two {
+  background-color: $kuning;
+  height: 712px;
+}
+@media (min-width: 1025px) {
+  .container-putih {
+    background-color: $putih;
+    width: 95vw;
+    height: 53%;
+    position: absolute;
+    right: 0px;
+    z-index: 1;
+    margin-top: -5rem;
+  }
+  .text-container-hitam {
+    color: $putih;
+    margin: 2.3rem 6rem 2rem 6rem;
+
+    font-family: $jost;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 30px;
+    letter-spacing: 0px;
+  }
+}
+@media (min-width: 801px) and (max-width: 1366px) {
+  .container-putih {
+    background-color: $putih;
+    width: 95vw;
+    height: 68vh;
+    position: absolute;
+    right: 0px;
+    z-index: 1;
+  }
+  .wrapper-desc {
+    margin: -1rem 0 0 -1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .container-putih {
+    background-color: #fff;
+    width: 95vw;
+    height: 78vh;
+    position: absolute;
+    right: 0px;
+    z-index: 1;
+  }
+  .wrapper-desc {
+    margin: -1rem 0 0 -1rem;
+  }
+}
+.wrapper-desc {
+  margin: 1rem 0 0 -1rem;
+}
+.container-hitam {
+  background-color: $hitam;
+  width: 65vw;
+  height: 15vh;
+  position: absolute;
+  z-index: 2;
+  margin-left: 15rem;
+  margin-top: -16.5rem;
+}
+.text-container-hitam {
+  color: $putih;
+  margin: 2rem 6rem 2rem 6rem;
+
+  font-family: $jost;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 30px;
+  letter-spacing: 0px;
+}
+.line-left {
+  border-bottom: 3px solid $hitam;
+  z-index: 2;
+  margin: 5rem 57vw 2rem 8vw;
+}
+.title-container {
+  margin: 1.5rem 0 0 9.3rem;
+  display: flex;
+  justify-content: space-between;
+}
+.solution-title {
+  font-family: $jost;
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 34px;
+  letter-spacing: 0px;
+  text-align: left;
+}
+
+.wrapper-carousel {
+  z-index: 4;
+}
+.carousel {
+  margin: 20vh 0 0 1px;
+  position: absolute;
+}
+.carousel-item {
+  z-index: 4;
+}
+.desc-text {
+  font-family: $jost;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 33px;
+  letter-spacing: 0px;
+  text-align: left;
+
+  margin-left: 5rem;
+  padding: 5.5rem;
+}
+.count {
+  font-family: $jost;
+  font-size: 55px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 68px;
+  letter-spacing: 0px;
+  text-align: left;
+}
+.count-desc {
+  font-family: $jost;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 30px;
+  letter-spacing: 0px;
+  text-align: left;
+  margin: -1.8rem 0.5rem 0 0.5rem;
+}
+.card {
+  width: 15rem !important;
+}

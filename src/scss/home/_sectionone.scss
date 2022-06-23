@@ -1,0 +1,103 @@
+body {
+  margin: 0;
+  overflow-x: hidden;
+}
+
+.section-one {
+  background-color: $abu;
+  height: 712px;
+  background-image: url('./../../../src/assets/images/bg-01.png');
+  background-repeat: no-repeat;
+  background-position: bottom -35vh right -8vw;
+  background-size: 60%;
+  right: -20px;
+}
+
+.header {
+  background-color: $abu;
+  padding: 0.7rem;
+  margin: 0 4.3rem 0 4.3rem;
+  border: none;
+}
+
+li {
+  font-family: $jost;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: 0px;
+  text-align: left;
+  list-style: none;
+  display: inline;
+  margin: 0 1rem 0 1rem;
+}
+
+li a {
+  text-decoration: none;
+  color: $hitam;
+}
+
+.bt-demo {
+  background-color: $kuning;
+  width: 166px;
+  height: 44px;
+  border: none;
+  margin-left: 1rem;
+
+  font-family: $jost;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 20px;
+  letter-spacing: 0px;
+}
+
+.bt-signin {
+  margin-right: 1rem;
+  background-color: $abu;
+  border-color: $hitam-tua;
+  border-width: 1px;
+  padding: 0.4rem;
+  width: 109px;
+  height: 44px;
+
+  font-family: $jost;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 20px;
+  letter-spacing: 0px;
+}
+
+.wrapper-text-header {
+  margin: 10vh 4.3rem 15vh 4.3rem;
+  padding: 0.7rem;
+}
+.text-header {
+  font-family: $jost;
+  font-size: 44px;
+  font-style: normal;
+  font-weight: 800;
+  line-height: 56px;
+  letter-spacing: 0px;
+  text-align: left;
+  color: $hitam;
+  width: 40vw;
+}
+.bt-demo-left {
+  background-color: $kuning;
+  border: none;
+  height: 44px;
+  width: 166px;
+  margin-top: 1.5rem;
+  border-radius: 0px;
+  padding: 12px, 32px, 12px, 32px;
+
+  font-family: $jost;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 20px;
+  letter-spacing: 0px;
+}

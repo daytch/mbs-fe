@@ -1,0 +1,68 @@
+.section-five {
+  height: 383px;
+  background-color: $hitam;
+  z-index: 2;
+}
+
+.line-left-s5 {
+  border-bottom: 3px solid white;
+  z-index: 2;
+  margin: 0 57vw 2rem 16rem;
+  padding-top: 4rem;
+}
+
+.solution-title-s5 {
+  font-family: $jost;
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 34px;
+  letter-spacing: 0px;
+  text-align: left;
+  color: white;
+}
+.title-container-s5 {
+  margin: 1.5rem 0 0 16rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.wrapper-setup {
+  display: flex;
+  justify-content: space-between;
+  padding: 3rem;
+  margin-left: 13rem;
+  margin-top: -2rem;
+}
+.title-card-s5 {
+  font-family: $jost;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 23px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: white;
+}
+.footer-card-s5 {
+  width: 8vw;
+}
+.badge-s5 {
+  background-color: $biru;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  position: absolute;
+  margin-top: -5rem;
+}
+.badge-font {
+  font-family: $jost;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 28px;
+  letter-spacing: 0px;
+  text-align: center;
+  margin-left: 8px;
+  color: $putih;
+}

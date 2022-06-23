@@ -1,0 +1,50 @@
+.section-eight {
+  height: 556px !important;
+  width: 100%;
+}
+.wrapper-s8 {
+  margin: 16rem 0 1rem 0;
+  width: 100%;
+}
+.product-s8 {
+  word-break: break-all;
+}
+.wrapper-s8 p {
+  font-family: $jost;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+.wrapper-s8 a {
+  font-family: $jost;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 30px;
+  letter-spacing: 0em;
+  text-align: left;
+  word-break: break-all;
+}
+
+footer {
+  height: 40px;
+  background-color: $hitam;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+footer center {
+  font-family: $jost;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: 0px;
+  text-align: center;
+  color: $putih;
+  vertical-align: middle;
+}

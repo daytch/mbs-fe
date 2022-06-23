@@ -1,0 +1,66 @@
+.login-card {
+  display: inline-block;
+  cursor: pointer;
+  border-radius: 20px;
+}
+
+.login-header {
+  text-align: center;
+}
+
+.login-title {
+  font-weight: 900;
+  text-align: center;
+  color: black;
+}
+.login-sub-title {
+  color: #5b6770;
+  text-align: center;
+  padding-bottom: 5%;
+}
+
+hr.solid {
+  border-top: 1px solid #bbb;
+}
+
+p {
+  color: black;
+}
+
+.login-font {
+  font-family: Jost;
+  src: url(https://fonts.google.com/specimen/Jost) format('truetype');
+}
+
+.login-forgot-password {
+  text-align: right;
+  color: #5b6770;
+  padding-bottom: 5%;
+}
+
+.login-button-login {
+  background-color: #fff500;
+  border: none;
+  color: black;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+  margin: 4px 2px;
+  border-radius: 16px;
+  width: 100%;
+  font-weight: bold;
+}
+.modal-login {
+  border-radius: 20px !important;
+}
+
+.btn-close-login {
+  background-color: white;
+  top: 8px;
+  border: none;
+  right: 8px;
+  position: absolute;
+  z-index: 2;
+}
