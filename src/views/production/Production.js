@@ -21,7 +21,7 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilPencil, cilHistory, cilSave, cilWarning /*cilTrash*/ } from '@coreui/icons'
-import TabelCostIndices from './TabelCostIndices'
+import TableProdcutionFactor from './TableProdcutionFactor'
 import TableProductionSchedule from './TableProdcutionSchedule'
 import './cost.css'
 import { useDispatch, useSelector } from 'react-redux'
@@ -32,6 +32,8 @@ import {
   getProductionSchedule,
   postProductionSchedule,
   putProductionSchedule,
+  postProductionFactor,
+  putProductionFactor,
 } from '../../redux/actions'
 import { isEmptyNullOrUndefined } from 'src/functions'
 import Swal from 'sweetalert2'
@@ -91,8 +93,8 @@ const Production = () => {
     let arrCostIndices = {}
     let newData = []
     let editData = []
-debugger
-    existingData[0].costIndexValues.forEach((element) => {})
+
+    existingData[0].productScheduleValueDtos.forEach((element) => {})
     for (let index = 0; index < periods.length; index++) {
       let productScheduleId = document.getElementById('indexname' + idx)
         ? document.getElementById('indexname' + idx).getAttribute('data-id')
@@ -109,7 +111,7 @@ debugger
       if (productScheduleValueId) {
         // Edit data
         editData.push({
-          productScheduleValueId: productScheduleValueId,
+          productScheduleValueId: Number(productScheduleValueId),
           periodId: periods[index].periodId,
           productScheduleId: Number(productScheduleId),
           positionN: periods[index].positionN,
@@ -142,10 +144,12 @@ debugger
     let dataProductionNew = [],
       dataProductionEdit = []
     let isError = false
+
     while (document.getElementById('indexname' + idx + '')) {
       let ProductID = document.getElementById('indexname' + idx).getAttribute('data-id')
       let ProductName = document.getElementById('indexname' + idx).value
-      let datas = getProductionScheduleData(idx, dataPeriods, dataSchedule)
+      let unitz = document.getElementById('units' + idx).value
+      let datas = getProductionScheduleData(idx, dataPeriods, dataSchedulePure)
 
       let dataPeriodNotEmpty =
         datas.newData.length > 0
@@ -158,16 +162,16 @@ debugger
           dataProductionEdit.push({
             productId: ProductID,
             productName: ProductName,
-            units: 'string',
-            projectRepresentationId: projectRepresentation.projectRepresentationId,
+            units: unitz,
+            projectRepresentationId: Number(projectRepresentation.projectRepresentationId),
             productScheduleValueDtos: datas.editData,
           })
         } else {
           dataProductionNew.push({
             productId: ProductID,
             productName: ProductName,
-            units: 'string',
-            projectRepresentationId: projectRepresentation.projectRepresentationId,
+            units: unitz,
+            projectRepresentationId: Number(projectRepresentation.projectRepresentationId),
             productScheduleValueDtos: datas.newData,
           })
         }
@@ -188,37 +192,111 @@ debugger
     if (!isError && dataProductionEdit.length > 0) {
       dispatch(putProductionSchedule(dataProductionEdit))
     }
-    // const data = []
-    // listDataProductionSchedule.forEach((item) => {
-    //   let child = []
-    //   for (const key in item) {
-    //     if (key.toLowerCase().includes('p0')) {
-    //       let period = projectRepresentation.periods.find((x) => x.periodName === key)
-
-    //       if (!isEmptyNullOrUndefined(item[key])) {
-    //         child.push({
-    //           productScheduleValueId: 0,
-    //           periodId: period.periodId,
-    //           productScheduleId: 0,
-    //           positionN: period.positionN,
-    //           productScheduleValue: Number(item[key]),
-    //         })
-    //       }
-    //     }
-    //     console.log(`${key}: ${item[key]}`)
-    //   }
-    //   data.push({
-    //     // productId: 0,
-    //     productName: item.indexname,
-    //     units: '',
-    //     projectRepresentationId: projectRepresentation.projectRepresentationId,
-    //     productScheduleValueDtos: child,
-    //   })
-    // })
-    // dispatch(postProductionSchedule(data[0]))
   }
 
-  const getColumns = () => {
+  const getProductionFactorData = (idx, periods, existingData) => {
+    let arrCostIndices = {}
+    let newData = []
+    let editData = []
+
+    existingData[0].productFactorValueDtos.forEach((element) => {})
+    for (let index = 0; index < periods.length; index++) {
+      let productFactorId = document.getElementById('indexname' + idx)
+        ? document.getElementById('indexname' + idx).getAttribute('data-id')
+        : 0
+      let id = periods[index].periodName.replace(' ', '_') + idx
+
+      let productFactorValueId = document.getElementById(id)
+        ? document.getElementById(id).getAttribute('data-valueid')
+        : 0
+      let productFactorValue = document.getElementById(id) ? document.getElementById(id).value : ''
+
+      if (productFactorValueId) {
+        // Edit data
+        editData.push({
+          productFactorValueId: Number(productFactorValueId),
+          periodId: periods[index].periodId,
+          productFactorId: Number(productFactorId),
+          positionN: periods[index].positionN,
+          productFactorValue: !isEmptyNullOrUndefined(productFactorValue)
+            ? Number(productFactorValue)
+            : null,
+        })
+      } else {
+        // New data
+        newData.push({
+          // productScheduleValueId: productScheduleValueId,
+          periodId: periods[index].periodId,
+          productFactorId: Number(productFactorId),
+          positionN: periods[index].positionN,
+          productFactorValue: !isEmptyNullOrUndefined(productFactorValue)
+            ? Number(productFactorValue)
+            : null,
+        })
+      }
+    }
+
+    arrCostIndices['newData'] = newData
+    arrCostIndices['editData'] = editData
+    return arrCostIndices
+  }
+  const submitProductionFactor = () => {
+    let idx = 0
+    let dataRepresentation = projectRepresentation
+    let dataPeriods = dataRepresentation.periods
+    let dataProductionNew = [],
+      dataProductionEdit = []
+    let isError = false
+
+    while (document.getElementById('indexname' + idx + '')) {
+      let ProductID = document.getElementById('indexname' + idx).getAttribute('data-id')
+      let ProductName = document.getElementById('indexname' + idx).value
+      let unitz = document.getElementById('units' + idx).value
+      let datas = getProductionFactorData(idx, dataPeriods, dataFactorPure)
+
+      let dataPeriodNotEmpty =
+        datas.newData.length > 0
+          ? datas.newData.filter((x) => !isEmptyNullOrUndefined(x.productScheduleValue))
+          : datas.editData.filter((x) => !isEmptyNullOrUndefined(x.productScheduleValue))
+
+      if (!isEmptyNullOrUndefined(ProductName)) {
+        if (ProductID) {
+          // Edit Data
+          dataProductionEdit.push({
+            productId: ProductID,
+            productName: ProductName,
+            units: unitz,
+            projectRepresentationId: Number(projectRepresentation.projectRepresentationId),
+            productFactorValueDtos: datas.editData,
+          })
+        } else {
+          dataProductionNew.push({
+            productId: ProductID,
+            productName: ProductName,
+            units: unitz,
+            projectRepresentationId: Number(projectRepresentation.projectRepresentationId),
+            productFactorValueDtos: datas.newData,
+          })
+        }
+      } else if (dataPeriodNotEmpty.length > 0 && isEmptyNullOrUndefined(ProductID)) {
+        isError = true
+        Swal.fire({
+          title: 'Empty Validation',
+          text: 'You must enter value in the Cost Index Name field.',
+          icon: 'warning',
+        })
+      }
+      idx++
+    }
+
+    if (!isError && dataProductionNew.length > 0) {
+      dispatch(postProductionFactor(dataProductionNew))
+    }
+    if (!isError && dataProductionEdit.length > 0) {
+      dispatch(putProductionFactor(dataProductionEdit))
+    }
+  }
+  const getColumns = (tipe) => {
     let dataRepresentation = projectRepresentation
     dispatch(getProjectCountry())
 
@@ -241,11 +319,19 @@ debugger
         )
         for (var i in dataPeriods) {
           if (dataPeriods.hasOwnProperty(i)) {
-            arrData.push({
-              Header: dataPeriods[i].periodName,
-              accessor: dataPeriods[i].periodName,
-              align: 'center',
-            })
+            if (tipe === 'schedule') {
+              arrData.push({
+                Header: dataPeriods[i].periodName,
+                accessor: dataPeriods[i].periodName + '_',
+                align: 'center',
+              })
+            } else {
+              arrData.push({
+                Header: dataPeriods[i].periodName,
+                accessor: dataPeriods[i].periodName,
+                align: 'center',
+              })
+            }
           }
         }
       }
@@ -255,50 +341,6 @@ debugger
       return null
     }
   }
-
-  // const getCostIndexValue = (idx, periods, existingData) => {
-  //   let arrCostIndices = {}
-  //   let newData = []
-  //   let editData = []
-
-  //   existingData[0].costIndexValues.forEach((element) => {})
-  //   for (let index = 0; index < periods.length; index++) {
-  //     let CostIndexId = document.getElementById('indexname' + idx)
-  //       ? document.getElementById('indexname' + idx).getAttribute('data-id')
-  //       : 0
-  //     let id = periods[index].periodName.replace(' ', '_') + idx
-
-  //     let CostIndexValueId = document.getElementById(id)
-  //       ? document.getElementById(id).getAttribute('data-valueid')
-  //       : 0
-  //     let costIndexValue = document.getElementById(id) ? document.getElementById(id).value : ''
-
-  //     if (CostIndexValueId) {
-  //       // Edit data
-
-  //       editData.push({
-  //         ccFleetOHPeriodID: CostIndexValueId === 'undefined' ? null : Number(CostIndexValueId),
-  //         periodId: periods[index].periodId,
-  //         ccFleetOHID: Number(CostIndexId),
-  //         positionN: periods[index].positionN,
-  //         value: costIndexValue,
-  //       })
-  //     } else {
-  //       // New data
-  //       newData.push({
-  //         periodId: periods[index].periodId,
-  //         positionN: periods[index].positionN,
-  //         ccFleetOHID: Number(CostIndexId),
-  //         value: costIndexValue,
-  //         ccFleetOHPeriodID: 0,
-  //       })
-  //     }
-  //   }
-
-  //   arrCostIndices['newData'] = newData
-  //   arrCostIndices['editData'] = editData
-  //   return arrCostIndices
-  // }
 
   const onClickReset = () => {
     window.location.reload()
@@ -343,60 +385,8 @@ debugger
     return flatObject
   }
 
-  const eqOHScheduleDataTable = useSelector((state) => {
-    if (state.EquipmentScheduleOH.data) {
-      let transformData = []
-      let currentData = state.EquipmentScheduleOH.data
-
-      for (let index = 0; index < currentData.length; index++) {
-        if (currentData[index].equipmentSchedulePeriodDtos.length > 0) {
-          let periods = projectRepresentation.periods
-
-          if (periods) {
-            var objectPeriod = periods.reduce(
-              (obj, item) => ((obj[item.periodName] = item.periodId), obj),
-              {},
-            )
-
-            let mergedArr = merge(periods, currentData[index].equipmentSchedulePeriodDtos)
-            let total = 0
-            localStorage.removeItem('totalArrayPerioScheduleOH')
-            mergedArr = mergedArr.map((item) => {
-              total++
-              return {
-                periodId: item.periodId,
-                periodName: item.periodName,
-                positionN: item.positionN,
-                costIndexId: currentData[index].ccFleetOHID,
-                costIndexName: currentData[index].fleetName,
-                costIndexValueId: item.ccFleetOHPeriodID,
-                costIndexValue: item.value,
-              }
-            })
-            localStorage.setItem('totalArrayPeriodScheduleOH', total)
-
-            let fixData = returnFlattenObject(mergedArr)
-
-            objectPeriod['indexname'] = currentData[index].fleetName
-            objectPeriod['costIndexId'] = currentData[index].ccFleetOHID
-            transformData.push(fixData)
-          } else {
-            if (projectRepresentation.periods.length > 0) {
-              let objData = { indexname: currentData[index].fleetName }
-              objData[projectRepresentation.periods[0].periodName] = null
-              objData['costIndexId'] = currentData[index].ccFleetOHID
-              // objData['periodId'] = 0
-              objData['positionN'] = index
-              objData['costIndexValueId'] = 0
-              transformData.push(objData)
-            }
-          }
-        }
-        return transformData
-      }
-    }
-  })
   let arrDetail = []
+  const dataSchedulePure = useSelector((state) => state.ProductionSchedule.data)
   const dataSchedule = useSelector((state) => {
     if (state.ProductionSchedule.data.length > 0) {
       let trueDataCostIndices = []
@@ -468,8 +458,79 @@ debugger
       return trueDataCostIndices
     }
   })
-  // const dataFactor = useSelector((state) => state.ProductionFactor.data)
+  const dataFactorPure = useSelector((state) => state.ProductionFactor.data)
+  const dataFactor = useSelector((state) => {
+    if (state.ProductionFactor.data.length > 0) {
+      let trueDataCostIndices = []
+      let datProdFactor = state.ProductionFactor.data
 
+      for (let index = 0; index < datProdFactor.length; index++) {
+        if (datProdFactor[index].productScheduleValueDtos.length > 0) {
+          let periods = projectRepresentation.periods
+
+          if (periods) {
+            var objectPeriod = periods.reduce(
+              (obj, item) => ((obj[item.periodName] = item.periodId), obj),
+              {},
+            )
+            let mergedArr = merge(periods, datProdFactor[index].productScheduleValueDtos)
+
+            let total = 0
+            localStorage.removeItem('totalArrayPeriodProdSchedule')
+            mergedArr = mergedArr.map((item) => {
+              total++
+              let detail = {
+                productScheduleValueId: item.productScheduleValueId,
+                periodId: item.periodId,
+                productScheduleId: datProdFactor[index].productId,
+                positionN: item.positionN,
+                productScheduleValue: item.productScheduleValue,
+              }
+              if (
+                !arrDetail.find((x) => x.periodId === item.periodId) &&
+                !isEmptyNullOrUndefined(detail.productScheduleValueId) &&
+                !isEmptyNullOrUndefined(detail.productScheduleValue)
+              ) {
+                arrDetail.push(detail)
+              }
+              return {
+                periodId: item.periodId,
+                periodName: item.periodName,
+                positionN: item.positionN,
+                productId: datProdFactor[index].productId,
+                productName: datProdFactor[index].productName,
+                units: datProdFactor[index].units,
+                productScheduleValue: item.productScheduleValue,
+                productScheduleValueId: item.productScheduleValueId,
+              }
+            })
+            localStorage.setItem('totalArrayPeriodProdSchedule', total)
+
+            let fixData = returnFlattenObject(mergedArr)
+
+            objectPeriod['indexname'] = datProdFactor[index].productName
+            objectPeriod['productId'] = datProdFactor[index].productId
+            objectPeriod['units'] = datProdFactor[index].units
+
+            trueDataCostIndices.push(fixData)
+          }
+        } else {
+          if (projectRepresentation.periods.length > 0) {
+            let objData = { indexname: datProdFactor[index].costIndexName }
+            objData[projectRepresentation.periods[0].periodName] = null
+            objData['costIndexId'] = datProdFactor[index].costIndexId
+            // objData['periodId'] = 0
+            objData['positionN'] = index
+            objData['costIndexValueId'] = 0
+            trueDataCostIndices.push(objData)
+          }
+        }
+      }
+
+      return trueDataCostIndices
+    }
+  })
+  
   return (
     <CRow>
       <Spinner loading={loading} />
@@ -497,15 +558,15 @@ debugger
               <CTabPane role="tabpanel" aria-labelledby="fleet-data-tab" visible={activeKey === 1}>
                 <CCard>
                   <CCardBody>
-                    {dataSchedule && projectRepresentation.periods ? (
+                    {projectRepresentation.periods ? (
                       <TableProductionSchedule
                         dataSchedule={dataSchedule}
+                        key={dataSchedule}
                         arrPeriodData={arrPeriodData}
                         isEdit={isEdit}
                         submitProductionSchedule={submitProductionSchedule}
                       />
                     ) : (
-                      //
                       <CAlert color="warning" className="d-flex align-items-center">
                         <CIcon
                           icon={cilWarning}
@@ -556,12 +617,12 @@ debugger
               >
                 <CCard>
                   <CCardBody>
-                    {eqOHScheduleDataTable && projectRepresentation.periods ? (
-                      <TabelCostIndices
-                        key={eqOHScheduleDataTable}
+                    {projectRepresentation.periods ? (
+                      <TableProdcutionFactor
+                        key={dataFactor}
                         arrPeriodData={arrPeriodData}
                         isEdit={isEdit}
-                        dataCostIndices={eqOHScheduleDataTable}
+                        dataFactor={dataFactor}
                         setDeletedId={setDeletedId}
                         deletedId={deletedId}
                       />
@@ -590,7 +651,7 @@ debugger
                       size="sm"
                       color="primary"
                       variant="outline"
-                      // onClick={onClickSave}
+                      onClick={submitProductionFactor}
                       className="mx-1"
                     >
                       <CIcon icon={cilSave} />

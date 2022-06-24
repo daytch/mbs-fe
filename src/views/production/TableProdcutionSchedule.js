@@ -2,7 +2,7 @@
 import React, { useMemo, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { useTable, usePagination } from 'react-table'
-import makeData from './makeData'
+import makeData from './makeDataSchedule'
 import { CButton, CFormSelect } from '@coreui/react'
 import 'react-datepicker/dist/react-datepicker.css'
 import { isEmptyNullOrUndefined } from 'src/functions'
@@ -64,7 +64,6 @@ const EditableCell = ({
   const onChange = (e) => {
     setValue(e.target.value)
     setValueid(e.target.getAttribute('data-valueid'))
-    debugger
   }
   const onBlur = () => {
     updateMyData(index, id, value)
@@ -73,6 +72,7 @@ const EditableCell = ({
   useEffect(() => {
     setValue(initialValue)
   }, [initialValue])
+
   if (id.indexOf('units') !== -1) {
     return (
       <input
@@ -85,7 +85,8 @@ const EditableCell = ({
       />
     )
   } else if (id.indexOf('indexname') !== -1) {
-    if (!isEmptyNullOrUndefined(value) && value.indexOf('~') !== -1) {
+    if (!isEmptyNullOrUndefined(value)) {
+      //} && value.indexOf('~') !== -1) {
       return (
         <input
           disabled={!isEdit}
@@ -131,6 +132,17 @@ const EditableCell = ({
         onBlur={onBlur}
       />
     )
+  } else {
+    return (
+      <input
+        disabled={!isEdit}
+        value={value || ''}
+        data-valueid={valueid}
+        id={id.replace(' ', '_') + index}
+        onChange={onChange}
+        onBlur={onBlur}
+      />
+    )
   }
 }
 
@@ -138,16 +150,7 @@ const defaultColumn = {
   Cell: EditableCell,
 }
 
-function Table({
-  updateDataProdcutionSchedule,
-  isEdit,
-  columns,
-  data,
-  updateMyData,
-  skipPageReset,
-  setDeletedId,
-  deletedId,
-}) {
+function Table({ isEdit, columns, data, updateMyData, skipPageReset, setDeletedId, deletedId }) {
   const {
     getTableProps,
     getTableBodyProps,
@@ -165,7 +168,6 @@ function Table({
     state: { pageIndex, pageSize },
   } = useTable(
     {
-      updateDataProdcutionSchedule,
       isEdit,
       columns,
       data,
@@ -301,9 +303,7 @@ function Table({
 const TableProductionSchedule = (props) => {
   const columns = useMemo(() => props.arrPeriodData, [props.arrPeriodData])
   const [data, setData] = useState(() =>
-    props.dataSchedule.length > 0
-      ? makeData(10 /*props.dataSchedule.length*/, props.dataSchedule)
-      : makeData(10, []),
+    props.dataSchedule?.length > 0 ? makeData(10, props.dataSchedule) : makeData(10, []),
   )
   const [skipPageReset, setSkipPageReset] = useState(false)
 

@@ -2,10 +2,11 @@
 import React, { useMemo, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { useTable, usePagination } from 'react-table'
-import makeData from './makeData'
+import makeData from './makeDataFactor'
 import { CButton, CFormSelect } from '@coreui/react'
 import 'react-datepicker/dist/react-datepicker.css'
 import { isEmptyNullOrUndefined } from 'src/functions'
+
 const Styles = styled.div`
   padding: 1rem;
 
@@ -49,7 +50,6 @@ const Styles = styled.div`
     text-align: center;
   }
 `
-
 const EditableCell = ({
   isEdit,
   value: initialValue,
@@ -73,8 +73,20 @@ const EditableCell = ({
     setValue(initialValue)
   }, [initialValue])
 
-  if (id.indexOf('indexname') !== -1) {
-    if (!isEmptyNullOrUndefined(value) && value.indexOf('~') !== -1) {
+  if (id.indexOf('units') !== -1) {
+    return (
+      <input
+        disabled={!isEdit}
+        value={value || ''}
+        data-valueid={valueid}
+        id={id.replace(' ', '_') + index}
+        onChange={onChange}
+        onBlur={onBlur}
+      />
+    )
+  } else if (id.indexOf('indexname') !== -1) {
+    if (!isEmptyNullOrUndefined(value)) {
+      //} && value.indexOf('~') !== -1) {
       return (
         <input
           disabled={!isEdit}
@@ -96,7 +108,18 @@ const EditableCell = ({
         />
       )
     }
-  } else if (value.indexOf('~') > -1) {
+  } else if (isEmptyNullOrUndefined(value)) {
+    return (
+      <input
+        disabled={!isEdit}
+        value={value || ''}
+        data-valueid={valueid}
+        id={id.replace(' ', '_') + index}
+        onChange={onChange}
+        onBlur={onBlur}
+      />
+    )
+  } else if (value && value.indexOf('~') > -1) {
     return (
       <input
         disabled={!isEdit}
@@ -122,18 +145,6 @@ const EditableCell = ({
     )
   }
 }
-
-// eslint-disable-next-line react/display-name
-// const IndeterminateCheckbox = React.forwardRef(({ indeterminate, ...rest }, ref) => {
-//   const defaultRef = React.useRef()
-//   const resolvedRef = ref || defaultRef
-
-//   React.useEffect(() => {
-//     resolvedRef.current.indeterminate = indeterminate
-//   }, [resolvedRef, indeterminate])
-
-//   return <input type="checkbox" ref={resolvedRef} {...rest} />
-// })
 
 const defaultColumn = {
   Cell: EditableCell,
@@ -163,42 +174,10 @@ function Table({ isEdit, columns, data, updateMyData, skipPageReset, setDeletedI
       setDeletedId,
       deletedId,
       defaultColumn,
-      // use the skipPageReset option to disable page resetting temporarily
       autoResetPage: !skipPageReset,
-      // updateMyData isn't part of the API, but
-      // anything we put into these options will
-      // automatically be available on the instance.
-      // That way we can call this function from our
-      // cell renderer!
       updateMyData,
     },
     usePagination,
-    // useRowSelect,
-    // (hooks) => {
-    //   hooks.visibleColumns.push((columns) => [
-    //     // Let's make a column for selection
-    //     {
-    //       id: 'selection',
-    //       // The header can use the table's getToggleAllRowsSelectedProps method
-    //       // to render a checkbox
-    //       Header: ({ getToggleAllRowsSelectedProps }) => (
-    //         <div>
-    //           <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />
-    //         </div>
-    //       ),
-    //       // The cell can use the individual row's getToggleRowSelectedProps method
-    //       // to the render a checkbox
-    //       Cell: ({ row }) => {
-    //         return (
-    //           <div>
-    //             <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} {...row.values} />
-    //           </div>
-    //         )
-    //       },
-    //     },
-    //     ...columns,
-    //   ])
-    // },
   )
 
   // Render the UI for your table
@@ -321,12 +300,10 @@ function Table({ isEdit, columns, data, updateMyData, skipPageReset, setDeletedI
   )
 }
 
-const TabelCostIndices = (props) => {
+const TableProductionFactor = (props) => {
   const columns = useMemo(() => props.arrPeriodData, [props.arrPeriodData])
   const [data, setData] = useState(() =>
-    props.dataCostIndices.length > 0
-      ? makeData(props.dataCostIndices.length, props.dataCostIndices)
-      : makeData(0, []),
+    props.dataFactor?.length > 0 ? makeData(10, props.dataFactor) : makeData(10, []),
   )
   const [skipPageReset, setSkipPageReset] = useState(false)
 
@@ -365,4 +342,4 @@ const TabelCostIndices = (props) => {
   )
 }
 
-export default TabelCostIndices
+export default TableProductionFactor
