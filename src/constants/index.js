@@ -1,5 +1,5 @@
-export const API_URL = 'https://mbsapidev.azurewebsites.net/api' // Azure : https://mbsapidev.azurewebsites.net/api  local: https://localhost:7002/api
-// export const API_URL = ' https://localhost:7002/api'
+// export const API_URL = 'https://mbsapidev.azurewebsites.net/api' // Azure : https://mbsapidev.azurewebsites.net/api  local: https://localhost:7002/api
+export const API_URL = ' https://localhost:7002/api'
 export const URL = {
   LOGIN: API_URL + '/Account/login',
   REGISTER: API_URL + '/auth/signup',

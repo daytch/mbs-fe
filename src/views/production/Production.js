@@ -31,11 +31,11 @@ import {
   getEquipmentScheduleOH,
   getProductionSchedule,
   postProductionSchedule,
-  putProductionSchedule,
+  // putProductionSchedule,
   postProductionFactor,
   putProductionFactor,
 } from '../../redux/actions'
-import { isEmptyNullOrUndefined } from 'src/functions'
+import { isEmptyNullOrUndefined } from '../../functions/index'
 import Swal from 'sweetalert2'
 
 const Production = () => {
@@ -90,11 +90,9 @@ const Production = () => {
   )
 
   const getProductionScheduleData = (idx, periods, existingData) => {
-    let arrCostIndices = {}
-    let newData = []
     let editData = []
 
-    existingData[0].productScheduleValueDtos.forEach((element) => {})
+    // existingData[0].productScheduleValueDtos.forEach((element) => {})
     for (let index = 0; index < periods.length; index++) {
       let productScheduleId = document.getElementById('indexname' + idx)
         ? document.getElementById('indexname' + idx).getAttribute('data-id')
@@ -108,41 +106,24 @@ const Production = () => {
         ? document.getElementById(id).value
         : ''
 
-      if (productScheduleValueId) {
-        // Edit data
-        editData.push({
-          productScheduleValueId: Number(productScheduleValueId),
-          periodId: periods[index].periodId,
-          productScheduleId: Number(productScheduleId),
-          positionN: periods[index].positionN,
-          productScheduleValue: !isEmptyNullOrUndefined(productScheduleValue)
-            ? Number(productScheduleValue)
-            : null,
-        })
-      } else {
-        // New data
-        newData.push({
-          // productScheduleValueId: productScheduleValueId,
-          periodId: periods[index].periodId,
-          productScheduleId: Number(productScheduleId),
-          positionN: periods[index].positionN,
-          productScheduleValue: !isEmptyNullOrUndefined(productScheduleValue)
-            ? Number(productScheduleValue)
-            : null,
-        })
-      }
+      editData.push({
+        productScheduleValueId: Number(productScheduleValueId),
+        periodId: periods[index].periodId,
+        productScheduleId: Number(productScheduleId),
+        positionN: periods[index].positionN,
+        productScheduleValue: !isEmptyNullOrUndefined(productScheduleValue)
+          ? Number(productScheduleValue)
+          : null,
+      })
     }
 
-    arrCostIndices['newData'] = newData
-    arrCostIndices['editData'] = editData
-    return arrCostIndices
+    return editData
   }
   const submitProductionSchedule = () => {
     let idx = 0
     let dataRepresentation = projectRepresentation
     let dataPeriods = dataRepresentation.periods
-    let dataProductionNew = [],
-      dataProductionEdit = []
+    let dataProductionNew = []
     let isError = false
 
     while (document.getElementById('indexname' + idx + '')) {
@@ -150,32 +131,25 @@ const Production = () => {
       let ProductName = document.getElementById('indexname' + idx).value
       let unitz = document.getElementById('units' + idx).value
       let datas = getProductionScheduleData(idx, dataPeriods, dataSchedulePure)
+      let dataIsi = datas.filter((x) => !isEmptyNullOrUndefined(x.productScheduleValue))
 
-      let dataPeriodNotEmpty =
-        datas.newData.length > 0
-          ? datas.newData.filter((x) => !isEmptyNullOrUndefined(x.productScheduleValue))
-          : datas.editData.filter((x) => !isEmptyNullOrUndefined(x.productScheduleValue))
-
-      if (!isEmptyNullOrUndefined(ProductName)) {
-        if (ProductID) {
-          // Edit Data
-          dataProductionEdit.push({
-            productId: ProductID,
-            productName: ProductName,
-            units: unitz,
-            projectRepresentationId: Number(projectRepresentation.projectRepresentationId),
-            productScheduleValueDtos: datas.editData,
-          })
-        } else {
-          dataProductionNew.push({
-            productId: ProductID,
-            productName: ProductName,
-            units: unitz,
-            projectRepresentationId: Number(projectRepresentation.projectRepresentationId),
-            productScheduleValueDtos: datas.newData,
-          })
-        }
-      } else if (dataPeriodNotEmpty.length > 0 && isEmptyNullOrUndefined(ProductID)) {
+      if (datas.length < 1) {
+        isError = true
+        Swal.fire({
+          title: 'Empty Validation',
+          text: 'You must at least 1 data.',
+          icon: 'warning',
+        })
+      } else if (!isEmptyNullOrUndefined(ProductName)) {
+        dataProductionNew.push({
+          productId: ProductID,
+          productName: ProductName,
+          units: unitz,
+          projectRepresentationId: Number(projectRepresentation.projectRepresentationId),
+          productScheduleValueDtos: datas,
+        })
+      } else if (dataIsi.length > 0 && isEmptyNullOrUndefined(ProductName)) {
+        
         isError = true
         Swal.fire({
           title: 'Empty Validation',
@@ -187,10 +161,7 @@ const Production = () => {
     }
 
     if (!isError && dataProductionNew.length > 0) {
-      dispatch(postProductionSchedule(dataProductionNew))
-    }
-    if (!isError && dataProductionEdit.length > 0) {
-      dispatch(putProductionSchedule(dataProductionEdit))
+      dispatch(postProductionSchedule(JSON.stringify(dataProductionNew)))
     }
   }
 
@@ -530,7 +501,7 @@ const Production = () => {
       return trueDataCostIndices
     }
   })
-  
+
   return (
     <CRow>
       <Spinner loading={loading} />

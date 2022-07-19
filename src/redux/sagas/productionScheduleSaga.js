@@ -15,7 +15,7 @@ import {
   URL,
 } from '../../constants'
 
-import { GET, PUT, POSTWithMessage, DELETE } from '../../services'
+import { GET, PUT, POST, DELETE } from '../../services'
 
 export function* getProductionSchedule(payload) {
   try {
@@ -40,7 +40,7 @@ export function* getProductionSchedule(payload) {
 
 export function* postProductionSchedule(action) {
   try {
-    const res = yield call(POSTWithMessage, URL.PRODUCTION_SCHEDULE, action.payload)
+    const res = yield call(POST, URL.PRODUCTION_SCHEDULE, action.payload)
 
     if (res) {
       yield put({
