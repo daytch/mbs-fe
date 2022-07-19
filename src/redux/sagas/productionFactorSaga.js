@@ -15,9 +15,9 @@ import {
   URL,
 } from '../../constants'
 
-import { GET, PUT, POSTWithMessage, DELETE } from '../../services'
+import { GET, PUT, POST, DELETE } from '../../services'
 
-export function* getProductionFactor(payload) {
+export function* getProductionFactor() {
   try {
     const res = yield call(GET, URL.PRODUCTION_FACTOR)
 
@@ -35,7 +35,7 @@ export function* getProductionFactor(payload) {
 
 export function* postProductionFactor(action) {
   try {
-    const res = yield call(POSTWithMessage, URL.COSTCENTRE, action.payload)
+    const res = yield call(POST, URL.PRODUCTION_FACTOR, action.payload)
 
     if (res) {
       yield put({

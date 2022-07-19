@@ -28,12 +28,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import Spinner from '../../components/Spinner'
 import {
   getProjectCountry,
-  getEquipmentScheduleOH,
   getProductionSchedule,
   postProductionSchedule,
-  // putProductionSchedule,
+  getProductionFactor,
   postProductionFactor,
-  putProductionFactor,
 } from '../../redux/actions'
 import { isEmptyNullOrUndefined } from '../../functions/index'
 import Swal from 'sweetalert2'
@@ -44,30 +42,10 @@ const Production = () => {
   const dispatch = useDispatch()
   const [isEdit, setIsEdit] = useState(false)
   const [toast, addToast] = useState(0)
-  const [deletedId, setDeletedId] = useState([])
   const [activeKey, setActiveKey] = useState(1)
   const [projectRepresentation] = useState(
     JSON.parse(localStorage.getItem('projectRepresentation')),
   )
-
-  const loading = false //useSelector((state) => state.EquipmentScheduleOH.loading)
-  const message = useSelector((state) => state.EquipmentScheduleOH.message)
-  const projectRep = useSelector((state) => state.Navigation.projectRepresentation)
-  const isSuccess = useSelector((state) => state.EquipmentScheduleOH.isSuccess)
-
-  const setMessageProcess = (isSuccess) => {
-    if (isSuccess) {
-      console.log(isSuccess)
-      console.log(message)
-      if (message === '') {
-        return
-      }
-      // setVisible(false)
-      addToast(ToastSuccess(message))
-    } else {
-      addToast(ToastError(message))
-    }
-  }
 
   const ToastError = (errorText) => {
     return (
@@ -89,10 +67,18 @@ const Production = () => {
     </CToast>
   )
 
-  const getProductionScheduleData = (idx, periods, existingData) => {
+  const ToastSuccessDelete = (
+    <CToast className="align-items-center" color="success">
+      <div className="d-flex">
+        <CToastBody>Data has been deleted!</CToastBody>
+        <CToastClose className="me-2 m-auto" />
+      </div>
+    </CToast>
+  )
+
+  const getProductionScheduleData = (idx, periods) => {
     let editData = []
 
-    // existingData[0].productScheduleValueDtos.forEach((element) => {})
     for (let index = 0; index < periods.length; index++) {
       let productScheduleId = document.getElementById('indexname' + idx)
         ? document.getElementById('indexname' + idx).getAttribute('data-id')
@@ -130,7 +116,7 @@ const Production = () => {
       let ProductID = document.getElementById('indexname' + idx).getAttribute('data-id')
       let ProductName = document.getElementById('indexname' + idx).value
       let unitz = document.getElementById('units' + idx).value
-      let datas = getProductionScheduleData(idx, dataPeriods, dataSchedulePure)
+      let datas = getProductionScheduleData(idx, dataPeriods)
       let dataIsi = datas.filter((x) => !isEmptyNullOrUndefined(x.productScheduleValue))
 
       if (datas.length < 1) {
@@ -149,7 +135,6 @@ const Production = () => {
           productScheduleValueDtos: datas,
         })
       } else if (dataIsi.length > 0 && isEmptyNullOrUndefined(ProductName)) {
-        
         isError = true
         Swal.fire({
           title: 'Empty Validation',
@@ -165,91 +150,72 @@ const Production = () => {
     }
   }
 
-  const getProductionFactorData = (idx, periods, existingData) => {
-    let arrCostIndices = {}
-    let newData = []
+  const getProductionFactorData = (idx, periods) => {
     let editData = []
 
-    existingData[0].productFactorValueDtos.forEach((element) => {})
     for (let index = 0; index < periods.length; index++) {
-      let productFactorId = document.getElementById('indexname' + idx)
-        ? document.getElementById('indexname' + idx).getAttribute('data-id')
+      
+      let productFactorId = document.getElementById('factor').querySelector('#indexname' + idx)
+        ? document
+            .getElementById('factor')
+            .querySelector('#indexname' + idx)
+            .getAttribute('data-id')
         : 0
-      let id = periods[index].periodName.replace(' ', '_') + idx
+      let id = '#' + periods[index].periodName.replace(' ', '_') + idx
 
-      let productFactorValueId = document.getElementById(id)
-        ? document.getElementById(id).getAttribute('data-valueid')
+      let productFactorValueId = document.getElementById('factor').querySelector(id)
+        ? document.getElementById('factor').querySelector(id).getAttribute('data-valueid')
         : 0
-      let productFactorValue = document.getElementById(id) ? document.getElementById(id).value : ''
+      let productFactorValue = document.getElementById('factor').querySelector(id)
+        ? document.getElementById('factor').querySelector(id).value
+        : ''
 
-      if (productFactorValueId) {
-        // Edit data
-        editData.push({
-          productFactorValueId: Number(productFactorValueId),
-          periodId: periods[index].periodId,
-          productFactorId: Number(productFactorId),
-          positionN: periods[index].positionN,
-          productFactorValue: !isEmptyNullOrUndefined(productFactorValue)
-            ? Number(productFactorValue)
-            : null,
-        })
-      } else {
-        // New data
-        newData.push({
-          // productScheduleValueId: productScheduleValueId,
-          periodId: periods[index].periodId,
-          productFactorId: Number(productFactorId),
-          positionN: periods[index].positionN,
-          productFactorValue: !isEmptyNullOrUndefined(productFactorValue)
-            ? Number(productFactorValue)
-            : null,
-        })
-      }
+      editData.push({
+        productFactorValueId: Number(productFactorValueId),
+        periodId: periods[index].periodId,
+        productFactorId: Number(productFactorId),
+        positionN: periods[index].positionN,
+        productFactorValue: !isEmptyNullOrUndefined(productFactorValue)
+          ? Number(productFactorValue)
+          : null,
+      })
     }
 
-    arrCostIndices['newData'] = newData
-    arrCostIndices['editData'] = editData
-    return arrCostIndices
+    return editData
   }
   const submitProductionFactor = () => {
     let idx = 0
     let dataRepresentation = projectRepresentation
     let dataPeriods = dataRepresentation.periods
-    let dataProductionNew = [],
-      dataProductionEdit = []
+    let dataProductionNew = []
     let isError = false
 
-    while (document.getElementById('indexname' + idx + '')) {
-      let ProductID = document.getElementById('indexname' + idx).getAttribute('data-id')
-      let ProductName = document.getElementById('indexname' + idx).value
-      let unitz = document.getElementById('units' + idx).value
-      let datas = getProductionFactorData(idx, dataPeriods, dataFactorPure)
+    while (document.getElementById('factor').querySelector('#indexname' + idx + '')) {
+      let ProductID = document
+        .getElementById('factor')
+        .querySelector('#indexname' + idx)
+        .getAttribute('data-id')
+      let ProductName = document.getElementById('factor').querySelector('#indexname' + idx).value
+      let unitz = document.getElementById('factor').querySelector('#units' + idx).value
+      let datas = getProductionFactorData(idx, dataPeriods)
+      let dataIsi = datas.filter((x) => !isEmptyNullOrUndefined(x.productFactorValue))
 
-      let dataPeriodNotEmpty =
-        datas.newData.length > 0
-          ? datas.newData.filter((x) => !isEmptyNullOrUndefined(x.productScheduleValue))
-          : datas.editData.filter((x) => !isEmptyNullOrUndefined(x.productScheduleValue))
-
-      if (!isEmptyNullOrUndefined(ProductName)) {
-        if (ProductID) {
-          // Edit Data
-          dataProductionEdit.push({
-            productId: ProductID,
-            productName: ProductName,
-            units: unitz,
-            projectRepresentationId: Number(projectRepresentation.projectRepresentationId),
-            productFactorValueDtos: datas.editData,
-          })
-        } else {
-          dataProductionNew.push({
-            productId: ProductID,
-            productName: ProductName,
-            units: unitz,
-            projectRepresentationId: Number(projectRepresentation.projectRepresentationId),
-            productFactorValueDtos: datas.newData,
-          })
-        }
-      } else if (dataPeriodNotEmpty.length > 0 && isEmptyNullOrUndefined(ProductID)) {
+      if (datas.length < 1) {
+        isError = true
+        Swal.fire({
+          title: 'Empty Validation',
+          text: 'You must at least 1 data.',
+          icon: 'warning',
+        })
+      } else if (!isEmptyNullOrUndefined(ProductName)) {
+        dataProductionNew.push({
+          productId: ProductID,
+          productName: ProductName,
+          units: unitz,
+          projectRepresentationId: Number(projectRepresentation.projectRepresentationId),
+          productFactorValueDtos: datas,
+        })
+      } else if (dataIsi.length > 0 && isEmptyNullOrUndefined(ProductName)) {
         isError = true
         Swal.fire({
           title: 'Empty Validation',
@@ -261,12 +227,10 @@ const Production = () => {
     }
 
     if (!isError && dataProductionNew.length > 0) {
-      dispatch(postProductionFactor(dataProductionNew))
-    }
-    if (!isError && dataProductionEdit.length > 0) {
-      dispatch(putProductionFactor(dataProductionEdit))
+      dispatch(postProductionFactor(JSON.stringify(dataProductionNew)))
     }
   }
+
   const getColumns = (tipe) => {
     let dataRepresentation = projectRepresentation
     dispatch(getProjectCountry())
@@ -323,19 +287,12 @@ const Production = () => {
   useEffect(() => {
     getColumns()
     dispatch(
-      getEquipmentScheduleOH({
-        projectRepresentationId: projectRepresentation.projectRepresentationId,
-        costCentreId: 1,
-      }),
-    )
-    dispatch(
       getProductionSchedule({
         projectRepresentationId: projectRepresentation.projectRepresentationId,
       }),
     )
-    setMessageProcess(isSuccess)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [message, projectRep])
+  }, [])
 
   const merge = (...arrays) => {
     const merged = {}
@@ -357,7 +314,6 @@ const Production = () => {
   }
 
   let arrDetail = []
-  const dataSchedulePure = useSelector((state) => state.ProductionSchedule.data)
   const dataSchedule = useSelector((state) => {
     if (state.ProductionSchedule.data.length > 0) {
       let trueDataCostIndices = []
@@ -429,7 +385,6 @@ const Production = () => {
       return trueDataCostIndices
     }
   })
-  const dataFactorPure = useSelector((state) => state.ProductionFactor.data)
   const dataFactor = useSelector((state) => {
     if (state.ProductionFactor.data.length > 0) {
       let trueDataCostIndices = []
@@ -502,9 +457,59 @@ const Production = () => {
     }
   })
 
+  const loadingSchedule = useSelector((state) => state.ProductionSchedule.loading)
+  const errSchedule = useSelector((state) => state.ProductionSchedule.error)
+  const msgSchedule = useSelector((state) => state.ProductionSchedule.message)
+  const isDeletedSchedule = useSelector((state) => state.ProductionSchedule.isDeleted)
+
+  const loadingFactor = useSelector((state) => state.ProductionFactor.loading)
+  const errFactor = useSelector((state) => state.ProductionFactor.error)
+  const msgFactor = useSelector((state) => state.ProductionFactor.message)
+  const isDeletedFactor = useSelector((state) => state.ProductionFactor.isDeleted)
+
+  const setMessageSchedule = () => {
+    if (errSchedule) {
+      addToast(ToastError(errSchedule))
+    } else if (msgSchedule && isDeletedSchedule) {
+      addToast(ToastSuccessDelete)
+    } else if (msgSchedule && !isDeletedSchedule) {
+      addToast(ToastSuccess)
+    }
+  }
+
+  const setMessageProcessFactor = () => {
+    if (errFactor) {
+      addToast(ToastError(errFactor))
+    } else if (msgFactor && isDeletedFactor) {
+      addToast(ToastSuccessDelete)
+    } else if (msgFactor && !isDeletedFactor) {
+      addToast(ToastSuccess)
+    }
+  }
+
+  useEffect(() => {
+    setMessageSchedule()
+    dispatch(
+      getProductionSchedule({
+        projectRepresentationId: projectRepresentation.projectRepresentationId,
+      }),
+    )
+    // eslint-disable-next-line
+  }, [msgSchedule, errSchedule])
+
+  useEffect(() => {
+    setMessageProcessFactor()
+    dispatch(
+      getProductionFactor({
+        projectRepresentationId: projectRepresentation.projectRepresentationId,
+      }),
+    )
+    // eslint-disable-next-line
+  }, [msgFactor, errFactor])
+
   return (
     <CRow>
-      <Spinner loading={loading} />
+      <Spinner loading={loadingFactor || loadingSchedule} />
       <CCol xs={12}>
         <CCard className="mb-4">
           <CToaster ref={toaster} push={toast} placement="bottom-end" />
@@ -594,8 +599,7 @@ const Production = () => {
                         arrPeriodData={arrPeriodData}
                         isEdit={isEdit}
                         dataFactor={dataFactor}
-                        setDeletedId={setDeletedId}
-                        deletedId={deletedId}
+                        submitProductionFactor={submitProductionSchedule}
                       />
                     ) : (
                       <CAlert color="warning" className="d-flex align-items-center">

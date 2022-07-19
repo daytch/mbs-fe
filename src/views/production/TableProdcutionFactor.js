@@ -183,7 +183,7 @@ function Table({ isEdit, columns, data, updateMyData, skipPageReset, setDeletedI
   // Render the UI for your table
   return (
     <>
-      <table {...getTableProps()}>
+      <table id="factor" {...getTableProps()}>
         <thead>
           {headerGroups.map((headerGroup, idx) => (
             <tr key={idx} {...headerGroup.getHeaderGroupProps()}>

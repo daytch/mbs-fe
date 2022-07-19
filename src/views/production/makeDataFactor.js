@@ -39,12 +39,12 @@ export default function makeData(...lens) {
                   data[key] = valData['units_' + idx]
                 } else if (
                   valData[item] === key &&
-                  !isEmptyNullOrUndefined(valData['productScheduleValueId_' + idx])
+                  !isEmptyNullOrUndefined(valData['productFactorValueId_' + idx])
                 ) {
                   data[key] =
-                    valData['productScheduleValue_' + idx] +
+                    valData['productFactorValue_' + idx] +
                     '~' +
-                    valData['productScheduleValueId_' + idx]
+                    valData['productFactorValueId_' + idx]
                 } else if (
                   key === 'indexname' &&
                   !isEmptyNullOrUndefined(valData['productName_' + idx])
