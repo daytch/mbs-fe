@@ -1,5 +1,5 @@
-// export const API_URL = 'https://mbsapidev.azurewebsites.net/api' // Azure : https://mbsapidev.azurewebsites.net/api  local: https://localhost:7002/api
-export const API_URL = ' https://localhost:7002/api'
+export const API_URL = 'https://mbsapidev.azurewebsites.net/api' // Azure : https://mbsapidev.azurewebsites.net/api  local: https://localhost:7002/api
+// export const API_URL = ' https://localhost:7002/api'
 export const URL = {
   LOGIN: API_URL + '/Account/login',
   REGISTER: API_URL + '/auth/signup',
@@ -34,6 +34,8 @@ export const URL = {
   INFRASTRUCTURECC: API_URL + '/CostCentreStructureInfrastructure',
   COSTCENTRE: API_URL + '/CostCentre',
   EQUIPMENTSCHEDULEOH: API_URL + '/EquipmentSchedule',
+  EQUIPMENTSCHEDULEPA: API_URL + '/EquipmentSchedulePA',
+  EQUIPMENTROSTER: API_URL + '/EquipmentScheduleRoster',
   ACCOUNT: API_URL + '/Account',
   COMPANY: API_URL + '/CompanySource',
   USERS: API_URL + '/Users',
@@ -349,6 +351,10 @@ export const DELETE_FLEETS = 'DELETE_FLEETS'
 export const DELETE_FLEETS_SUCCESS = 'DELETE_FLEETS_SUCCESS'
 export const DELETE_FLEETS_ERROR = 'DELETE_FLEETS_ERROR'
 
+export const GET_FLEET_MATERIAL_SERVICE = 'GET_FLEET_MATERIAL_SERVICE'
+export const GET_FLEET_MATERIAL_SERVICE_SUCCESS = 'GET_FLEET_MATERIAL_SERVICE_SUCCESS'
+export const GET_FLEET_MATERIAL_SERVICE_ERROR = 'GET_FLEET_MATERIAL_SERVICE_ERROR'
+
 // Resources - Infrastructure
 export const GET_INFRASTRUCTURE = 'GET_INFRASTRUCTURE'
 export const GET_INFRASTRUCTURE_SUCCESS = 'GET_INFRASTRUCTURE_SUCCESS'
@@ -539,3 +545,23 @@ export const DELETE_PRODUCTION_FACTOR = 'DELETE_PRODUCTION_FACTOR'
 export const DELETE_PRODUCTION_FACTOR_SUCCESS = 'DELETE_PRODUCTION_FACTOR_SUCCESS'
 export const DELETE_PRODUCTION_FACTOR_ERROR = 'DELETE_PRODUCTION_FACTOR_ERROR'
 // END Production
+
+// EQUIPMENT_ROSTER start
+export const GET_EQUIPMENT_ROSTER = 'GET_EQUIPMENT_ROSTER'
+export const GET_EQUIPMENT_ROSTER_SUCCESS = 'GET_EQUIPMENT_ROSTER_SUCCESS'
+export const GET_EQUIPMENT_ROSTER_ERROR = 'GET_EQUIPMENT_ROSTER_ERROR'
+
+export const POST_EQUIPMENT_ROSTER = 'POST_EQUIPMENT_ROSTER'
+export const POST_EQUIPMENT_ROSTER_SUCCESS = 'POST_EQUIPMENT_ROSTER_SUCCESS'
+export const POST_EQUIPMENT_ROSTER_ERROR = 'POST_EQUIPMENT_ROSTER_ERROR'
+// EQUIPMENT_ROSTER end
+
+// EQUIPMENT_PA start
+export const GET_EQUIPMENT_PA = 'GET_EQUIPMENT_PA'
+export const GET_EQUIPMENT_PA_SUCCESS = 'GET_EQUIPMENT_PA_SUCCESS'
+export const GET_EQUIPMENT_PA_ERROR = 'GET_EQUIPMENT_PA_ERROR'
+
+export const POST_EQUIPMENT_PA = 'POST_EQUIPMENT_PA'
+export const POST_EQUIPMENT_PA_SUCCESS = 'POST_EQUIPMENT_PA_SUCCESS'
+export const POST_EQUIPMENT_PA_ERROR = 'POST_EQUIPMENT_PA_ERROR'
+// EQUIPMENT_PA end

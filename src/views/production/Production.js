@@ -21,8 +21,8 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilPencil, cilHistory, cilSave, cilWarning /*cilTrash*/ } from '@coreui/icons'
-import TableProdcutionFactor from './TableProdcutionFactor'
-import TableProductionSchedule from './TableProdcutionSchedule'
+import TableProductionFactor from './TableProductionFactor'
+import TableProductionSchedule from './TableProductionSchedule'
 import './cost.css'
 import { useDispatch, useSelector } from 'react-redux'
 import Spinner from '../../components/Spinner'
@@ -43,6 +43,7 @@ const Production = () => {
   const [isEdit, setIsEdit] = useState(false)
   const [toast, addToast] = useState(0)
   const [activeKey, setActiveKey] = useState(1)
+  const [loading, setLoading] = useState(true)
   const [projectRepresentation] = useState(
     JSON.parse(localStorage.getItem('projectRepresentation')),
   )
@@ -138,7 +139,7 @@ const Production = () => {
         isError = true
         Swal.fire({
           title: 'Empty Validation',
-          text: 'You must enter value in the Cost Index Name field.',
+          text: 'You must enter value in the Product Name field.',
           icon: 'warning',
         })
       }
@@ -154,7 +155,6 @@ const Production = () => {
     let editData = []
 
     for (let index = 0; index < periods.length; index++) {
-      
       let productFactorId = document.getElementById('factor').querySelector('#indexname' + idx)
         ? document
             .getElementById('factor')
@@ -219,7 +219,7 @@ const Production = () => {
         isError = true
         Swal.fire({
           title: 'Empty Validation',
-          text: 'You must enter value in the Cost Index Name field.',
+          text: 'You must enter value in the Product Name field.',
           icon: 'warning',
         })
       }
@@ -339,7 +339,7 @@ const Production = () => {
                 periodId: item.periodId,
                 productScheduleId: datProdSchedule[index].productId,
                 positionN: item.positionN,
-                productScheduleValue: item.productScheduleValue,
+                productScheduleValue: item.productScheduleValue ? item.productScheduleValue : '',
               }
               if (
                 !arrDetail.find((x) => x.periodId === item.periodId) &&
@@ -355,7 +355,7 @@ const Production = () => {
                 productId: datProdSchedule[index].productId,
                 productName: datProdSchedule[index].productName,
                 units: datProdSchedule[index].units,
-                productScheduleValue: item.productScheduleValue,
+                productScheduleValue: item.productScheduleValue ? item.productScheduleValue : '',
                 productScheduleValueId: item.productScheduleValueId,
               }
             })
@@ -391,7 +391,7 @@ const Production = () => {
       let datProdFactor = state.ProductionFactor.data
 
       for (let index = 0; index < datProdFactor.length; index++) {
-        if (datProdFactor[index].productScheduleValueDtos.length > 0) {
+        if (datProdFactor[index].productFactorValueDtos.length > 0) {
           let periods = projectRepresentation.periods
 
           if (periods) {
@@ -399,23 +399,23 @@ const Production = () => {
               (obj, item) => ((obj[item.periodName] = item.periodId), obj),
               {},
             )
-            let mergedArr = merge(periods, datProdFactor[index].productScheduleValueDtos)
+            let mergedArr = merge(periods, datProdFactor[index].productFactorValueDtos)
 
             let total = 0
-            localStorage.removeItem('totalArrayPeriodProdSchedule')
+            localStorage.removeItem('totalArrayPeriodProdFactor')
             mergedArr = mergedArr.map((item) => {
               total++
               let detail = {
-                productScheduleValueId: item.productScheduleValueId,
+                productFactorValueId: item.productFactorValueId,
                 periodId: item.periodId,
-                productScheduleId: datProdFactor[index].productId,
+                productFactorId: datProdFactor[index].productFactorId,
                 positionN: item.positionN,
-                productScheduleValue: item.productScheduleValue,
+                productFactorValue: item.productFactorValue ? item.productFactorValue : '',
               }
               if (
                 !arrDetail.find((x) => x.periodId === item.periodId) &&
-                !isEmptyNullOrUndefined(detail.productScheduleValueId) &&
-                !isEmptyNullOrUndefined(detail.productScheduleValue)
+                !isEmptyNullOrUndefined(detail.productFactorValueId) &&
+                !isEmptyNullOrUndefined(detail.productFactorValue)
               ) {
                 arrDetail.push(detail)
               }
@@ -426,11 +426,11 @@ const Production = () => {
                 productId: datProdFactor[index].productId,
                 productName: datProdFactor[index].productName,
                 units: datProdFactor[index].units,
-                productScheduleValue: item.productScheduleValue,
-                productScheduleValueId: item.productScheduleValueId,
+                productFactorValue: item.productFactorValue ? item.productFactorValue : '',
+                productFactorValueId: item.productFactorValueId,
               }
             })
-            localStorage.setItem('totalArrayPeriodProdSchedule', total)
+            localStorage.setItem('totalArrayPeriodProdFactor', total)
 
             let fixData = returnFlattenObject(mergedArr)
 
@@ -507,9 +507,17 @@ const Production = () => {
     // eslint-disable-next-line
   }, [msgFactor, errFactor])
 
+  useEffect(() => {
+    if (!loadingFactor && !loadingSchedule) {
+      setLoading(false)
+    } else {
+      setLoading(true)
+    }
+  }, [loadingFactor, loadingSchedule])
+
   return (
     <CRow>
-      <Spinner loading={loadingFactor || loadingSchedule} />
+      <Spinner loading={loading} />
       <CCol xs={12}>
         <CCard className="mb-4">
           <CToaster ref={toaster} push={toast} placement="bottom-end" />
@@ -594,7 +602,7 @@ const Production = () => {
                 <CCard>
                   <CCardBody>
                     {projectRepresentation.periods ? (
-                      <TableProdcutionFactor
+                      <TableProductionFactor
                         key={dataFactor}
                         arrPeriodData={arrPeriodData}
                         isEdit={isEdit}

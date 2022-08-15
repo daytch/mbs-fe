@@ -26,6 +26,7 @@ export const ProductionSchedule = (state = INIT_STATE, action) => {
     case GET_PRODUCTION_SCHEDULE: {
       return {
         ...state,
+        loading: true,
       }
     }
     case GET_PRODUCTION_SCHEDULE_SUCCESS: {
@@ -47,6 +48,7 @@ export const ProductionSchedule = (state = INIT_STATE, action) => {
       return {
         ...state,
         // data: action.payload,
+        loading: true,
       }
     }
     case POST_PRODUCTION_SCHEDULE_SUCCESS: {
@@ -69,6 +71,7 @@ export const ProductionSchedule = (state = INIT_STATE, action) => {
       return {
         ...state,
         data: action.payload,
+        loading: true,
       }
     }
     case PUT_PRODUCTION_SCHEDULE_SUCCESS: {
@@ -90,6 +93,7 @@ export const ProductionSchedule = (state = INIT_STATE, action) => {
     case DELETE_PRODUCTION_SCHEDULE: {
       return {
         ...state,
+        loading: true,
       }
     }
     case DELETE_PRODUCTION_SCHEDULE_SUCCESS: {

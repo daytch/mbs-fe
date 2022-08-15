@@ -63,11 +63,10 @@ const LevyCategories = () => {
   const message = useSelector((state) => state.Levy.message)
   const levyCategoryOption = useSelector((state) => state.LevyCategory.dataOption)
 
-
   const setMessageProcess = (isSuccess) => {
     if (isSuccess) {
-      console.log(isSuccess)
-      console.log(message)
+      // console.log(isSuccess)
+      // console.log(message)
       if (message === '') {
         return
       }

@@ -107,6 +107,7 @@ import {
   putFleets,
   deleteFleets,
   getEquipmentTypes,
+  getFleetMaterialService,
 } from './equipmentAction'
 import {
   getResourcesInfra,
@@ -133,12 +134,7 @@ import {
   deleteInfrastructurecc,
 } from './infrastructureccAction'
 
-import {
-  getEquipmentScheduleOH,
-  postEquipmentScheduleOH,
-  putEquipmentScheduleOH,
-  deleteEquipmentScheduleOH,
-} from './equipmentScheduleOHAction'
+import { getEquipmentScheduleOH, postEquipmentScheduleOH } from './equipmentScheduleOHAction'
 
 import {
   getRole,
@@ -166,6 +162,8 @@ import {
   putProductionFactor,
   deleteProductionFactor,
 } from './productionFactorAction'
+import { getEquipmentRoster, postEquipmentRoster } from './equipmentScheduleRosterAction'
+import { getEquipmentSchedulePA, postEquipmentSchedulePA } from './equipmentSchedulePAAction'
 
 export {
   doLogin,
@@ -285,8 +283,6 @@ export {
   deleteCostCentre,
   getEquipmentScheduleOH,
   postEquipmentScheduleOH,
-  putEquipmentScheduleOH,
-  deleteEquipmentScheduleOH,
   getUser,
   postUser,
   putUser,
@@ -313,4 +309,9 @@ export {
   postProductionFactor,
   putProductionFactor,
   deleteProductionFactor,
+  getEquipmentRoster,
+  postEquipmentRoster,
+  getEquipmentSchedulePA,
+  postEquipmentSchedulePA,
+  getFleetMaterialService,
 }

@@ -72,19 +72,19 @@ function _inherits(subClass, superClass) {
       : (subClass.__proto__ = superClass)
 }
 
-var TreeView = (function (_Component) {
-  _inherits(TreeView, _Component)
+var Tree = (function (_Component) {
+  _inherits(Tree, _Component)
 
-  function TreeView() {
-    _classCallCheck(this, TreeView)
+  function Tree() {
+    _classCallCheck(this, Tree)
 
     return _possibleConstructorReturn(
       this,
-      (TreeView.__proto__ || Object.getPrototypeOf(TreeView)).apply(this, arguments),
+      (Tree.__proto__ || Object.getPrototypeOf(Tree)).apply(this, arguments),
     )
   }
 
-  _createClass(TreeView, [
+  _createClass(Tree, [
     {
       key: 'shouldComponentUpdate',
       value: function shouldComponentUpdate(nextProps) {
@@ -102,10 +102,10 @@ var TreeView = (function (_Component) {
         var treeData = this.props.treeData
 
         if (treeData) {
-          ; (0, _jquery2.default)(this.treeContainer).jstree(treeData)
-            ; (0, _jquery2.default)(this.treeContainer).on('changed.jstree', function (e, data) {
-              _this2.props.onChange(e, data)
-            })
+          ;(0, _jquery2.default)(this.treeContainer).jstree(treeData)
+          ;(0, _jquery2.default)(this.treeContainer).on('changed.jstree', function (e, data) {
+            _this2.props.onChange(e, data)
+          })
         }
       },
     },
@@ -119,8 +119,8 @@ var TreeView = (function (_Component) {
         // treeSearchData = _props.treeSearchData
         // console.log('treeData', treeData)
         if (treeData.core !== undefined) {
-          ; (0, _jquery2.default)(this.treeContainer).jstree(true).settings = treeData
-            ; (0, _jquery2.default)(this.treeContainer).jstree(true).refresh()
+          ;(0, _jquery2.default)(this.treeContainer).jstree(true).settings = treeData
+          ;(0, _jquery2.default)(this.treeContainer).jstree(true).refresh()
           // if(treeSearchData) {
           //   $(this.treeContainer).jstree('search', treeSearchData);
           // }
@@ -155,17 +155,17 @@ var TreeView = (function (_Component) {
     },
   ])
 
-  return TreeView
+  return Tree
 })(_react.Component)
 
-TreeView.propTypes = {
+Tree.propTypes = {
   treeData: _propTypes2.default.object.isRequired,
   treeSearchData: _propTypes2.default.object.isRequired,
   onChange: _propTypes2.default.func,
 }
-TreeView.defaultProps = {
+Tree.defaultProps = {
   onChange: function onChange() {
     return false
   },
 }
-exports.default = TreeView
+exports.default = Tree

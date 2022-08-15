@@ -26,7 +26,7 @@ export const ProductionFactor = (state = INIT_STATE, action) => {
     case GET_PRODUCTION_FACTOR: {
       return {
         ...state,
-        // data: action.data,
+        loading: true,
       }
     }
     case GET_PRODUCTION_FACTOR_SUCCESS: {
@@ -48,6 +48,7 @@ export const ProductionFactor = (state = INIT_STATE, action) => {
       return {
         ...state,
         // data: action.payload,
+        loading: true,
       }
     }
     case POST_PRODUCTION_FACTOR_SUCCESS: {
@@ -70,6 +71,7 @@ export const ProductionFactor = (state = INIT_STATE, action) => {
       return {
         ...state,
         data: action.payload,
+        loading: true,
       }
     }
     case PUT_PRODUCTION_FACTOR_SUCCESS: {
@@ -91,6 +93,7 @@ export const ProductionFactor = (state = INIT_STATE, action) => {
     case DELETE_PRODUCTION_FACTOR: {
       return {
         ...state,
+        loading: true,
       }
     }
     case DELETE_PRODUCTION_FACTOR_SUCCESS: {

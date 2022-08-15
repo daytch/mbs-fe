@@ -1,10 +1,8 @@
-/* eslint-disable no-loop-func */
 import React, { useEffect, useState, useRef } from 'react'
 import {
   CCol,
   CRow,
   CCard,
-  CCardHeader,
   CCardBody,
   CButton,
   CToastBody,
@@ -15,24 +13,22 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilPencil, cilHistory, cilSave, cilWarning /*cilTrash*/ } from '@coreui/icons'
-import TabelCostIndices from './TabelCostIndices'
+import TableSE from './TableScheduleEquipment'
 import './cost.css'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import Spinner from '../../components/Spinner'
-import {
-  getProjectCountry,
-  getEquipmentScheduleOH,
-  postEquipmentScheduleOH,
-  putEquipmentScheduleOH,
-  // deleteCostIndices,
-} from '../../redux/actions'
+// import {
+//   getProjectCountry,
+//   getEquipmentScheduleOH,
+//   postEquipmentScheduleOH,
+// } from '../../redux/actions'
 import { isEmptyNullOrUndefined } from 'src/functions'
 import Swal from 'sweetalert2'
 
-const EquipmentScheduleOHFunction = () => {
+const Availability = () => {
   const [arrPeriodData, setArrPeriodData] = useState([])
   const toaster = useRef()
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
   const [isEdit, setIsEdit] = useState(false)
   const [toast, addToast] = useState(0)
   const [deletedId, setDeletedId] = useState([])
@@ -94,7 +90,7 @@ const EquipmentScheduleOHFunction = () => {
 
   const getColumns = () => {
     let dataRepresentation = projectRepresentation
-    dispatch(getProjectCountry())
+    // dispatch(getProjectCountry())
 
     let arrData = [
       {
@@ -215,10 +211,10 @@ const EquipmentScheduleOHFunction = () => {
     }
 
     if (!isError && dataCostIndicesNew.length > 0) {
-      dispatch(postEquipmentScheduleOH(dataCostIndicesNew))
+      // dispatch(postEquipmentScheduleOH(dataCostIndicesNew))
     }
     if (!isError && dataCostIndicesEdit.length > 0) {
-      dispatch(putEquipmentScheduleOH(dataCostIndicesEdit))
+      // dispatch(putEquipmentScheduleOH(dataCostIndicesEdit))
     }
   }
   // const onClickDelete = () => {
@@ -241,12 +237,12 @@ const EquipmentScheduleOHFunction = () => {
 
   useEffect(() => {
     getColumns()
-    dispatch(
-      getEquipmentScheduleOH({
-        projectRepresentationId: projectRepresentation.projectRepresentationId,
-        costCentreId: 1,
-      }),
-    )
+    // dispatch(
+    //   getEquipmentScheduleOH({
+    //     projectRepresentationId: projectRepresentation.projectRepresentationId,
+    //     costCentreId: 1,
+    //   }),
+    // )
     setMessageProcess(isSuccess)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [message, projectRep])
@@ -254,7 +250,7 @@ const EquipmentScheduleOHFunction = () => {
   const merge = (...arrays) => {
     const merged = {}
 
-    arrays.forEach((data) => data.forEach((o) => Object.assign((merged[o.periodId] ??= {}), o)))
+    arrays.forEach((data) => data.forEach((o) => Object.assign(merged[o.periodId] ?? {}, o)))
 
     return Object.values(merged)
   }
@@ -323,61 +319,7 @@ const EquipmentScheduleOHFunction = () => {
   })
 
   const dataPureCostIndices = useSelector((state) => state.FinanceCostIndices.dataCostIndices)
-  // const dataCostIndices = useSelector((state) => {
-  //   if (state.FinanceCostIndices.dataCostIndices) {
-  //     let trueDataCostIndices = []
-  //     let datCostIndices = state.FinanceCostIndices.dataCostIndices
 
-  //     for (let index = 0; index < datCostIndices.length; index++) {
-  //       if (datCostIndices[index].costIndexValues.length > 0) {
-  //         let periods = projectRepresentation.periods
-
-  //         if (periods) {
-  //           var objectPeriod = periods.reduce(
-  //             (obj, item) => ((obj[item.periodName] = item.periodId), obj),
-  //             {},
-  //           )
-
-  //           let mergedArr = merge(periods, datCostIndices[index].costIndexValues)
-  //           let total = 0
-  //           localStorage.removeItem('totalArrayPeriod')
-  //           mergedArr = mergedArr.map((item) => {
-  //             total++
-  //             return {
-  //               periodId: item.periodId,
-  //               periodName: item.periodName,
-  //               positionN: item.positionN,
-  //               costIndexId: datCostIndices[index].costIndexId, // item.costIndexId,
-  //               costIndexName: datCostIndices[index].costIndexName,
-  //               costIndexValue: item.costIndexValue,
-  //               costIndexValueId: item.costIndexValueId,
-  //             }
-  //           })
-  //           localStorage.setItem('totalArrayPeriod', total)
-
-  //           let fixData = returnFlattenObject(mergedArr)
-
-  //           objectPeriod['indexname'] = datCostIndices[index].costIndexName
-  //           objectPeriod['costIndexId'] = datCostIndices[index].costIndexId
-
-  //           trueDataCostIndices.push(fixData)
-  //         }
-  //       } else {
-  //         if (projectRepresentation.periods.length > 0) {
-  //           let objData = { indexname: datCostIndices[index].costIndexName }
-  //           objData[projectRepresentation.periods[0].periodName] = null
-  //           objData['costIndexId'] = datCostIndices[index].costIndexId
-  //           // objData['periodId'] = 0
-  //           objData['positionN'] = index
-  //           objData['costIndexValueId'] = 0
-  //           trueDataCostIndices.push(objData)
-  //         }
-  //       }
-  //     }
-
-  //     return trueDataCostIndices
-  //   }
-  // })
   return (
     <CRow>
       <Spinner loading={loading} />
@@ -385,12 +327,9 @@ const EquipmentScheduleOHFunction = () => {
         <CCard className="mb-4">
           <CToaster ref={toaster} push={toast} placement="bottom-end" />
 
-          <CCardHeader>
-            <strong>Cost Indices Schedules</strong>
-          </CCardHeader>
           <CCardBody>
             {eqOHScheduleDataTable && projectRepresentation.periods ? (
-              <TabelCostIndices
+              <TableSE
                 key={eqOHScheduleDataTable}
                 arrPeriodData={arrPeriodData}
                 isEdit={isEdit}
@@ -441,4 +380,4 @@ const EquipmentScheduleOHFunction = () => {
   )
 }
 
-export default EquipmentScheduleOHFunction
+export default Availability

@@ -15,7 +15,7 @@ const TableExistingEquipment = (props) => {
       minWidth: 650,
     },
   })
-  console.log('props.data :', props.data)
+  // console.log('props.data :', props.data)
   const classes = useStyles()
   const [selected, setSelected] = useState([])
 

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import TreeView from './TreeView'
+import Tree from './Tree'
 import { getCostCentre, postCostCentre, putCostCentre, deleteCostCentre } from '../../redux/actions'
 import { useDispatch, useSelector } from 'react-redux'
 import {
@@ -25,8 +25,9 @@ import { cilPencil, cilSave, /* cilHistory,cilWarning */ cilTrash } from '@coreu
 import Swal from 'sweetalert2'
 import PropTypes from 'prop-types'
 
-const CostCentreTree = (params) => {
-  // console.log('props', params.setSelectedId(0))
+const CostCentreTree = (props) => {
+  // console.log('props', props)
+  const { canInput, getData, setSelectedId, selectedId } = props
   const dispatch = useDispatch()
   const [visible, setVisible] = useState(false)
   const [CCCode, setCCCode] = useState('')
@@ -35,11 +36,10 @@ const CostCentreTree = (params) => {
   let rawData = []
   let loadedData = {}
   // eslint-disable-next-line no-unused-vars
-  const [selectedId, setSelectedId] = useState('')
+  // const [selectedId, setSelectedId] = useState('')
   const [isEdit, setIsEdit] = useState(false)
   const [isSelectedChange, setIsSelectedChange] = useState(false)
   const [costCentreTreeData] = useState({})
-  const [canInput] = useState(params.canInput ? true : false)
   const [projectRepresentation] = useState(
     JSON.parse(localStorage.getItem('projectRepresentation')),
   )
@@ -185,9 +185,12 @@ const CostCentreTree = (params) => {
 
   const onChange = (e, data) => {
     if (data.selected[0]) {
+      if (getData) {
+        getData(data.selected[0])
+      }
       setIsSelectedChange(true)
       setSelectedId(data.selected[0])
-      params.setSelectedId(data.selected[0])
+      setSelectedId(data.selected[0])
       loadedData?.core?.data?.forEach((item) => {
         setActiveTree(Number(data.selected[0]), item)
 
@@ -201,8 +204,8 @@ const CostCentreTree = (params) => {
   }
 
   const onClickEdit = () => {
-    if (params.selectedId) {
-      let selectedData = rawData.filter((x) => x.costCentreId === Number(params.selectedId))
+    if (selectedId) {
+      let selectedData = rawData.filter((x) => x.costCentreId === Number(selectedId))
       setCCCode(selectedData[0].costCentreCode)
       setCCName(selectedData[0].costCentreName)
       setTitleModal('Edit Cost Centre Structure')
@@ -221,9 +224,9 @@ const CostCentreTree = (params) => {
     let param = {}
     if (isEdit) {
       // edit
-      let dt = rawData.filter((x) => x.costCentreId === Number(params.selectedId))
+      let dt = rawData.filter((x) => x.costCentreId === Number(selectedId))
       param = {
-        costCentreId: params.selectedId,
+        costCentreId: selectedId,
         projectRepresentationId: projectRepresentation.projectRepresentationId,
         costCentreCode: CCCode,
         costCentreName: CCName,
@@ -236,7 +239,7 @@ const CostCentreTree = (params) => {
         projectRepresentationId: projectRepresentation.projectRepresentationId,
         costCentreCode: CCCode,
         costCentreName: CCName,
-        parentCostCentreN: params.selectedId ? Number(params.selectedId) : null,
+        parentCostCentreN: selectedId ? Number(selectedId) : null,
       }
       dispatch(postCostCentre(param))
       onCloseResetAll()
@@ -246,9 +249,9 @@ const CostCentreTree = (params) => {
 
   const onClickDelete = () => {
     console.log('onClickDelete')
-    dispatch(deleteCostCentre(params.selectedId))
+    dispatch(deleteCostCentre(selectedId))
     setSelectedId(-99)
-    params.setSelectedId(-99)
+    setSelectedId(-99)
   }
 
   const onCloseResetAll = () => {
@@ -261,7 +264,7 @@ const CostCentreTree = (params) => {
     <>
       <CToaster ref={toaster} push={toast} placement="bottom-end" />
       <div style={{ overflowX: 'auto' }}>
-        <TreeView treeData={data} onChange={(e, data) => onChange(e, data)} treeSearchData={{}} />
+        <Tree treeData={data} onChange={(e, data) => onChange(e, data)} treeSearchData={{}} />
       </div>
       <br />
       <br />
@@ -355,7 +358,12 @@ const CostCentreTree = (params) => {
     </>
   )
 }
-export default CostCentreTree
+
 CostCentreTree.propTypes = {
   canInput: PropTypes.bool,
+  getData: PropTypes.func,
+  setSelectedId: PropTypes.func,
+  selectedId: PropTypes.any,
 }
+
+export default CostCentreTree

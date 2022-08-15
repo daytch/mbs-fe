@@ -30,6 +30,8 @@ import { Company } from './companyReducer'
 import { Role } from './roleReducer'
 import { ProductionSchedule } from './productionScheduleReducer'
 import { ProductionFactor } from './productionFactorReducer'
+import { EquipmentScheduleRoster } from './equipmentScheduleRosterReducer'
+import { EquipmentSchedulePA } from './equipmentSchedulePAReducer'
 
 const appReducer = combineReducers({
   getLogin,
@@ -63,6 +65,8 @@ const appReducer = combineReducers({
   Role,
   ProductionFactor,
   ProductionSchedule,
+  EquipmentScheduleRoster,
+  EquipmentSchedulePA,
 })
 
 const rootReducer = (state, action) => {

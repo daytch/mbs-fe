@@ -4,6 +4,7 @@ import {
   PUT_FLEETS,
   DELETE_FLEETS,
   GET_EQUIPMENT_TYPES,
+  GET_FLEET_MATERIAL_SERVICE,
 } from '../../constants'
 
 export function getFleets(data) {
@@ -37,6 +38,13 @@ export function deleteFleets(data) {
 export function getEquipmentTypes(data) {
   return {
     type: GET_EQUIPMENT_TYPES,
+    data: data,
+  }
+}
+
+export function getFleetMaterialService(data) {
+  return {
+    type: GET_FLEET_MATERIAL_SERVICE,
     data: data,
   }
 }

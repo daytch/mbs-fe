@@ -1,4 +1,3 @@
-import { isEmptyNullOrUndefined } from '../../functions'
 const range = (len) => {
   const arr = []
   for (let i = 0; i < len; i++) {
@@ -12,7 +11,7 @@ const dataCalendar = () => {
 
   if (dataRepresentation) {
     let dataPeriods = dataRepresentation.periods
-    let objData = { indexname: '', units: '' }
+    let objData = { indexname: '' }
     for (var i in dataPeriods) {
       if (dataPeriods.hasOwnProperty(i)) {
         objData[dataPeriods[i].periodName] = ''
@@ -27,7 +26,8 @@ export default function makeData(...lens) {
     const len = lens[depth]
     return range(len).map((d, i) => {
       let data = dataCalendar()
-
+      // console.log('data :', data)
+      // let total = localStorage.getItem('totalArrayPeriod')
       if (lens[1].length > 0) {
         if (lens[1][i]) {
           for (var key in data) {
@@ -35,26 +35,19 @@ export default function makeData(...lens) {
               let valData = lens[1][i]
               for (var item in valData) {
                 let idx = item.split('_')[1]
-                if (key === 'units' && !isEmptyNullOrUndefined(valData['units_' + idx])) {
-                  data[key] = valData['units_' + idx]
-                } else if (
-                  valData[item] === key &&
-                  !isEmptyNullOrUndefined(valData['productFactorValueId_' + idx])
-                ) {
+                if (valData[item] === key) {
                   data[key] =
-                    valData['productFactorValue_' + idx] +
+                    valData['costIndexValue_' + idx] + '~' + valData['costIndexValueId_' + idx]
+                } else if (key === 'indexname') {
+                  //   debugger
+                  data['indexnameR'] =
+                    valData['fleetName'] +
                     '~' +
-                    valData['productFactorValueId_' + idx]
-                } else if (
-                  key === 'indexname' &&
-                  !isEmptyNullOrUndefined(valData['productName_' + idx])
-                ) {
-                  data['indexname'] =
-                    valData['productName_' + idx] +
-                    '~' +
-                    valData['productId_' + idx] +
+                    valData['ccFleetID'] +
                     '~' +
                     valData['periodId_' + idx]
+                } else if (key === 'rosterId') {
+                  data['rosterId'] = valData['rosterId']
                 }
               }
             }

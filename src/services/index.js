@@ -153,16 +153,17 @@ export function PUT(url, body, header = getHeaderToken()) {
       if (err.response.status === 401) {
         Logout()
       }
-      if (err.response.status === 400) {
-        return {
-          isError: true,
-          message: err.response.data.errors[0].description, // err.response.data.error,
-        }
-      }
-      return {
-        isError: true,
-        message: 'Something wrong in our system, please contact Administrator!',
-      }
+      return err
+      // if (err.response.status === 400) {
+      //   return {
+      //     isError: true,
+      //     message: err.response.data.errors[0].description, // err.response.data.error,
+      //   }
+      // }
+      // return {
+      //   isError: true,
+      //   message: 'Something wrong in our system, please contact Administrator!',
+      // }
     })
 }
 

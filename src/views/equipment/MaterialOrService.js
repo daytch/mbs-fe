@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { useTable, usePagination } from 'react-table'
 import { CButton, CFormSelect } from '@coreui/react'
@@ -50,9 +50,11 @@ const Styles = styled.div`
 `
 
 const EditableCell = ({
+  toggleModalMaterialQuantity,
   updateMaterialService,
   currencies,
-  levyCategories,
+  dataQuantityMethod,
+  dataDropdown,
   value: initialValue,
   row: { index },
   column: { id },
@@ -60,7 +62,29 @@ const EditableCell = ({
 }) => {
   const [value, setValue] = useState(initialValue)
   const [visibleSelect, setVisibleSelect] = useState(false)
+  const [disableBtn, setDisableBtn] = useState(true)
 
+  const onChangeQuantity = (e) => {
+    let isi = ''
+    setValue(e.currentTarget.value)
+    isi = e.currentTarget.value
+    updateMaterialService(index, id, isi)
+    var element = document.getElementById('scheduled')
+    element.onclick = () => {
+      onClickSchedule()
+    }
+    if (isi === 'Constant Value') {
+      document.getElementById('constant').disabled = false
+      setDisableBtn(true)
+      element.disabled = true
+      element.classList.add('disabled')
+    } else if (isi === 'Scheduled Values') {
+      document.getElementById('constant').disabled = true
+      setDisableBtn(false)
+      element.disabled = false
+      element.classList.remove('disabled')
+    }
+  }
   const onChange = (e) => {
     let isi = ''
     if (e.currentTarget.nodeName === 'INPUT') {
@@ -78,8 +102,11 @@ const EditableCell = ({
   const onClick = () => {
     setVisibleSelect(true)
   }
+  const onClickSchedule = () => {
+    toggleModalMaterialQuantity()
+  }
 
-  React.useEffect(() => {
+  useEffect(() => {
     setValue(initialValue)
   }, [initialValue])
 
@@ -103,7 +130,7 @@ const EditableCell = ({
           })}
       </select>
     </div>
-  ) : id === 'levyCategoryId' ? (
+  ) : id === 'materialId' ? (
     <div onClick={onClick}>
       <select
         id={id}
@@ -113,18 +140,62 @@ const EditableCell = ({
         onChange={onChange}
         onBlur={onBlur}
       >
-        {levyCategories &&
-          levyCategories.map((item, index) => {
+        {dataDropdown &&
+          dataDropdown.map((item, index) => {
             return (
-              <option key={index} value={item.levyCategoryId}>
-                {item.levyCategoryId < 0 ? '' : item.levyCategoryName}
+              <option key={index} value={item.value}>
+                {item.value < 0 ? '' : item.label}
               </option>
             )
           })}
       </select>
     </div>
+  ) : id === 'quantity' ? (
+    <div onClick={onClick}>
+      <select
+        id={id}
+        data-index={index}
+        className={'' + (visibleSelect || value ? 'visible' : 'invisible')}
+        value={value}
+        onChange={onChangeQuantity}
+        onBlur={onBlur}
+      >
+        {dataQuantityMethod &&
+          dataQuantityMethod.map((item, index) => {
+            return (
+              <option key={index} value={item.value}>
+                {item.value < 0 ? '' : item.label}
+              </option>
+            )
+          })}
+      </select>
+    </div>
+  ) : id === 'scheduled' ? (
+    // <div onClick={onClick}>
+    <CButton color="primary" id={id} size="sm" disabled={disableBtn}>
+      . . .
+    </CButton>
   ) : (
-    <input id={id} data-index={index} value={value} onChange={onChange} onBlur={onBlur} />
+    // <button
+    //   className="btn-sm btn-default btn-block"
+    //   id={id}
+    //   onClick={() => {
+    //
+    //     toggleModalMaterialQuantity()
+    //   }}
+    //   disabled={disableBtn}
+    // >
+    //   . . .
+    // </button>
+    // </div>
+    <input
+      id={id}
+      data-index={index}
+      className={index}
+      value={value}
+      onChange={onChange}
+      onBlur={onBlur}
+    />
   )
 }
 
@@ -133,10 +204,13 @@ const defaultColumn = {
 }
 
 function Table({
+  toggleModalMaterialQuantity,
   dataMaterialService,
   updateMaterialService,
   currencies,
   levyCategories,
+  dataQuantityMethod,
+  dataDropdown,
   columns,
   data,
   updateMyData,
@@ -159,10 +233,13 @@ function Table({
     state: { pageIndex, pageSize },
   } = useTable(
     {
+      toggleModalMaterialQuantity,
       dataMaterialService,
       updateMaterialService,
       currencies,
       levyCategories,
+      dataQuantityMethod,
+      dataDropdown,
       columns,
       data,
       defaultColumn,
@@ -318,6 +395,9 @@ const MaterialOrService = ({
   currencies,
   levyCategories,
   isNew,
+  dataDropdown,
+  dataQuantityMethod,
+  toggleModalMaterialQuantity,
 }) => {
   const columns = useMemo(
     () => [
@@ -397,11 +477,12 @@ const MaterialOrService = ({
     setSkipPageReset(false)
   }, [data])
 
-  //   const resetData = () => setData(originalData)
-
   return (
     <Styles>
       <Table
+        toggleModalMaterialQuantity={toggleModalMaterialQuantity}
+        dataQuantityMethod={dataQuantityMethod}
+        dataDropdown={dataDropdown}
         dataMaterialService={dataMaterialService}
         updateMaterialService={updateMaterialService}
         currencies={currencies}

@@ -1,5 +1,4 @@
 /* eslint-disable no-loop-func */
-/* eslint-disable no-sequences */
 import React, { useEffect, useState, useRef } from 'react'
 import {
   CCol,
@@ -15,7 +14,7 @@ import {
   CAlert,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { cilPencil, cilHistory, cilSave, cilWarning /*cilTrash*/ } from '@coreui/icons'
+import { cilPencil, cilHistory, cilSave, cilWarning } from '@coreui/icons'
 import TabelCostIndices from './TabelCostIndices'
 import './cost.css'
 import { useDispatch, useSelector } from 'react-redux'
@@ -25,7 +24,6 @@ import {
   getEquipmentScheduleOH,
   postEquipmentScheduleOH,
   putEquipmentScheduleOH,
-  // deleteCostIndices,
 } from '../../redux/actions'
 import { isEmptyNullOrUndefined } from 'src/functions'
 import Swal from 'sweetalert2'
@@ -43,7 +41,7 @@ const EquipmentScheduleOHFunction = () => {
   // const [costIndices, setCostIndices] = useState([])
 
   const loading = useSelector((state) => state.EquipmentScheduleOH.loading)
-  const err = useSelector((state) => state.FinanceCostIndices.error)
+  // const err = useSelector((state) => state.FinanceCostIndices.error)
   // const msg = useSelector((state) => state.FinanceCostIndices.message)
   // const isDeleted = useSelector((state) => state.FinanceCostIndices.isDeleted)
   const message = useSelector((state) => state.EquipmentScheduleOH.message)
@@ -52,8 +50,8 @@ const EquipmentScheduleOHFunction = () => {
 
   const setMessageProcess = (isSuccess) => {
     if (isSuccess) {
-      console.log(isSuccess)
-      console.log(message)
+      // console.log(isSuccess)
+      // console.log(message)
       if (message === '') {
         return
       }
@@ -64,14 +62,14 @@ const EquipmentScheduleOHFunction = () => {
     }
   }
 
-  const ToastSuccessDelete = (
-    <CToast className="align-items-center" color="success">
-      <div className="d-flex">
-        <CToastBody>Data has been deleted!</CToastBody>
-        <CToastClose className="me-2 m-auto" />
-      </div>
-    </CToast>
-  )
+  // const ToastSuccessDelete = (
+  //   <CToast className="align-items-center" color="success">
+  //     <div className="d-flex">
+  //       <CToastBody>Data has been deleted!</CToastBody>
+  //       <CToastClose className="me-2 m-auto" />
+  //     </div>
+  //   </CToast>
+  // )
 
   const ToastError = (errorText) => {
     return (
@@ -147,7 +145,7 @@ const EquipmentScheduleOHFunction = () => {
         // Edit data
 
         editData.push({
-          ccFleetOHPeriodID: CostIndexValueId == 'undefined' ? null : Number(CostIndexValueId),
+          ccFleetOHPeriodID: CostIndexValueId === 'undefined' ? null : Number(CostIndexValueId),
           periodId: periods[index].periodId,
           ccFleetOHID: Number(CostIndexId),
           positionN: periods[index].positionN,
@@ -268,7 +266,7 @@ const EquipmentScheduleOHFunction = () => {
     }
     return flatObject
   }
-  const equipmentScheduleOHData = useSelector((state) => state.EquipmentScheduleOH.data)
+  // const equipmentScheduleOHData = useSelector((state) => state.EquipmentScheduleOH.data)
   const eqOHScheduleDataTable = useSelector((state) => {
     if (state.EquipmentScheduleOH.data) {
       let transformData = []
@@ -324,61 +322,61 @@ const EquipmentScheduleOHFunction = () => {
   })
 
   const dataPureCostIndices = useSelector((state) => state.FinanceCostIndices.dataCostIndices)
-  const dataCostIndices = useSelector((state) => {
-    if (state.FinanceCostIndices.dataCostIndices) {
-      let trueDataCostIndices = []
-      let datCostIndices = state.FinanceCostIndices.dataCostIndices
+  // const dataCostIndices = useSelector((state) => {
+  //   if (state.FinanceCostIndices.dataCostIndices) {
+  //     let trueDataCostIndices = []
+  //     let datCostIndices = state.FinanceCostIndices.dataCostIndices
 
-      for (let index = 0; index < datCostIndices.length; index++) {
-        if (datCostIndices[index].costIndexValues.length > 0) {
-          let periods = projectRepresentation.periods
+  //     for (let index = 0; index < datCostIndices.length; index++) {
+  //       if (datCostIndices[index].costIndexValues.length > 0) {
+  //         let periods = projectRepresentation.periods
 
-          if (periods) {
-            var objectPeriod = periods.reduce(
-              (obj, item) => ((obj[item.periodName] = item.periodId), obj),
-              {},
-            )
+  //         if (periods) {
+  //           var objectPeriod = periods.reduce(
+  //             (obj, item) => ((obj[item.periodName] = item.periodId), obj),
+  //             {},
+  //           )
 
-            let mergedArr = merge(periods, datCostIndices[index].costIndexValues)
-            let total = 0
-            localStorage.removeItem('totalArrayPeriod')
-            mergedArr = mergedArr.map((item) => {
-              total++
-              return {
-                periodId: item.periodId,
-                periodName: item.periodName,
-                positionN: item.positionN,
-                costIndexId: datCostIndices[index].costIndexId, // item.costIndexId,
-                costIndexName: datCostIndices[index].costIndexName,
-                costIndexValue: item.costIndexValue,
-                costIndexValueId: item.costIndexValueId,
-              }
-            })
-            localStorage.setItem('totalArrayPeriod', total)
+  //           let mergedArr = merge(periods, datCostIndices[index].costIndexValues)
+  //           let total = 0
+  //           localStorage.removeItem('totalArrayPeriod')
+  //           mergedArr = mergedArr.map((item) => {
+  //             total++
+  //             return {
+  //               periodId: item.periodId,
+  //               periodName: item.periodName,
+  //               positionN: item.positionN,
+  //               costIndexId: datCostIndices[index].costIndexId, // item.costIndexId,
+  //               costIndexName: datCostIndices[index].costIndexName,
+  //               costIndexValue: item.costIndexValue,
+  //               costIndexValueId: item.costIndexValueId,
+  //             }
+  //           })
+  //           localStorage.setItem('totalArrayPeriod', total)
 
-            let fixData = returnFlattenObject(mergedArr)
+  //           let fixData = returnFlattenObject(mergedArr)
 
-            objectPeriod['indexname'] = datCostIndices[index].costIndexName
-            objectPeriod['costIndexId'] = datCostIndices[index].costIndexId
+  //           objectPeriod['indexname'] = datCostIndices[index].costIndexName
+  //           objectPeriod['costIndexId'] = datCostIndices[index].costIndexId
 
-            trueDataCostIndices.push(fixData)
-          }
-        } else {
-          if (projectRepresentation.periods.length > 0) {
-            let objData = { indexname: datCostIndices[index].costIndexName }
-            objData[projectRepresentation.periods[0].periodName] = null
-            objData['costIndexId'] = datCostIndices[index].costIndexId
-            // objData['periodId'] = 0
-            objData['positionN'] = index
-            objData['costIndexValueId'] = 0
-            trueDataCostIndices.push(objData)
-          }
-        }
-      }
+  //           trueDataCostIndices.push(fixData)
+  //         }
+  //       } else {
+  //         if (projectRepresentation.periods.length > 0) {
+  //           let objData = { indexname: datCostIndices[index].costIndexName }
+  //           objData[projectRepresentation.periods[0].periodName] = null
+  //           objData['costIndexId'] = datCostIndices[index].costIndexId
+  //           // objData['periodId'] = 0
+  //           objData['positionN'] = index
+  //           objData['costIndexValueId'] = 0
+  //           trueDataCostIndices.push(objData)
+  //         }
+  //       }
+  //     }
 
-      return trueDataCostIndices
-    }
-  })
+  //     return trueDataCostIndices
+  //   }
+  // })
   return (
     <CRow>
       <Spinner loading={loading} />

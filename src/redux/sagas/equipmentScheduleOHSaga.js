@@ -10,10 +10,8 @@ import {
 import { all, call, put, takeLatest } from 'redux-saga/effects'
 import { GET, PUT, DELETE, POST } from '../../services'
 
-export function* getEquipmentScheduleOH(action) {
-  console.log('test', action)
+export function* getEquipmentSchedulePA(action) {
   try {
-    console.log('test')
     const res = yield call(
       GET,
       URL.EQUIPMENTSCHEDULEOH + `?costcentreId=${action.payload.costCentreId}`,
@@ -38,7 +36,7 @@ export function* getEquipmentScheduleOH(action) {
   }
 }
 
-export function* postEquipmentScheduleOH(action) {
+export function* postEquipmentSchedulePA(action) {
   console.log('Post', action.payload)
   try {
     const res = yield call(POST, URL.EQUIPMENTSCHEDULEOH, action.payload)
@@ -62,7 +60,7 @@ export function* postEquipmentScheduleOH(action) {
     })
   }
 }
-export function* putEquipmentScheduleOH(action) {
+export function* putEquipmentSchedulePA(action) {
   try {
     console.log('PUT', action.payload)
 
@@ -87,7 +85,7 @@ export function* putEquipmentScheduleOH(action) {
     })
   }
 }
-export function* deleteEquipmentScheduleOH(action) {
+export function* deleteEquipmentSchedulePA(action) {
   try {
     const res = yield call(DELETE, URL.EQUIPMENTSCHEDULEOH + '/' + action.payload.id)
     console.log(res)
@@ -113,9 +111,7 @@ export function* deleteEquipmentScheduleOH(action) {
 
 export default function* rootSaga() {
   yield all([
-    takeLatest(GET_EQUIPMENTSCHEDULEOH, getEquipmentScheduleOH),
-    takeLatest(POST_EQUIPMENTSCHEDULEOH, postEquipmentScheduleOH),
-    takeLatest(PUT_EQUIPMENTSCHEDULEOH, putEquipmentScheduleOH),
-    takeLatest(DELETE_EQUIPMENTSCHEDULEOH, deleteEquipmentScheduleOH),
+    takeLatest(GET_EQUIPMENTSCHEDULEOH, getEquipmentSchedulePA),
+    takeLatest(POST_EQUIPMENTSCHEDULEOH, postEquipmentSchedulePA),
   ])
 }

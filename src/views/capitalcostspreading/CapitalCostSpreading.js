@@ -12,7 +12,7 @@ import {
   CTabPane,
   CButton,
 } from '@coreui/react'
-import CostCentreTree from './../costcentre/CostCentreTree'
+import CostCentreTree from './../../components/TreeView/CostCentreTree'
 import Equipment from './Equipment'
 // import Infrastructure from './Infrastructure'
 

@@ -17,7 +17,7 @@ import {
   URL,
 } from '../../constants'
 
-import { GET, PUT, POSTWithMessage, DELETE } from '../../services'
+import { GET, PUT, POST, DELETE } from '../../services'
 
 export function* getGenericEquipment() {
   try {
@@ -47,7 +47,7 @@ export function* getGenericEquipment() {
 
 export function* postGenericEquipment(action) {
   try {
-    const res = yield call(POSTWithMessage, URL.GENERAL_EQUIPMENT, action.payload)
+    const res = yield call(POST, URL.GENERAL_EQUIPMENT, action.payload)
 
     if (res) {
       yield put({

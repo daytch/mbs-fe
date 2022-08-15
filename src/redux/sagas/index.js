@@ -30,6 +30,8 @@ import Company from './companySaga'
 import Role from './roleSaga'
 import ProductionFactor from './productionFactorSaga'
 import ProductionSchedule from './productionScheduleSaga'
+import EquipmentSchedulePA from './equipmentSchedulePASaga'
+import EquipmentScheduleRoster from './equipmentScheduleRosterSaga'
 
 export default function* rootSaga() {
   yield all([
@@ -59,10 +61,12 @@ export default function* rootSaga() {
     Infrastructurecc(),
     CostCentre(),
     EquipmentScheduleOH(),
+    EquipmentSchedulePA(),
     User(),
     Company(),
     Role(),
     ProductionFactor(),
     ProductionSchedule(),
+    EquipmentScheduleRoster(),
   ])
 }

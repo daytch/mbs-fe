@@ -11,7 +11,7 @@ import {
   CRow,
   CTabPane,
 } from '@coreui/react'
-import CostCentreTree from './CostCentreTree'
+import CostCentreTree from '../../components/TreeView/CostCentreTree'
 import Equipment from './Equipment'
 import Personel from './Personnel'
 import Material from './Material'

@@ -26,6 +26,16 @@ const spares = () => {
   }
 }
 
+const materials = () => {
+  return {
+    fleetResourceId: '',
+    fleetId: '',
+    resourceId: '',
+    quantityPerOh: '',
+    quantityType: '',
+  }
+}
+
 export default function makeData(...lens) {
   if (lens[1] === 'mainCost') {
     const makeDataLevel = (depth = 0) => {
@@ -42,6 +52,7 @@ export default function makeData(...lens) {
               quantity: lens[2][i].quantity,
               countryId: lens[2][i].countryId,
               componentCost: lens[2][i].componentCost,
+              levyCategoryId: lens[2][i].levyCategoryId,
             }
           }
         }
@@ -52,7 +63,7 @@ export default function makeData(...lens) {
       })
     }
     return makeDataLevel()
-  } else {
+  } else if (lens[1] === 'spares') {
     const makeDataLevel = (depth = 0) => {
       const len = lens[depth]
       return range(len).map((d, i) => {
@@ -68,6 +79,32 @@ export default function makeData(...lens) {
               quantity: lens[2][i].quantity,
               countryId: lens[2][i].countryId,
               sparePartCost: lens[2][i].sparePartCost,
+            }
+          }
+        }
+        return {
+          ...data,
+          subRows: lens[depth + 1] ? makeDataLevel(depth + 1) : undefined,
+        }
+      })
+    }
+
+    return makeDataLevel()
+  } else if (lens[1] === 'material') {
+    const makeDataLevel = (depth = 0) => {
+      const len = lens[depth]
+      return range(len).map((d, i) => {
+        let data = materials()
+
+        if (lens[2].length > 0) {
+          if (lens[2][i]) {
+            data = {
+              rowId: i,
+              fleetResourceId: lens[2][i].fleetResourceId,
+              fleetId: lens[2][i].fleetId,
+              resourceId: lens[2][i].resourceId,
+              quantityPerOh: lens[2][i].quantityPerOh,
+              quantityType: lens[2][i].quantityType,
             }
           }
         }

@@ -34,16 +34,20 @@ import { cilPencil, cilTrash, cilCheckAlt, cilX } from '@coreui/icons'
 import { useDispatch, useSelector } from 'react-redux'
 import DataTable from 'react-data-table-component'
 import {
-  getGenericEquipment,
-  postGenericEquipment,
-  putGenericEquipment,
-  deleteGenericEquipment,
+  // getEquipment,
+  // postEquipment,
+  // putEquipment,
+  // deleteEquipment,
   getCurrencies,
   getLevyCategories,
   getEmployeeType,
   getFleets,
+  postFleets,
+  putFleets,
   getEquipmentTypes,
-  // postFleets,
+  getFleetMaterialService,
+  getMaterials,
+  deleteFleets,
 } from '../../redux/actions'
 import Spinner from '../../components/Spinner'
 import Swal from 'sweetalert2'
@@ -60,7 +64,7 @@ import CreatableSelect from 'react-select/creatable'
 const Equipment = () => {
   const [visible, setVisible] = useState(false)
   const [visibleEQType, setVisibleEQType] = useState(false)
-  // const [visibleModel, setVisibleModel] = useState(false)
+  const [visibleMaterialQuantity, setVisibleMaterialQuantity] = useState(false)
   const [toast, addToast] = useState(0)
   const toaster = useRef()
   const dispatch = useDispatch()
@@ -99,6 +103,7 @@ const Equipment = () => {
   const [fDisposalPercentage, setFDisposalPercentage] = useState('')
   const [fDisposalValue, setFDisposalValue] = useState('')
   const [fCurrency, setFCurrency] = useState('')
+  const [fCountryId, setFCountryId] = useState(0)
   const [fNotes, setFNotes] = useState('')
   // eslint-disable-next-line no-unused-vars
   const [selectedModelId, setSelectedModelId] = useState('')
@@ -115,6 +120,7 @@ const Equipment = () => {
     { value: 'Service', label: 'Service' },
   ])
   const [dataQuantityMethod, setDataQuantityMethod] = useState([
+    { value: '', label: 'Select Material' },
     { value: 'Scheduled Values', label: 'Scheduled Values' },
     { value: 'Constant Value', label: 'Constant Value' },
   ])
@@ -141,11 +147,20 @@ const Equipment = () => {
   // eslint-disable-next-line
   const [validated, setValidated] = useState(false)
 
-  const loading = useSelector((state) => state.GenericEquipment.loading)
+  const loading = useSelector((state) => state.Equipment.loading)
 
-  const err = useSelector((state) => state.GenericEquipment.error)
-  const msg = useSelector((state) => state.GenericEquipment.message)
-  const isDeleted = useSelector((state) => state.GenericEquipment.isDeleted)
+  const err = useSelector((state) => state.Equipment.error)
+  const msg = useSelector((state) => state.Equipment.message)
+  const isDeleted = useSelector((state) => state.Equipment.isDeleted)
+  const materials = useSelector((state) => {
+    let dataDropdown = [{ value: 0, label: 'Select Material' }]
+    if (state.ResourcesMaterials?.data && state.ResourcesMaterials?.data.length > 0) {
+      state.ResourcesMaterials.data.map((item) =>
+        dataDropdown.push({ value: item.resourceId, label: item.resourceName }),
+      )
+    }
+    return dataDropdown
+  })
 
   const setMessageProcess = () => {
     if (err) {
@@ -156,14 +171,17 @@ const Equipment = () => {
       addToast(ToastSuccess)
     }
   }
-
   useEffect(() => {
-    setMessageProcess()
-    dispatch(getGenericEquipment())
+    dispatch(getFleetMaterialService())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+  useEffect(() => {
+    dispatch(getFleetMaterialService())
     dispatch(getCurrencies())
     dispatch(getLevyCategories(projectRepresentation.projectRepresentationId))
     dispatch(getEmployeeType(projectRepresentation.projectRepresentationId))
     dispatch(getFleets({ projectRepresentationId: projectRepresentation.projectRepresentationId }))
+    setMessageProcess()
     // eslint-disable-next-line
   }, [msg, err])
 
@@ -270,7 +288,6 @@ const Equipment = () => {
       }
     }
   }
-
   const updateSpare = (index, id, isi) => {
     let dataCost = {
       rowId: index,
@@ -298,6 +315,7 @@ const Equipment = () => {
     }
   }
 
+  const dataMaterials = useSelector((state) => state.Equipment.dataFleetMaterial)
   const currencies = useSelector((state) => state.Country.dataCurrencies)
   const levyCategories = useSelector((state) => {
     let arrLexyCategories = []
@@ -360,43 +378,71 @@ const Equipment = () => {
     setFleetName('')
     setEquipmentType('')
     setFSpecifications('')
+    setEquipmentModel('')
+    setFAge('')
     setFLife('')
+    setFFleetSize('')
     setFAvailability('')
     setFMaxUtilisation('')
     setFManhourMethod('')
     setFMMR('')
     setFTEF('')
     setFDisposalValueMethod('')
-    setCountryId('')
+    setFCountryId('')
     setCurrency('')
     setFDisposalValue('')
     setFDisposalPercentage('')
     setSpareCostMethod('')
+    setFEquipmentSource('')
+    setFNotes('')
     setSpareCostProportion('')
     setEquipmentModelCosts([])
     setEquipmentModelSpareParts([])
   }
-
   const onClickEdit = (row) => {
     setValidated(false)
     setIsNew(false)
-    setId(row.equipmentModelId)
-    setFleetName(row.equipmentModelName)
+    setId(row.fleetId)
+    setFleetName(row.fleetName)
+    setFAge(row.averageAge)
+    setFFleetSize(row.fleetSize)
+    setFCountryId(row.countryId)
+    setFNotes(row.notes)
     setEquipmentType(row.equipmentTypeName)
-    setFSpecifications(row.specifications)
+    setEquipmentModel(row.equipmentModelName)
+    setFSpecifications(row.specifications || '')
     setFLife(row.lifeEstimated)
     setFAvailability(row.paEstimated)
     setFMaxUtilisation(row.muEstimated)
-    setFManhourMethod(row.mmm)
+    setFManhourMethod(row.mmm || '')
     setFDisposalValueMethod(Number(row.disposalValueMethod))
-    setSpareCostMethod(Number(row.spareCostMethod))
-    setEquipmentModelCosts(row.equipmentModelCosts)
-    setEquipmentModelSpareParts(row.equipmentModelSpareParts)
+    setSpareCostMethod(row.sparesCostMethod)
+    setEquipmentModelCosts(row.mainCostComponent)
+    setEquipmentModelSpareParts(row.spares)
     setFMMR(row.mmrEstimated)
     if (row.tefEstimated) {
       setFTEF(row.tefEstimated)
     }
-    setCountryId(row.countryId)
+    if (row.source) {
+      switch (row.source) {
+        case 'Owned Already':
+          // row.source = 'Owned Already'
+          setFEquipmentSource(1)
+          break
+        case 'Available New':
+          // row.source = 'Available New'
+          setFEquipmentSource(2)
+          break
+        case 'Available Used':
+          // row.source = 'Available Used'
+          setFEquipmentSource(3)
+          break
+
+        default:
+          break
+      }
+    }
+    // setCountryId(row.countryId)
     setCurrency(row.currencyAbbr)
     setFDisposalValue(row.disposalValue ? Number(row.disposalValue) : '')
     if (row.disposalValueRatio > 0) {
@@ -405,10 +451,9 @@ const Equipment = () => {
     if (row.sparesCostRatio) {
       setSpareCostProportion(row.sparesCostRatio)
     }
-    setSpareCostMethod(row.sparesCostMethod)
+    setSpareCostMethod(row.sparesCostMethod || '')
     setVisible(!visible)
   }
-
   const onClickDelete = (row) => {
     Swal.fire({
       title: 'Are you sure?',
@@ -421,7 +466,7 @@ const Equipment = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         let param = { id: row.equipmentModelId }
-        dispatch(deleteGenericEquipment(param))
+        dispatch(deleteFleets(param))
 
         setTimeout(() => {
           addToast(ToastSuccessDelete)
@@ -603,31 +648,31 @@ const Equipment = () => {
       if (form.checkValidity() === true) {
         let payload = {
           from: 'string',
-          fleetId: 0,
+          fleetId: id,
           projectRepresentationId: projectRepresentation.projectRepresentationId,
           projectRepresentationName: projectRepresentation.projectRepresentationName,
           fleetName: fleetName,
           equipmentModelName: equipmentModel,
           equipmentTypeName: equipmentType,
           disposalValueMethod: fDisposalValueMethod,
-          countryId: countryId,
-          currencyAbbr: currency,
-          disposalValue: fDisposalValue,
-          disposalValueRatio: fDisposalPercentage,
+          countryId: Number(fCountryId),
+          currencyAbbr: fCurrency,
+          disposalValue: Number(fDisposalValue),
+          disposalValueRatio: Number(fDisposalPercentage),
           specifications: fSpecifications,
           source: fEquipmentSource,
-          fleetSize: fFleetSize,
-          lifeEstimated: fLife,
-          averageAge: fAge,
-          paEstimated: fAvailability,
-          muEstimated: fMaxUtilisation,
+          fleetSize: Number(fFleetSize),
+          lifeEstimated: Number(fLife),
+          averageAge: Number(fAge),
+          paEstimated: Number(fAvailability),
+          muEstimated: Number(fMaxUtilisation),
           mmm: fManhourMethod,
-          mmrEstimated: fMMR,
-          tefEstimated: fTEF,
+          mmrEstimated: Number(fMMR),
+          tefEstimated: Number(fTEF),
           notes: fNotes,
           sparesCostMethod: spareCostMethod,
-          sparesCostRatio: spareCostProportion,
-          fleetLife: fLife,
+          sparesCostRatio: Number(spareCostProportion),
+          fleetLife: Number(fLife),
           ohusedProject: 0,
           mainCostComponent: getMainCostComponent(),
           spares: getSparePart(),
@@ -636,21 +681,18 @@ const Equipment = () => {
           operators: getOperators(),
         }
 
-        if (Number(countryId) <= 0) {
-          delete payload.countryId
-        }
         if (id > 0) {
-          dispatch(putGenericEquipment(payload))
+          dispatch(putFleets(payload))
         } else {
-          dispatch(postGenericEquipment(payload))
+          dispatch(postFleets(payload))
         }
       }
-      setVisible(!visible)
+      // setVisible(!visible)
       // setTimeout(() => {
       //   addToast(ToastSuccess)
       // }, 1500)
     } else {
-      setVisible(!visible)
+      // setVisible(!visible)
     }
   }
 
@@ -968,9 +1010,13 @@ const Equipment = () => {
                   options={currencies}
                   size="sm"
                   onChange={(e) => {
-                    setFCurrency(e.currentTarget.value)
+                    let country = currencies.filter(
+                      (x) => x.value === Number(e.currentTarget.value),
+                    )
+                    setFCurrency(country[0].label)
+                    setFCountryId(country[0].value)
                   }}
-                  value={fCurrency}
+                  value={fCountryId}
                   disabled={!percenDisabled}
                   required
                 />
@@ -1082,6 +1128,7 @@ const Equipment = () => {
             <CCard>
               <CCardBody>
                 <MainCost
+                  key={Math.random()}
                   equipmentModelCosts={equipmentModelCosts}
                   updateEquipmentModelCosts={updateEquipmentModelCosts}
                   currencies={currencies}
@@ -1102,6 +1149,7 @@ const Equipment = () => {
                     <CRow>
                       <CCol sm={4}>
                         <CFormCheck
+                          key={Math.random()}
                           style={{ fontSize: 'smaller' }}
                           value="1"
                           type="radio"
@@ -1114,6 +1162,7 @@ const Equipment = () => {
                       </CCol>
                       <CCol sm={8}>
                         <CFormCheck
+                          key={Math.random()}
                           style={{ fontSize: 'smaller' }}
                           value="2"
                           type="radio"
@@ -1167,6 +1216,9 @@ const Equipment = () => {
                   currencies={currencies}
                   levyCategories={levyCategories}
                   isNew={isNew}
+                  dataDropdown={materials}
+                  dataQuantityMethod={dataQuantityMethod}
+                  toggleModalMaterialQuantity={toggleModalMaterialQuantity}
                 />
               </CCardBody>
             </CCard>
@@ -1243,25 +1295,47 @@ const Equipment = () => {
   }
 
   const setFleet = () => {
-    setFleetName(selectedFleet.fleetName ? selectedFleet.fleetName : '')
-    setEquipmentType(selectedFleet.equipmentTypeName ? selectedFleet.equipmentTypeName : '')
-    setEquipmentModel(selectedFleet.equipmentModelName ? selectedFleet.equipmentModelName : '')
-    setFSpecifications(selectedFleet.specifications ? selectedFleet.specifications : '')
-    setFEquipmentSource(selectedFleet.source ? selectedFleet.source : '')
-    setFLife(selectedFleet.lifeEstimated ? selectedFleet.lifeEstimated : '')
-    setFAge(selectedFleet.averageAge ? selectedFleet.averageAge : '')
-    setFFleetSize(selectedFleet.fleetSize ? selectedFleet.fleetSize : '')
-    setFAvailability(selectedFleet.availability ? selectedFleet.availability : '')
-    setFMaxUtilisation(selectedFleet.muEstimated ? selectedFleet.muEstimated : '') // ?
-    setFManhourMethod(selectedFleet.mmm ? selectedFleet.mmm : '') // ?
-    setFMMR(selectedFleet.mmrEstimated ? selectedFleet.mmrEstimated : '')
-    setFTEF(selectedFleet.tefEstimated ? selectedFleet.tefEstimated : '')
-    setFDisposalValueMethod(
-      selectedFleet.disposalValueMethod ? selectedFleet.disposalValueMethod : '',
-    )
-    setFDisposalPercentage(selectedFleet.disposalValueRatio ? selectedFleet.disposalValueRatio : '')
-    setFCurrency(selectedFleet.currencyAbbr ? selectedFleet.currencyAbbr : '')
-    setFNotes(selectedFleet.notes ? selectedFleet.notes : '')
+    // console.log('selectedFleet:', selectedFleet)
+    setIsNew(false)
+    setId(selectedFleet.fleetId || '')
+
+    setFleetName(selectedFleet.fleetName || '')
+    setFAge(selectedFleet.averageAge || '')
+    setFFleetSize(selectedFleet.fleetSize || '')
+    setFCountryId(selectedFleet.countryId || '')
+    setFNotes(selectedFleet.notes || '')
+    setEquipmentType(selectedFleet.equipmentTypeName || '')
+    setEquipmentModel(selectedFleet.equipmentModelName || '')
+    setFSpecifications(selectedFleet.specifications || '')
+    setFLife(selectedFleet.lifeEstimated || '')
+    setFAvailability(selectedFleet.paEstimated || '')
+    setFMaxUtilisation(selectedFleet.muEstimated || '')
+    setFManhourMethod(selectedFleet.mmm || '')
+    setFDisposalValueMethod(selectedFleet.disposalValueMethod || '')
+    setSpareCostMethod(selectedFleet.sparesCostMethod || '1')
+    setEquipmentModelCosts(selectedFleet.mainCostComponent || '')
+    setEquipmentModelSpareParts(selectedFleet.spares || '')
+    setFMMR(selectedFleet.mmrEstimated || '')
+    if (selectedFleet.tefEstimated) {
+      setFTEF(selectedFleet.tefEstimated)
+    }
+    const sources = {
+      'Owned Already': '1',
+      'Available New': '2',
+      'Available Used': '3',
+    }
+    if (selectedFleet.source) {
+      setFEquipmentSource(sources[selectedFleet.source])
+    }
+    // setCountryId(selectedFleet.countryId)
+    setCurrency(selectedFleet.currencyAbbr || '')
+    setFDisposalValue(selectedFleet.disposalValue ? Number(selectedFleet.disposalValue) : '')
+    if (selectedFleet.disposalValueRatio > 0) {
+      setFDisposalPercentage(selectedFleet.disposalValueRatio)
+    }
+    if (selectedFleet.sparesCostRatio) {
+      setSpareCostProportion(selectedFleet.sparesCostRatio)
+    }
   }
 
   const onClickOkButton = () => {
@@ -1278,7 +1352,6 @@ const Equipment = () => {
         if (result.isConfirmed) {
           setFleet()
           setVisibleEQType(false)
-          // Swal.fire('Deleted!', 'Your file has been deleted.', 'success')
         }
       })
     } else {
@@ -1289,7 +1362,9 @@ const Equipment = () => {
       })
     }
   }
-
+  const toggleModalMaterialQuantity = () => {
+    setVisibleMaterialQuantity((visibleMaterialQuantity) => !visibleMaterialQuantity)
+  }
   return (
     <>
       <Spinner loading={loading} />
@@ -1312,6 +1387,35 @@ const Equipment = () => {
               >
                 Create New
               </CButton>
+
+              <CModal size="xl" alignment="center" scrollable visible={visibleMaterialQuantity}>
+                <CModalHeader className="px-5">
+                  <CModalTitle>Material / Service Quantity</CModalTitle>
+                </CModalHeader>
+                <CModalBody className="px-5 overflow-auto">
+                  <TableExistingEquipment
+                    data={filteredFleets}
+                    setSelectedModelId={setSelectedModelId}
+                    equipmentModel={equipmentModel}
+                    setSelectedFleet={setSelectedFleet}
+                  />
+                </CModalBody>
+                <CModalFooter>
+                  <CButton color="primary" onClick={onClickOkButton} size="sm">
+                    Ok
+                    <CIcon icon={cilCheckAlt} />
+                  </CButton>
+                  <CButton
+                    color="danger"
+                    onClick={() => setVisibleMaterialQuantity(false)}
+                    type="submit"
+                    size="sm"
+                  >
+                    Cancel
+                    <CIcon icon={cilX} />
+                  </CButton>
+                </CModalFooter>
+              </CModal>
 
               <CModal size="xl" alignment="center" scrollable visible={visibleEQType}>
                 <CModalHeader className="px-5">

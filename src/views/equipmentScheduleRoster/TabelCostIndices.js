@@ -101,7 +101,7 @@ const EditableCell = ({
       <input
         disabled={!isEdit}
         type="text"
-        value={value ? (value.split('~')[0] != 'undefined' ? value.split('~')[0] : '') : ''}
+        value={value ? (value.split('~')[0] !== 'undefined' ? value.split('~')[0] : '') : ''}
         id={id.replace(' ', '_') + index}
         data-valueid={value.split('~')[1]}
         data-periodid={value.split('~')[2]}

@@ -12,11 +12,15 @@ import {
   DELETE_FLEETS_SUCCESS,
   DELETE_FLEETS_ERROR,
   GET_EQUIPMENT_TYPES,
+  GET_FLEET_MATERIAL_SERVICE,
+  GET_FLEET_MATERIAL_SERVICE_ERROR,
+  GET_FLEET_MATERIAL_SERVICE_SUCCESS,
 } from '../../constants'
 
 const INIT_STATE = {
   dataFleets: [],
   dataEquipmentTypes: [],
+  dataFleetMaterial: [],
   loading: true,
   error: '',
   message: '',
@@ -124,6 +128,26 @@ export const Equipment = (state = INIT_STATE, action) => {
       }
     }
 
+    case GET_FLEET_MATERIAL_SERVICE: {
+      return {
+        ...state,
+      }
+    }
+    case GET_FLEET_MATERIAL_SERVICE_SUCCESS: {
+      return {
+        ...state,
+        dataFleetMaterial: action.data,
+        loading: false,
+        isCalendar: false,
+      }
+    }
+    case GET_FLEET_MATERIAL_SERVICE_ERROR: {
+      return {
+        ...state,
+        loading: false,
+        error: action.error,
+      }
+    }
     default:
       return state
   }

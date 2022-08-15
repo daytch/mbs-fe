@@ -17,9 +17,12 @@ import {
 
 import { GET, PUT, POST, DELETE } from '../../services'
 
-export function* getProductionFactor() {
+export function* getProductionFactor(payload) {
   try {
-    const res = yield call(GET, URL.PRODUCTION_FACTOR)
+    const res = yield call(
+      GET,
+      URL.PRODUCTION_FACTOR + '?projectRepresentationId=' + payload.payload.projectRepresentationId,
+    )
 
     yield put({
       type: GET_PRODUCTION_FACTOR_SUCCESS,

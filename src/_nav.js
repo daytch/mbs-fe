@@ -169,26 +169,9 @@ const _nav = [
         to: '/production',
       },
       {
-        component: CNavGroup,
+        component: CNavItem,
         name: 'Equipment',
         to: '/scheduleequipment',
-        items: [
-          {
-            component: CNavItem,
-            name: 'Equipment Roster',
-            to: '/equipmentRoster',
-          },
-          {
-            component: CNavItem,
-            name: 'Equipment OH Function',
-            to: '/equipmentOHFunction',
-          },
-          {
-            component: CNavItem,
-            name: 'Optional Ability(%)',
-            to: '/optionalAbility',
-          },
-        ],
       },
       {
         component: CNavItem,

@@ -57,8 +57,8 @@ const CountriesCurrencies = () => {
 
   const setMessageProcess = (isSuccess) => {
     if (isSuccess) {
-      console.log(isSuccess)
-      console.log(message)
+      // console.log(isSuccess)
+      // console.log(message)
       if (message === '') {
         return
       }

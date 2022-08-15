@@ -342,7 +342,7 @@ const MainCost = ({
     ],
     [],
   )
-
+  // console.log('equipmentModelCosts : ', equipmentModelCosts)
   const [data, setData] = useState(() => makeData(20, 'mainCost', equipmentModelCosts))
   const [originalData] = useState(data)
   const [skipPageReset, setSkipPageReset] = useState(false)

@@ -35,7 +35,6 @@ const ExchangeRateSchedules = lazyRetry(() =>
   import('./views/exchangerateschedules/ExchangeRateSchedules'),
 )
 const CostCentre = lazyRetry(() => import('./views/costcentre/CostCentre'))
-const CostCentreTree = lazyRetry(() => import('./views/costcentre/CostCentreTree'))
 
 //Financial
 const Indexcontingency = lazyRetry(() => import('./views/indexcontingency/Indexcontingency'))
@@ -43,11 +42,6 @@ const LevyCateogries = lazyRetry(() => import('./views/levycategories/LevyCatego
 const Levies = lazyRetry(() => import('./views/levies/Levies'))
 //financial
 
-// EquipmentSchedule
-
-const EquipmentScheduleOHFunction = lazyRetry(() =>
-  import('./views/equipmentOHFunction/EquipmentScheduleOHFunction'),
-)
 // equipmentSchedule
 const Profile = lazyRetry(() => import('./views/profile/Profile'))
 
@@ -115,12 +109,7 @@ const routes = [
   },
   { path: '/indexcontingency', name: 'Index Contingency', component: Indexcontingency },
   { path: '/costcentre', name: 'Cost Centre', component: CostCentre },
-  { path: '/costcentretree', name: 'Cost Centre', component: CostCentreTree },
-  {
-    path: '/equipmentohfunction',
-    name: 'Equipment OH Function',
-    component: EquipmentScheduleOHFunction,
-  },
+
   { path: '/profile', name: 'Profile', component: Profile },
   { path: '/user', name: 'User', component: User },
   { path: '/resetPassword', name: 'Reset', component: Reset },
