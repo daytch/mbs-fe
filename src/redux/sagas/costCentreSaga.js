@@ -59,7 +59,7 @@ export function* putCostCentre(action) {
   try {
     const res = yield call(
       PUT,
-      URL.COSTCENTRE + '/' + action.payload.infrastructureId,
+      URL.COSTCENTRE + '/' + action.payload.costCentreId,
       action.payload,
     )
 

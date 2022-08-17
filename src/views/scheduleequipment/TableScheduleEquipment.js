@@ -80,10 +80,12 @@ const EditableCell = ({
   useEffect(() => {
     setValue(initialValue)
   }, [initialValue])
-
+  // if (value) {
+  
+  // }
   if (id.indexOf('indexnameR') !== -1) {
     if (!isEmptyNullOrUndefined(value) && value.indexOf('~') !== -1) {
-      // debugger
+      
       return (
         <input
           disabled={true}
@@ -105,18 +107,29 @@ const EditableCell = ({
         />
       )
     }
-  } else if (value?.indexOf('~') > -1) {
+  } else if (typeof value === 'number') {
+    
     return (
-      <input
-        disabled={!isEdit}
-        type="text"
-        value={value ? (value.split('~')[0] !== 'undefined' ? value.split('~')[0] : '') : ''}
-        id={id.replace(' ', '_') + index}
-        data-valueid={value.split('~')[1]}
-        data-periodid={value.split('~')[2]}
-        onChange={onChange}
-        onBlur={onBlur}
-      />
+      <div onClick={onClick}>
+        <select
+          disabled={!isEdit}
+          id={id.replace(' ', '_') + index}
+          data-index={index}
+          className="visible"
+          value={value}
+          onChange={onChange}
+          onBlur={onBlur}
+        >
+          {dataRosters &&
+            dataRosters.map((item, index) => {
+              return (
+                <option key={index} value={item.id}>
+                  {item.name < 0 ? '' : item.name}
+                </option>
+              )
+            })}
+        </select>
+      </div>
     )
   } else if (tipe === 'roster') {
     return (
@@ -139,6 +152,19 @@ const EditableCell = ({
             })}
         </select>
       </div>
+    )
+  } else if (value?.indexOf('~') > -1) {
+    return (
+      <input
+        disabled={!isEdit}
+        type="text"
+        value={value ? (value.split('~')[0] !== 'undefined' ? value.split('~')[0] : '') : ''}
+        id={id.replace(' ', '_') + index}
+        data-valueid={value.split('~')[1]}
+        data-periodid={value.split('~')[2]}
+        onChange={onChange}
+        onBlur={onBlur}
+      />
     )
   } else {
     return (
@@ -341,10 +367,11 @@ const TableScheduleEquipment = (props) => {
     pa: dataSchedulePA,
   }
   const [data, setData] = useState(() =>
-    dt[tipe].length > 0 ? makeData(dt[tipe].length, dt[tipe], tipe) : makeData(10, [], tipe),
+    dt[tipe]?.length > 0 ? makeData(dt[tipe]?.length, dt[tipe], tipe) : makeData(10, [], tipe),
   )
   const [skipPageReset, setSkipPageReset] = useState(false)
-
+  // console.log('data roster : ', dt[tipe])
+  // console.log('data : ', data)
   const updateMyData = (rowIndex, columnId, value) => {
     // We also turn on the flag to not reset the page
     setSkipPageReset(true)

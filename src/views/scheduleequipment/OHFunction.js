@@ -1,3 +1,4 @@
+/* eslint-disable no-sequences */
 import React, { useEffect, useState, useRef } from 'react'
 import {
   CCol,

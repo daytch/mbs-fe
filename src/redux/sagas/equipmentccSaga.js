@@ -18,6 +18,7 @@ export function* getEquipmentcc(action) {
       GET,
       URL.FLEETS + `?projectRepresentationId=${action.payload.projectRepresentationId}`,
     )
+    
     var currentDataOption = ['Please Select']
     if (fleets.value) {
       for (let index = 0; index < fleets.value.length; index++) {

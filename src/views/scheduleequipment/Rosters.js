@@ -7,7 +7,7 @@ import './cost.css'
 import PropTypes from 'prop-types'
 
 const Rosters = (props) => {
-  console.log('props : ', props)
+  // console.log('props : ', props)
   const {
     dataRosters,
     dataEquipmentRosters,

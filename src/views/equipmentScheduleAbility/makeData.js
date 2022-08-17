@@ -26,7 +26,7 @@ export default function makeData(...lens) {
     const len = lens[depth]
     return range(len).map((d, i) => {
       let data = dataCalendar()
-      // console.log('data :', data)
+      
       // let total = localStorage.getItem('totalArrayPeriod')
       if (lens[1].length > 0) {
         if (lens[1][i]) {

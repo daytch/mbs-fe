@@ -6,17 +6,18 @@ const range = (len) => {
   return arr
 }
 
-const dataCalendar = () => {
+const dataRoster = () => {
   let dataRepresentation = JSON.parse(localStorage.getItem('projectRepresentation'))
 
   if (dataRepresentation) {
     let dataPeriods = dataRepresentation.periods
-    let objData = { indexname: '' }
+    let objData = { indexnameR: '' }
     for (var i in dataPeriods) {
       if (dataPeriods.hasOwnProperty(i)) {
         objData[dataPeriods[i].periodName] = ''
       }
     }
+
     return objData
   }
 }
@@ -25,8 +26,9 @@ export default function makeData(...lens) {
   const makeDataLevel = (depth = 0) => {
     const len = lens[depth]
     return range(len).map((d, i) => {
-      let data = dataCalendar()
-      // console.log('data :', data)
+      let data = dataRoster()
+
+      // console.log('lens:', lens)
       // let total = localStorage.getItem('totalArrayPeriod')
       if (lens[1].length > 0) {
         if (lens[1][i]) {
@@ -35,19 +37,17 @@ export default function makeData(...lens) {
               let valData = lens[1][i]
               for (var item in valData) {
                 let idx = item.split('_')[1]
-                if (valData[item] === key) {
-                  data[key] =
-                    valData['costIndexValue_' + idx] + '~' + valData['costIndexValueId_' + idx]
-                } else if (key === 'indexname') {
-                  //   debugger
+
+                if (key === 'indexnameR' && valData['ccFleetRosterID_' + idx]) {
+                  // debugger
                   data['indexnameR'] =
-                    valData['fleetName'] +
+                    valData['fleetName_' + idx] +
                     '~' +
-                    valData['ccFleetID'] +
+                    valData['ccFleetRosterID_' + idx] +
                     '~' +
                     valData['periodId_' + idx]
-                } else if (key === 'rosterId') {
-                  data['rosterId'] = valData['rosterId']
+                } else if (valData[item] === key && valData['rosterID_' + idx]) {
+                  data[key] = valData['rosterID_' + idx]
                 }
               }
             }

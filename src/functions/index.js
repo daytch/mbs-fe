@@ -106,3 +106,20 @@ export function DataURIToBlob(dataURI) {
 
   return new Blob([ia], { type: mimeString })
 }
+
+export function merge(...arrays) {
+  const merged = {}
+
+  arrays.forEach((data) => data.forEach((o) => Object.assign((merged[o.periodId] ??= {}), o)))
+
+  return Object.values(merged)
+}
+export const returnFlattenObject = (arr) => {
+  const flatObject = {}
+  for (let i = 0; i < arr.length; i++) {
+    for (const property in arr[i]) {
+      flatObject[`${property}_${i}`] = arr[i][property]
+    }
+  }
+  return flatObject
+}

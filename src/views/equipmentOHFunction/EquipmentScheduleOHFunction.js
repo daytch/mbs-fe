@@ -253,7 +253,7 @@ const EquipmentScheduleOHFunction = () => {
   }, [message, projectRep])
 
   const merge = (...arrays) => {
-    const merged = {}
+    const merged = {}}
 
     arrays.forEach((data) => data.forEach((o) => Object.assign((merged[o.periodId] ??= {}), o)))
 
