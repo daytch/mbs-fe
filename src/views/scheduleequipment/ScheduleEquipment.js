@@ -270,7 +270,7 @@ const ScheduleEquipment = () => {
       var rosterValue = 0
       var rosterText = ''
       if (document.getElementById(id) && !isEmptyNullOrUndefined(e.value)) {
-        debugger
+        
         rosterValue = e.selectedOptions[0].value
         rosterText = e.options[e.selectedIndex].text
 
@@ -284,7 +284,7 @@ const ScheduleEquipment = () => {
         })
       }
     }
-    debugger
+    
     return rosterData
   }
 
