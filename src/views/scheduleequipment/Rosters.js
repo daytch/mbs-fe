@@ -7,14 +7,12 @@ import './cost.css'
 import PropTypes from 'prop-types'
 
 const Rosters = (props) => {
-  // console.log('props : ', props)
+  console.log('Roster props : ', props)
   const {
     dataRosters,
     dataEquipmentRosters,
     arrPeriodData,
     isEdit,
-    setDeletedId,
-    deletedId,
     onClickEdit,
     onClickSave,
     onClickReset,
@@ -30,8 +28,6 @@ const Rosters = (props) => {
               arrPeriodData={arrPeriodData}
               isEdit={isEdit}
               dataScheduleRoster={dataEquipmentRosters}
-              setDeletedId={setDeletedId}
-              deletedId={deletedId}
               data={dataEquipmentRosters}
               dataRosters={dataRosters}
               tipe={'roster'}
@@ -78,9 +74,6 @@ Rosters.propTypes = {
   dataEquipmentRosters: PropTypes.array,
   arrPeriodData: PropTypes.array,
   isEdit: PropTypes.bool,
-  setDeletedId: PropTypes.func,
-  getColumn: PropTypes.func,
-  deletedId: PropTypes.array,
   onClickEdit: PropTypes.func,
   onClickSave: PropTypes.func,
   onClickReset: PropTypes.func,

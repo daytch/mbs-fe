@@ -12,7 +12,6 @@ const INIT_STATE = {
   loading: true,
   error: '',
   message: '',
-  isDeleted: false,
 }
 
 export const EquipmentScheduleRoster = (state = INIT_STATE, action) => {
@@ -21,7 +20,6 @@ export const EquipmentScheduleRoster = (state = INIT_STATE, action) => {
       return {
         ...state,
         loading: true,
-        // data: action.data,
       }
     }
     case GET_EQUIPMENT_ROSTER_SUCCESS: {
@@ -49,8 +47,7 @@ export const EquipmentScheduleRoster = (state = INIT_STATE, action) => {
       return {
         ...state,
         loading: false,
-        message: !state.isDeleted ? state.message + '!' : 'Data has been saved!',
-        isDeleted: false,
+        message: 'Data has been saved!',
       }
     }
     case POST_EQUIPMENT_ROSTER_ERROR: {

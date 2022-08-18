@@ -80,12 +80,32 @@ const EditableCell = ({
   useEffect(() => {
     setValue(initialValue)
   }, [initialValue])
-  // if (value) {
-  
-  // }
+
   if (id.indexOf('indexnameR') !== -1) {
     if (!isEmptyNullOrUndefined(value) && value.indexOf('~') !== -1) {
-      
+      return (
+        <input
+          disabled={true}
+          value={value.split('~')[0]}
+          data-id={value.split('~')[1]}
+          id={id + index}
+          onChange={onChange}
+          onBlur={onBlur}
+        />
+      )
+    } else {
+      return (
+        <input
+          disabled={!isEdit}
+          value={value || ''}
+          onChange={onChange}
+          id={id + index}
+          onBlur={onBlur}
+        />
+      )
+    }
+  } else if (id.indexOf('indexnameO') !== -1) {
+    if (!isEmptyNullOrUndefined(value) && value.indexOf('~') !== -1) {
       return (
         <input
           disabled={true}
@@ -108,7 +128,6 @@ const EditableCell = ({
       )
     }
   } else if (typeof value === 'number') {
-    
     return (
       <div onClick={onClick}>
         <select
@@ -173,6 +192,7 @@ const EditableCell = ({
         value={value || ''}
         data-valueid={valueid}
         id={id.replace(' ', '_') + index}
+        type={tipe === 'pa' ? 'number' : 'text'}
         onChange={onChange}
         onBlur={onBlur}
       />
@@ -360,6 +380,7 @@ const TableScheduleEquipment = (props) => {
     deletedId,
   } = props
   // console.log('props : ', props)
+
   const columns = useMemo(() => arrPeriodData, [arrPeriodData])
   const dt = {
     roster: dataScheduleRoster,
@@ -370,7 +391,8 @@ const TableScheduleEquipment = (props) => {
     dt[tipe]?.length > 0 ? makeData(dt[tipe]?.length, dt[tipe], tipe) : makeData(10, [], tipe),
   )
   const [skipPageReset, setSkipPageReset] = useState(false)
-  // console.log('data roster : ', dt[tipe])
+  // console.log('data tipe : ', dt[tipe])
+  // console.log('tipe : ', tipe)
   // console.log('data : ', data)
   const updateMyData = (rowIndex, columnId, value) => {
     // We also turn on the flag to not reset the page

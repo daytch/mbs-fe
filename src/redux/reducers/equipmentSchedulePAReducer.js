@@ -27,7 +27,6 @@ export const EquipmentSchedulePA = (state = INIT_STATE, action) => {
       return {
         ...state,
         data: action.data,
-        costCentreFleets: action.dataOption,
         loading: false,
         isSuccess: true,
       }

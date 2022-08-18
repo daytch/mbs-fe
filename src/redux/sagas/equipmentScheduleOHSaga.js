@@ -1,107 +1,61 @@
 import {
-  GET_EQUIPMENTSCHEDULEOH,
-  POST_EQUIPMENTSCHEDULEOH,
-  ERROR_EQUIPMENTSCHEDULEOH,
-  SUCCESS_EQUIPMENTSCHEDULEOH,
+  GET_EQUIPMENTSCHEDULE_OH,
+  POST_EQUIPMENTSCHEDULE_OH,
+  POST_EQUIPMENTSCHEDULE_OH_ERROR,
+  POST_EQUIPMENTSCHEDULE_OH_SUCCESS,
+  GET_EQUIPMENTSCHEDULE_OH_ERROR,
+  GET_EQUIPMENTSCHEDULE_OH_SUCCESS,
   URL,
 } from '../../constants'
 import { all, call, put, takeLatest } from 'redux-saga/effects'
-import { GET, PUT, DELETE, POST } from '../../services'
+import { GET, POST } from '../../services'
 
-export function* getEquipmentSchedulePA(action) {
+export function* getEquipmentScheduleOH(action) {
   try {
+    
     const res = yield call(
       GET,
-      URL.EQUIPMENTSCHEDULEOH + `?costcentreId=${action.payload.costCentreId}`,
+      URL.EQUIPMENTSCHEDULEOH + `?costcentreId=${action.payload.costcentreId}`,
     )
-    console.log(action)
-    const equipmentCC = yield call(
-      GET,
-      URL.EQUIPMENTCC + `?costCentreId=${action.payload.costCentreId}`,
-    )
+    
+    // const equipmentCC = yield call(
+    //   GET,
+    //   URL.EQUIPMENTCC + `?costCentreId=${action.payload.costcentreId}`,
+    // )
 
     yield put({
-      type: SUCCESS_EQUIPMENTSCHEDULEOH,
+      type: GET_EQUIPMENTSCHEDULE_OH_SUCCESS,
       data: res.value,
-      dataOption: equipmentCC.value,
+      // dataOption: equipmentCC.value,
       message: 'Load Success',
     })
   } catch (err) {
     yield put({
-      type: ERROR_EQUIPMENTSCHEDULEOH,
+      type: GET_EQUIPMENTSCHEDULE_OH_ERROR,
       error: err.message,
     })
   }
 }
 
-export function* postEquipmentSchedulePA(action) {
-  console.log('Post', action.payload)
+export function* postEquipmentScheduleOH(action) {
   try {
     const res = yield call(POST, URL.EQUIPMENTSCHEDULEOH, action.payload)
 
     if (!res.isError) {
       yield put({
-        type: SUCCESS_EQUIPMENTSCHEDULEOH,
+        type: POST_EQUIPMENTSCHEDULE_OH_SUCCESS,
         message: 'Data has been saved!',
       })
       // yield call(getCurrencies)
     } else {
       yield put({
-        type: ERROR_EQUIPMENTSCHEDULEOH,
+        type: POST_EQUIPMENTSCHEDULE_OH_ERROR,
         message: res.message,
       })
     }
   } catch (err) {
     yield put({
-      type: ERROR_EQUIPMENTSCHEDULEOH,
-      error: err.message,
-    })
-  }
-}
-export function* putEquipmentSchedulePA(action) {
-  try {
-    console.log('PUT', action.payload)
-
-    const res = yield call(PUT, URL.EQUIPMENTSCHEDULEOH, action.payload)
-
-    if (!res.isError) {
-      yield put({
-        type: SUCCESS_EQUIPMENTSCHEDULEOH,
-        message: 'Data has been saved!',
-      })
-      // yield call(getInfraChecklist)
-    } else {
-      yield put({
-        type: ERROR_EQUIPMENTSCHEDULEOH,
-        error: res.message,
-      })
-    }
-  } catch (err) {
-    yield put({
-      type: ERROR_EQUIPMENTSCHEDULEOH,
-      error: err.message,
-    })
-  }
-}
-export function* deleteEquipmentSchedulePA(action) {
-  try {
-    const res = yield call(DELETE, URL.EQUIPMENTSCHEDULEOH + '/' + action.payload.id)
-    console.log(res)
-    if (!res.isError) {
-      yield put({
-        type: SUCCESS_EQUIPMENTSCHEDULEOH,
-        message: 'Data has been deleted!',
-      })
-      // yield call(getInfraChecklist)
-    } else {
-      yield put({
-        type: ERROR_EQUIPMENTSCHEDULEOH,
-        error: res.message,
-      })
-    }
-  } catch (err) {
-    yield put({
-      type: ERROR_EQUIPMENTSCHEDULEOH,
+      type: GET_EQUIPMENTSCHEDULE_OH_ERROR,
       error: err.message,
     })
   }
@@ -109,7 +63,7 @@ export function* deleteEquipmentSchedulePA(action) {
 
 export default function* rootSaga() {
   yield all([
-    takeLatest(GET_EQUIPMENTSCHEDULEOH, getEquipmentSchedulePA),
-    takeLatest(POST_EQUIPMENTSCHEDULEOH, postEquipmentSchedulePA),
+    takeLatest(GET_EQUIPMENTSCHEDULE_OH, getEquipmentScheduleOH),
+    takeLatest(POST_EQUIPMENTSCHEDULE_OH, postEquipmentScheduleOH),
   ])
 }

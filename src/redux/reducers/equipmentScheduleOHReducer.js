@@ -1,19 +1,14 @@
 import {
-  GET_EQUIPMENTSCHEDULEOH,
-  POST_EQUIPMENTSCHEDULEOH,
-  PUT_EQUIPMENTSCHEDULEOH,
-  DELETE_EQUIPMENTSCHEDULEOH,
-  ERROR_EQUIPMENTSCHEDULEOH,
-  SUCCESS_EQUIPMENTSCHEDULEOH,
+  GET_EQUIPMENTSCHEDULE_OH,
+  GET_EQUIPMENTSCHEDULE_OH_ERROR,
+  GET_EQUIPMENTSCHEDULE_OH_SUCCESS,
+  POST_EQUIPMENTSCHEDULE_OH,
+  POST_EQUIPMENTSCHEDULE_OH_ERROR,
+  POST_EQUIPMENTSCHEDULE_OH_SUCCESS,
 } from '../../constants'
 
 const INIT_STATE = {
   data: [],
-  dataOption: [
-    'Please Select',
-    { label: 'Summative', value: '1' },
-    { label: 'Compounding', value: '2' },
-  ],
   costCentreFleets: [],
   loading: false,
   message: '',
@@ -22,7 +17,7 @@ const INIT_STATE = {
 
 export const EquipmentScheduleOH = (state = INIT_STATE, action) => {
   switch (action.type) {
-    case GET_EQUIPMENTSCHEDULEOH: {
+    case GET_EQUIPMENTSCHEDULE_OH: {
       return {
         ...state,
         data: action.data,
@@ -32,7 +27,7 @@ export const EquipmentScheduleOH = (state = INIT_STATE, action) => {
       }
     }
 
-    case SUCCESS_EQUIPMENTSCHEDULEOH: {
+    case GET_EQUIPMENTSCHEDULE_OH_SUCCESS: {
       if (action.data) {
         return {
           ...state,
@@ -42,8 +37,6 @@ export const EquipmentScheduleOH = (state = INIT_STATE, action) => {
           isSuccess: true,
         }
       } else {
-        // console.log(state)
-        // console.log(action)
         return {
           ...state,
           loading: false,
@@ -52,7 +45,7 @@ export const EquipmentScheduleOH = (state = INIT_STATE, action) => {
         }
       }
     }
-    case ERROR_EQUIPMENTSCHEDULEOH: {
+    case GET_EQUIPMENTSCHEDULE_OH_ERROR: {
       return {
         ...state,
         loading: false,
@@ -61,31 +54,24 @@ export const EquipmentScheduleOH = (state = INIT_STATE, action) => {
       }
     }
 
-    case POST_EQUIPMENTSCHEDULEOH: {
+    case POST_EQUIPMENTSCHEDULE_OH: {
       return {
         ...state,
-        data: action.data,
         loading: true,
-        message: '',
-        isSuccess: true,
       }
     }
-    case PUT_EQUIPMENTSCHEDULEOH: {
+    case POST_EQUIPMENTSCHEDULE_OH_SUCCESS: {
       return {
         ...state,
-        data: action.data,
-        loading: true,
-        message: '',
-        isSuccess: true,
+        loading: false,
+        message: 'Data has been saved!',
       }
     }
-    case DELETE_EQUIPMENTSCHEDULEOH: {
+    case POST_EQUIPMENTSCHEDULE_OH_ERROR: {
       return {
         ...state,
-        data: action.data,
-        loading: true,
-        message: '',
-        isSuccess: true,
+        loading: false,
+        error: action.error,
       }
     }
     default:

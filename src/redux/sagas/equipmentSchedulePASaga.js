@@ -14,13 +14,12 @@ export function* getEquipmentSchedulePA(action) {
   try {
     const res = yield call(
       GET,
-      URL.EQUIPMENTSCHEDULEPA + `?costcentreId=${action.payload.costCentreId}`,
+      URL.EQUIPMENTSCHEDULEPA + `?costcentreId=${action.payload.costcentreId}`,
     )
 
     yield put({
       type: GET_EQUIPMENT_PA_SUCCESS,
       data: res.value,
-      dataOption: res.value,
       message: 'Load Success',
     })
   } catch (err) {
@@ -32,7 +31,6 @@ export function* getEquipmentSchedulePA(action) {
 }
 
 export function* postEquipmentSchedulePA(action) {
-  console.log('Post', action.payload)
   try {
     const res = yield call(POST, URL.EQUIPMENTSCHEDULEPA, action.payload)
 
@@ -41,17 +39,16 @@ export function* postEquipmentSchedulePA(action) {
         type: POST_EQUIPMENT_PA_SUCCESS,
         message: 'Data has been saved!',
       })
-      // yield call(getCurrencies)
     } else {
       yield put({
         type: POST_EQUIPMENT_PA_ERROR,
-        message: res.message,
+        error: res.message,
       })
     }
   } catch (err) {
     yield put({
       type: POST_EQUIPMENT_PA_ERROR,
-      message: err.message,
+      error: err.message,
     })
   }
 }
