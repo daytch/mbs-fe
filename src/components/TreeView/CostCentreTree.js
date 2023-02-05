@@ -1,6 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react'
 import Tree from './Tree'
-import { getCostCentre, postCostCentre, putCostCentre, deleteCostCentre } from '../../redux/actions'
+import {
+  getCostCentre,
+  postCostCentre,
+  putCostCentre,
+  deleteCostCentre,
+  getCostCentreName,
+} from '../../redux/actions'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   CCol,
@@ -27,7 +33,7 @@ import PropTypes from 'prop-types'
 
 const CostCentreTree = (props) => {
   // console.log('props', props)
-  const { canInput, getData, setSelectedId, selectedId } = props
+  const { canInput, getData, setSelectedId, selectedId, setCostCentreName } = props
   const dispatch = useDispatch()
   const [visible, setVisible] = useState(false)
   const [CCCode, setCCCode] = useState('')
@@ -49,6 +55,15 @@ const CostCentreTree = (props) => {
   const err = useSelector((state) => state.CostCentre.error)
   const msg = useSelector((state) => state.CostCentre.message)
   const isDeleted = useSelector((state) => state.CostCentre.isDeleted)
+
+  useEffect(() => {
+    dispatch(
+      getCostCentre({ projectRepresentationId: projectRepresentation.projectRepresentationId }),
+    )
+    setMessageProcess()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+  // const dataCostCentre = useSelector((state) => state.CostCentre.data)
 
   useEffect(() => {
     dispatch(
@@ -190,10 +205,18 @@ const CostCentreTree = (props) => {
       }
       setIsSelectedChange(true)
       setSelectedId(data.selected[0])
-      setSelectedId(data.selected[0])
+      // setSelectedId(data.selected[0])
+
+      let selectedCC = rawData.filter((x) => x.costCentreId === Number(data.selected[0]))
+      if (selectedCC.length > 0) {
+        dispatch(getCostCentreName({ costCentreName: selectedCC[0].costCentreName }))
+        if (setCostCentreName) {
+          setCostCentreName(selectedCC[0].costCentreName)
+        }
+      }
+
       loadedData?.core?.data?.forEach((item) => {
         setActiveTree(Number(data.selected[0]), item)
-
         item.state.selected = Number(data.selected[0]) === item.id ? true : false
         if (item.state.selected) {
           return
@@ -208,6 +231,8 @@ const CostCentreTree = (props) => {
       let selectedData = rawData.filter((x) => x.costCentreId === Number(selectedId))
       setCCCode(selectedData[0].costCentreCode)
       setCCName(selectedData[0].costCentreName)
+
+      dispatch(getCostCentreName({ costCentreName: selectedData[0].costCentreName }))
       setTitleModal('Edit Cost Centre Structure')
       setVisible(true)
       setIsEdit(true)
@@ -364,6 +389,7 @@ CostCentreTree.propTypes = {
   getData: PropTypes.func,
   setSelectedId: PropTypes.func,
   selectedId: PropTypes.any,
+  setCostCentreName: PropTypes.func,
 }
 
 export default CostCentreTree

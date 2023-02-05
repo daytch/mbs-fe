@@ -6,6 +6,9 @@ import {
   POST_EQUIPMENT_ROSTER,
   POST_EQUIPMENT_ROSTER_SUCCESS,
   POST_EQUIPMENT_ROSTER_ERROR,
+  GET_EQUIPMENT_ROSTER_REPORT,
+  GET_EQUIPMENT_ROSTER_REPORT_ERROR,
+  GET_EQUIPMENT_ROSTER_REPORT_SUCCESS,
   URL,
 } from '../../constants'
 
@@ -30,6 +33,25 @@ export function* getEquipmentRoster(payload) {
   }
 }
 
+export function* getEquipmentRosterReport(payload) {
+  try {
+    const res = yield call(
+      GET,
+      URL.EQUIPMENTROSTER + '/ReportEquipmentScheduleRoster/' + payload.payload,
+    )
+
+    yield put({
+      type: GET_EQUIPMENT_ROSTER_REPORT_SUCCESS,
+      data: res.value.listEquipmentScheduleRoster,
+    })
+  } catch (err) {
+    yield put({
+      type: GET_EQUIPMENT_ROSTER_REPORT_ERROR,
+      error: err.message,
+    })
+  }
+}
+
 export function* postEquipmentRoster(action) {
   try {
     const res = yield call(POST, URL.EQUIPMENTROSTER, action.payload)
@@ -37,9 +59,8 @@ export function* postEquipmentRoster(action) {
     if (res) {
       yield put({
         type: POST_EQUIPMENT_ROSTER_SUCCESS,
-        data: {},
+        data: res,
       })
-      // yield call(getEquipmentRoster)
     }
   } catch (err) {
     yield put({
@@ -53,5 +74,6 @@ export default function* rootSaga() {
   yield all([
     takeLatest(GET_EQUIPMENT_ROSTER, getEquipmentRoster),
     takeLatest(POST_EQUIPMENT_ROSTER, postEquipmentRoster),
+    takeLatest(GET_EQUIPMENT_ROSTER_REPORT, getEquipmentRosterReport),
   ])
 }

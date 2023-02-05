@@ -393,7 +393,7 @@ const GenericEquipment = () => {
             equipmentModelSpareParts: dataSP,
           }
         }
-        console.log('payload', payload)
+        // console.log('payload', payload)
         if (Number(countryId) <= 0) {
           delete payload.countryId
         }

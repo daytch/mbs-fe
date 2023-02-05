@@ -210,17 +210,6 @@ const CostIndicesSchedules = () => {
       dispatch(putCostIndices(dataCostIndicesEdit))
     }
   }
-  // const onClickDelete = () => {
-  //   if (deletedId.length > 0) {
-  //     dispatch(deleteCostIndices(deletedId))
-  //   } else {
-  //     Swal.fire({
-  //       title: 'Empty Validation',
-  //       text: 'You must select at least one Cost Index.',
-  //       icon: 'warning',
-  //     })
-  //   }
-  // }
   const onClickReset = () => {
     window.location.reload()
   }
@@ -309,7 +298,7 @@ const CostIndicesSchedules = () => {
       return trueDataCostIndices
     }
   })
-  console.log('arrPeriodData', arrPeriodData)
+  // console.log('arrPeriodData', arrPeriodData)
   return (
     <CRow>
       <Spinner loading={loading} />

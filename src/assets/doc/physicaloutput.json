@@ -1,0 +1,188 @@
+[
+  {
+    "id": 1,
+    "report": "Equipment Operating Hours By Cost Centre",
+    "rheader": "Equipment Operating Hours By Cost Centre",
+    "code": "EquipmentOperatingHoursByCostCentre"
+  },
+  {
+    "id": 2,
+    "report": "Equipment Operating Hours Summary",
+    "rheader": "Equipment Operating Hours Summary",
+    "code": "EquipmentOperatingHoursSummary"
+  },
+  {
+    "id": 3,
+    "report": "Equipment Required By Cost Centre",
+    "rheader": "Equipment Required By Cost Centre",
+    "code": "EquipmentRequiredByCostCentre"
+  },
+  {
+    "id": 4,
+    "report": "Equipment Required Summary",
+    "rheader": "Equipment Required Summary",
+    "code": "EquipmentRequiredSummary"
+  },
+  {
+    "id": 5,
+    "report": "Equipment Commissioning By Cost Centre",
+    "rheader": "Equipment Commissioning By Cost Centre",
+    "code": "EquipmentCommissioningByCostCentre"
+  },
+  {
+    "id": 6,
+    "report": "Equipment Commissioning Summary",
+    "rheader": "Equipment Commissioning Summary",
+    "code": "EquipmentCommissioningSummary"
+  },
+  {
+    "id": 7,
+    "report": "Equipment Replacement By Cost Centre",
+    "rheader": "Equipment Replacement By Cost Centre",
+    "code": "EquipmentReplacementByCostCentre"
+  },
+  {
+    "id": 8,
+    "report": "Equipment Replacement Summary",
+    "rheader": "Equipment Replacement Summary",
+    "code": "EquipmentReplacementSummary"
+  },
+  {
+    "id": 9,
+    "report": "Equipment Disposal Expired By Cost Centre",
+    "rheader": "Equipment Disposal Expired By Cost Centre",
+    "code": "EquipmentDisposalExpiredByCostCentre"
+  },
+  {
+    "id": 10,
+    "report": "Equipment Disposal Expired Summary",
+    "rheader": "Equipment Disposal Expired Summary",
+    "code": "EquipmentDisposalExpiredSummary"
+  },
+  {
+    "id": 11,
+    "report": "Equipment Disposal Not Required Cost Centre",
+    "rheader": "Equipment Disposal Not Required Cost Centre",
+    "code": "EquipmentDisposalNotRequiredCostCentre"
+  },
+  {
+    "id": 12,
+    "report": "Equipment Disposal Not Required Summary",
+    "rheader": "Equipment Disposal Not Required Summary",
+    "code": "EquipmentDisposalNotRequiredSummary"
+  },
+  {
+    "id": 13,
+    "report": "Equipment Total Disposal By Cost Centre",
+    "rheader": "Equipment Total Disposal By Cost Centre",
+    "code": "EquipmentTotalDisposalByCostCentre"
+  },
+  {
+    "id": 14,
+    "report": "Equipment Total Disposal Summary",
+    "rheader": "Equipment Total Disposal Summary",
+    "code": "EquipmentTotalDisposalSummary"
+  },
+  {
+    "id": 15,
+    "report": "Equipment Fleet By Cost Centre",
+    "rheader": "Equipment Fleet By Cost Centre",
+    "code": "EquipmentFleetByCostCentre"
+  },
+  {
+    "id": 16,
+    "report": "Equipment Fleet Summary",
+    "rheader": "Equipment Fleet Summary",
+    "code": "EquipmentFleetSummary"
+  },
+  {
+    "id": 17,
+    "report": "Equipment Utilisation By Cost Centre",
+    "rheader": "Equipment Utilisation By Cost Centre",
+    "code": "EquipmentUtilisationByCostCentre"
+  },
+  {
+    "id": 18,
+    "report": "Equipment Utilisation Summary",
+    "rheader": "Equipment Utilisation Summary",
+    "code": "EquipmentUtilisationSummary"
+  },
+  {
+    "id": 19,
+    "report": "Materials/Services By Cost Centre",
+    "rheader": "Materials/Services By Cost Centre",
+    "code": "MaterialsServicesByCostCentre"
+  },
+  {
+    "id": 20,
+    "report": "Materials By Cost Centre",
+    "rheader": "Materials By Cost Centre",
+    "code": "MaterialsByCostCentre"
+  },
+  {
+    "id": 21,
+    "report": "Services By Cost Centre",
+    "rheader": "Services By Cost Centre",
+    "code": "ServicesByCostCentre"
+  },
+  {
+    "id": 22,
+    "report": "Materials/Services (Consumed By Equipment)",
+    "rheader": "Materials/Services (Consumed By Equipment)",
+    "code": "MaterialsServicesConsumedByEquipment"
+  },
+  {
+    "id": 23,
+    "report": "Materials/Services (Not Consumed By Equipment)",
+    "rheader": "Materials/Services (Not Consumed By Equipment)",
+    "code": "MaterialsServicesNotConsumedByEquipment"
+  },
+  {
+    "id": 24,
+    "report": "Materials/Services Summary",
+    "rheader": "Materials/Services Summary",
+    "code": "MaterialsServicesSummary"
+  },
+  {
+    "id": 25,
+    "report": "Employee Excluding Relief By Cost Centre",
+    "rheader": "Employee Excluding Relief By Cost Centre",
+    "code": "EmployeeExcludingReliefByCostCentre"
+  },
+  {
+    "id": 26,
+    "report": "Employee Excluding Relief Summary",
+    "rheader": "Employee Excluding Relief Summary",
+    "code": "EmployeeExcludingReliefSummary"
+  },
+  {
+    "id": 27,
+    "report": "Employee Required for Relief By Cost Centre",
+    "rheader": "Employee Required for Relief By Cost Centre",
+    "code": "EmployeeRequiredforReliefByCostCentre"
+  },
+  {
+    "id": 28,
+    "report": "Employee Required for Relief Summary",
+    "rheader": "Employee Required for Relief Summary",
+    "code": "EmployeeRequiredforReliefSummary"
+  },
+  {
+    "id": 29,
+    "report": "Employee Total By Cost Centre",
+    "rheader": "Employee Total By Cost Centre",
+    "code": "EmployeeTotalByCostCentre"
+  },
+  {
+    "id": 30,
+    "report": "Employee Total Summary",
+    "rheader": "Employee Total Summary",
+    "code": "EmployeeTotalSummary"
+  },
+  {
+    "id": 31,
+    "report": "General Function",
+    "rheader": "General Function",
+    "code": "GeneralFunction"
+  }
+]

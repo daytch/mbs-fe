@@ -7,6 +7,9 @@ import { CButton, CFormSelect } from '@coreui/react'
 import 'react-datepicker/dist/react-datepicker.css'
 import { isEmptyNullOrUndefined } from 'src/functions'
 import PropTypes from 'prop-types'
+import ContextMenu from './../../components/ContextMenu'
+import { useDispatch } from 'react-redux'
+import { showModal } from './../../redux/actions'
 
 const Styles = styled.div`
   padding: 1rem;
@@ -55,6 +58,7 @@ const Styles = styled.div`
 const EditableCell = ({
   isEdit,
   dataRosters,
+  // setVisible,
   tipe,
   value: initialValue,
   row: { index },
@@ -65,7 +69,11 @@ const EditableCell = ({
   const [value, setValue] = useState(initialValue)
   const [valueid, setValueid] = useState('')
   const [visibleSelect, setVisibleSelect] = useState(false)
-
+  const [idx, setIdx] = useState(0)
+  const dispatch = useDispatch()
+  const setVisible = () => {
+    dispatch(showModal())
+  }
   const onChange = (e) => {
     setValue(e.target.value)
     setValueid(e.target.getAttribute('data-valueid'))
@@ -81,6 +89,12 @@ const EditableCell = ({
     setValue(initialValue)
   }, [initialValue])
 
+  useEffect(() => {
+    if (tipe === 'oh') {
+      setIdx((x) => x + 1)
+    }
+  }, [tipe])
+  // console.log('setVisible TableSE : ', setVisible)
   if (id.indexOf('indexnameR') !== -1) {
     if (!isEmptyNullOrUndefined(value) && value.indexOf('~') !== -1) {
       return (
@@ -127,7 +141,30 @@ const EditableCell = ({
         />
       )
     }
-  } else if (typeof value === 'number') {
+  } else if (id.indexOf('indexnameP') !== -1) {
+    if (!isEmptyNullOrUndefined(value) && value.indexOf('~') !== -1) {
+      return (
+        <input
+          disabled={true}
+          value={value.split('~')[0]}
+          data-id={value.split('~')[1]}
+          id={id + index}
+          onChange={onChange}
+          onBlur={onBlur}
+        />
+      )
+    } else {
+      return (
+        <input
+          disabled={!isEdit}
+          value={value || ''}
+          onChange={onChange}
+          id={id + index}
+          onBlur={onBlur}
+        />
+      )
+    }
+  } else if (typeof value === 'number' && tipe === 'roster') {
     return (
       <div onClick={onClick}>
         <select
@@ -149,6 +186,17 @@ const EditableCell = ({
             })}
         </select>
       </div>
+    )
+  } else if (typeof value === 'number' && tipe === 'pa') {
+    return (
+      <input
+        disabled={!isEdit}
+        value={value}
+        id={id.replace(' ', '_') + index}
+        type="number"
+        onChange={onChange}
+        onBlur={onBlur}
+      />
     )
   } else if (tipe === 'roster') {
     return (
@@ -186,17 +234,34 @@ const EditableCell = ({
       />
     )
   } else {
-    return (
-      <input
-        disabled={!isEdit}
-        value={value || ''}
-        data-valueid={valueid}
-        id={id.replace(' ', '_') + index}
-        type={tipe === 'pa' ? 'number' : 'text'}
-        onChange={onChange}
-        onBlur={onBlur}
-      />
-    )
+    if (tipe === 'oh') {
+      return (
+        <div className={id + idx}>
+          {isEdit && <ContextMenu idElem={id + idx} setVisible={setVisible} />}
+          <input
+            disabled={!isEdit}
+            value={value || ''}
+            data-valueid={valueid}
+            id={id.replace(' ', '_') + index}
+            type={tipe === 'pa' ? 'number' : 'text'}
+            onChange={onChange}
+            onBlur={onBlur}
+          />
+        </div>
+      )
+    } else {
+      return (
+        <input
+          disabled={!isEdit}
+          value={value || ''}
+          data-valueid={valueid}
+          id={id.replace(' ', '_') + index}
+          type={tipe === 'pa' ? 'number' : 'text'}
+          onChange={onChange}
+          onBlur={onBlur}
+        />
+      )
+    }
   }
 }
 
@@ -214,6 +279,7 @@ function Table({
   setDeletedId,
   deletedId,
   dataRosters,
+  setVisible,
 }) {
   const {
     getTableProps,
@@ -238,6 +304,7 @@ function Table({
       setDeletedId,
       deletedId,
       dataRosters,
+      setVisible,
       tipe,
       defaultColumn,
       // use the skipPageReset option to disable page resetting temporarily
@@ -378,6 +445,7 @@ const TableScheduleEquipment = (props) => {
     isEdit,
     setDeletedId,
     deletedId,
+    // setVisible,
   } = props
   // console.log('props : ', props)
 
@@ -392,8 +460,8 @@ const TableScheduleEquipment = (props) => {
   )
   const [skipPageReset, setSkipPageReset] = useState(false)
   // console.log('data tipe : ', dt[tipe])
-  // console.log('tipe : ', tipe)
-  // console.log('data : ', data)
+  // console.log('arrPeriodData : ', arrPeriodData)
+  // console.log('data (' + tipe + ') : ', data)
   const updateMyData = (rowIndex, columnId, value) => {
     // We also turn on the flag to not reset the page
     setSkipPageReset(true)
@@ -412,9 +480,9 @@ const TableScheduleEquipment = (props) => {
 
   useEffect(() => {
     setSkipPageReset(false)
-    // console.log('data : ', data)
   }, [data])
 
+  // console.log('setVisible TableSE (parent): ', setVisible)
   return (
     <Styles>
       <Table
@@ -427,6 +495,7 @@ const TableScheduleEquipment = (props) => {
         deletedId={deletedId}
         dataRosters={dataRosters}
         tipe={tipe}
+        // setVisible={setVisible}
       />
     </Styles>
   )
@@ -442,6 +511,7 @@ TableScheduleEquipment.propTypes = {
   dataScheduleRoster: PropTypes.array,
   dataScheduleOH: PropTypes.array,
   dataSchedulePA: PropTypes.array,
+  // setVisible: PropTypes.any,
 }
 
 export default TableScheduleEquipment

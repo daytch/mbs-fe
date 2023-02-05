@@ -32,6 +32,13 @@ import { ProductionSchedule } from './productionScheduleReducer'
 import { ProductionFactor } from './productionFactorReducer'
 import { EquipmentScheduleRoster } from './equipmentScheduleRosterReducer'
 import { EquipmentSchedulePA } from './equipmentSchedulePAReducer'
+import { FunctionPersonnel } from './functionPersonnelReducer'
+import { FunctionGeneral } from './functionGeneralReducer'
+import { FunctionCostCentre } from './functionCostCentreReducer'
+import { MaterialFunction } from './materialFunctionReducer'
+import { FunctionBuilder } from './functionBuilderReducer'
+import { PhysicalOutput } from './physicalOutputReducer'
+import { CostOutput } from './costOutputReducer'
 
 const appReducer = combineReducers({
   getLogin,
@@ -67,6 +74,13 @@ const appReducer = combineReducers({
   ProductionSchedule,
   EquipmentScheduleRoster,
   EquipmentSchedulePA,
+  FunctionPersonnel,
+  FunctionGeneral,
+  FunctionCostCentre,
+  MaterialFunction,
+  FunctionBuilder,
+  PhysicalOutput,
+  CostOutput,
 })
 
 const rootReducer = (state, action) => {

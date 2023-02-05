@@ -119,7 +119,7 @@ const ExchangeRateSchedules = () => {
     let dataExchangeRate = []
     let dataPeriods = dataRepresentation.periods
 
-    while (document.getElementById('Period_0' + idx + '')) {
+    while (document.getElementById('currency' + idx)) {
       if (!isEmptyNullOrUndefined(document.getElementById('currency' + idx).value)) {
         let dataVal = getCostIndexValue(idx, dataPeriods)
         if (dataVal.length > 0) {
@@ -148,11 +148,10 @@ const ExchangeRateSchedules = () => {
       let excRate = document.getElementById(periods[index].periodName.replace(' ', '_') + idx).value
 
       if (!isEmptyNullOrUndefined(ExchRateId) || !isEmptyNullOrUndefined(excRate)) {
-        // Edit data
         data.push({
           projectRepresentationId: projectRepresentation.projectRepresentationId,
           exchRateId: Number(ExchRateId),
-          periodId: Number(periodId),
+          periodId: periodId ? Number(periodId) : periods[index].periodId,
           countryId: Number(CountryId),
           positionN: periods[index].positionN,
           exchRate: excRate ? Number(excRate) : null,

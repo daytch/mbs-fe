@@ -5,7 +5,7 @@ import {
   cilCalendar,
   cilLayers,
   cilFeaturedPlaylist,
-  cilGraph,
+  // cilGraph,
   cibMathworks,
   cilChartLine,
   cilStorage,
@@ -224,12 +224,12 @@ const _nav = [
       },
     ],
   },
-  {
-    component: CNavItem,
-    name: 'Analysis',
-    to: '/analysis',
-    icon: <CIcon icon={cilGraph} customClassName="nav-icon" />,
-  },
+  // {
+  //   component: CNavItem,
+  //   name: 'Analysis',
+  //   to: '/analysis',
+  //   icon: <CIcon icon={cilGraph} customClassName="nav-icon" />,
+  // },
   {
     component: CNavItem,
     name: 'Report',

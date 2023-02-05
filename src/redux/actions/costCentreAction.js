@@ -1,5 +1,6 @@
 import {
   GET_COST_CENTRE,
+  GET_COST_CENTRE_REPORT,
   POST_COST_CENTRE,
   PUT_COST_CENTRE,
   DELETE_COST_CENTRE,
@@ -8,6 +9,13 @@ import {
 export function getCostCentre(data) {
   return {
     type: GET_COST_CENTRE,
+    payload: data,
+  }
+}
+
+export function getCostCentreReport(data) {
+  return {
+    type: GET_COST_CENTRE_REPORT,
     payload: data,
   }
 }

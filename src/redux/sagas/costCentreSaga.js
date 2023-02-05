@@ -12,6 +12,9 @@ import {
   DELETE_COST_CENTRE,
   DELETE_COST_CENTRE_SUCCESS,
   DELETE_COST_CENTRE_ERROR,
+  GET_COST_CENTRE_REPORT,
+  GET_COST_CENTRE_REPORT_ERROR,
+  GET_COST_CENTRE_REPORT_SUCCESS,
   URL,
 } from '../../constants'
 
@@ -31,6 +34,22 @@ export function* getCostCentre(payload) {
   } catch (err) {
     yield put({
       type: GET_COST_CENTRE_ERROR,
+      error: err.message,
+    })
+  }
+}
+
+export function* getCostCentreReport(payload) {
+  try {
+    const res = yield call(GET, URL.COSTCENTRE + '/ReportCostCentres/' + payload.payload)
+
+    yield put({
+      type: GET_COST_CENTRE_REPORT_SUCCESS,
+      data: res.value.listCostCentreStructure,
+    })
+  } catch (err) {
+    yield put({
+      type: GET_COST_CENTRE_REPORT_ERROR,
       error: err.message,
     })
   }
@@ -57,11 +76,7 @@ export function* postCostCentre(action) {
 
 export function* putCostCentre(action) {
   try {
-    const res = yield call(
-      PUT,
-      URL.COSTCENTRE + '/' + action.payload.costCentreId,
-      action.payload,
-    )
+    const res = yield call(PUT, URL.COSTCENTRE + '/' + action.payload.costCentreId, action.payload)
 
     if (res) {
       yield put({
@@ -103,5 +118,6 @@ export default function* rootSaga() {
     takeLatest(POST_COST_CENTRE, postCostCentre),
     takeLatest(PUT_COST_CENTRE, putCostCentre),
     takeLatest(DELETE_COST_CENTRE, deleteCostCentre),
+    takeLatest(GET_COST_CENTRE_REPORT, getCostCentreReport),
   ])
 }

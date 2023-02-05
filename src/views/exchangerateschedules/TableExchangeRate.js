@@ -75,6 +75,12 @@ const EditableCell = ({
   }
 
   useEffect(() => {
+    if (id.toLowerCase().indexOf('period') > -1) {
+      setPeriodId(value)
+    }
+  }, [id, value])
+
+  useEffect(() => {
     setValue(initialValue)
   }, [initialValue])
 

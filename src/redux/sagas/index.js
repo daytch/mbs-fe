@@ -32,6 +32,13 @@ import ProductionFactor from './productionFactorSaga'
 import ProductionSchedule from './productionScheduleSaga'
 import EquipmentSchedulePA from './equipmentSchedulePASaga'
 import EquipmentScheduleRoster from './equipmentScheduleRosterSaga'
+import FunctionPersonnel from './functionPersonnelSaga'
+import FunctionGeneral from './functionGeneralSaga'
+import FunctionCostCentre from './functionCostCentreSaga'
+import MaterialFunction from './materialFunctionSaga'
+import FunctionBuilder from './functionBuilderSaga'
+import PhysicalOutput from './physicalOutputSaga'
+import CostOutput from './costOutputSaga'
 
 export default function* rootSaga() {
   yield all([
@@ -68,5 +75,12 @@ export default function* rootSaga() {
     ProductionFactor(),
     ProductionSchedule(),
     EquipmentScheduleRoster(),
+    FunctionPersonnel(),
+    FunctionGeneral(),
+    FunctionCostCentre(),
+    MaterialFunction(),
+    FunctionBuilder(),
+    PhysicalOutput(),
+    CostOutput(),
   ])
 }

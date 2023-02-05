@@ -3,6 +3,7 @@ import {
   POST_PRODUCTION_SCHEDULE,
   PUT_PRODUCTION_SCHEDULE,
   DELETE_PRODUCTION_SCHEDULE,
+  GET_REPORT_PRODUCTION_SCHEDULES,
 } from '../../constants'
 
 export function getProductionSchedule(data) {
@@ -29,6 +30,13 @@ export function putProductionSchedule(data) {
 export function deleteProductionSchedule(data) {
   return {
     type: DELETE_PRODUCTION_SCHEDULE,
+    payload: data,
+  }
+}
+
+export function getReportProductionSchedule(data) {
+  return {
+    type: GET_REPORT_PRODUCTION_SCHEDULES,
     payload: data,
   }
 }

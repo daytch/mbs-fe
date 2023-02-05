@@ -53,8 +53,8 @@ export const Country = (state = INIT_STATE, action) => {
     case GET_PROJECT_COUNTRY: {
       return {
         ...state,
-        dataCountry: action.data,
-        dataCountries: action.countries,
+        // dataCountry: action.data,
+        // dataCountries: action.countries,
         successMessage: '',
       }
     }

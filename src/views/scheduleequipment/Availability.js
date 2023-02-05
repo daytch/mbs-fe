@@ -8,14 +8,7 @@ import PropTypes from 'prop-types'
 
 const Availability = (props) => {
   // console.log('Availability props : ', props)
-  const {
-    dataEquipmentPA,
-    arrPeriodData,
-    isEdit,
-    onClickEdit,
-    onClickSave,
-    onClickReset,
-  } = props
+  const { dataEquipmentPA, arrPeriodData, isEdit, onClickEdit, onClickSave, onClickReset } = props
 
   return (
     <CRow>

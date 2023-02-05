@@ -329,7 +329,7 @@ const Infrastructure = (props) => {
   const [data, setData] = useState(() =>
     props.dataCostIndices.length > 0 ? makeData(20, props.dataCostIndices) : makeData(101, []),
   )
-  console.log('data', props.dataCostIndices)
+  // console.log('data', props.dataCostIndices)
   const [skipPageReset, setSkipPageReset] = useState(false)
 
   const updateMyData = (rowIndex, columnId, value) => {

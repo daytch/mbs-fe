@@ -5,10 +5,14 @@ import {
   GET_PROJECT_REPRESENTATION_DETAIL,
   GET_PROJECT_REPRESENTATION_DETAIL_SUCCESS,
   GET_PROJECT_REPRESENTATION_DETAIL_ERROR,
+  GET_INDEX_CONTINGENCY_REPORT,
+  GET_INDEX_CONTINGENCY_REPORT_ERROR,
+  GET_INDEX_CONTINGENCY_REPORT_SUCCESS,
 } from '../../constants'
 
 const INIT_STATE = {
   data: [],
+  report: {},
   loading: true,
   error: '',
   message: '',
@@ -55,6 +59,27 @@ export const IndexContingency = (state = INIT_STATE, action) => {
       }
     }
     case GET_PROJECT_REPRESENTATION_DETAIL_ERROR: {
+      return {
+        ...state,
+        loading: false,
+        error: action.error,
+      }
+    }
+
+    case GET_INDEX_CONTINGENCY_REPORT: {
+      return {
+        ...state,
+      }
+    }
+    case GET_INDEX_CONTINGENCY_REPORT_SUCCESS: {
+      return {
+        ...state,
+        report: action.data,
+        loading: false,
+        isCalendar: false,
+      }
+    }
+    case GET_INDEX_CONTINGENCY_REPORT_ERROR: {
       return {
         ...state,
         loading: false,

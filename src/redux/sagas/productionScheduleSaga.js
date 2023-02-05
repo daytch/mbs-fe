@@ -12,10 +12,34 @@ import {
   DELETE_PRODUCTION_SCHEDULE,
   DELETE_PRODUCTION_SCHEDULE_SUCCESS,
   DELETE_PRODUCTION_SCHEDULE_ERROR,
+  GET_REPORT_PRODUCTION_SCHEDULES,
+  GET_REPORT_PRODUCTION_SCHEDULES_ERROR,
+  GET_REPORT_PRODUCTION_SCHEDULES_SUCCESS,
   URL,
 } from '../../constants'
 
 import { GET, PUT, POST, DELETE } from '../../services'
+
+export function* getReportProductionSchedule(action) {
+  try {
+    const res = yield call(
+      GET,
+      URL.PRODUCTION_SCHEDULE +
+        '/ReportProductionSchedules/' +
+        action.payload.projectRepresentationId,
+    )
+
+    yield put({
+      type: GET_REPORT_PRODUCTION_SCHEDULES_SUCCESS,
+      data: res.value,
+    })
+  } catch (err) {
+    yield put({
+      type: GET_REPORT_PRODUCTION_SCHEDULES_ERROR,
+      error: err.message,
+    })
+  }
+}
 
 export function* getProductionSchedule(payload) {
   try {
@@ -102,5 +126,6 @@ export default function* rootSaga() {
     takeLatest(POST_PRODUCTION_SCHEDULE, postProductionSchedule),
     takeLatest(PUT_PRODUCTION_SCHEDULE, putProductionSchedule),
     takeLatest(DELETE_PRODUCTION_SCHEDULE, deleteProductionSchedule),
+    takeLatest(GET_REPORT_PRODUCTION_SCHEDULES, getReportProductionSchedule),
   ])
 }

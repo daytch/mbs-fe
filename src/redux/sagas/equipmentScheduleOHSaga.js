@@ -5,6 +5,9 @@ import {
   POST_EQUIPMENTSCHEDULE_OH_SUCCESS,
   GET_EQUIPMENTSCHEDULE_OH_ERROR,
   GET_EQUIPMENTSCHEDULE_OH_SUCCESS,
+  GET_EQUIPMENT_OH_REPORT,
+  GET_EQUIPMENT_OH_REPORT_SUCCESS,
+  GET_EQUIPMENT_OH_REPORT_ERROR,
   URL,
 } from '../../constants'
 import { all, call, put, takeLatest } from 'redux-saga/effects'
@@ -12,26 +15,39 @@ import { GET, POST } from '../../services'
 
 export function* getEquipmentScheduleOH(action) {
   try {
-    
     const res = yield call(
       GET,
       URL.EQUIPMENTSCHEDULEOH + `?costcentreId=${action.payload.costcentreId}`,
     )
-    
-    // const equipmentCC = yield call(
-    //   GET,
-    //   URL.EQUIPMENTCC + `?costCentreId=${action.payload.costcentreId}`,
-    // )
 
     yield put({
       type: GET_EQUIPMENTSCHEDULE_OH_SUCCESS,
       data: res.value,
-      // dataOption: equipmentCC.value,
       message: 'Load Success',
     })
   } catch (err) {
     yield put({
       type: GET_EQUIPMENTSCHEDULE_OH_ERROR,
+      error: err.message,
+    })
+  }
+}
+
+export function* getEquipmentScheduleOHReport(action) {
+  try {
+    const res = yield call(
+      GET,
+      URL.EQUIPMENTSCHEDULEOH + `/ReportEquipmentSchedule/${action.payload}`,
+    )
+
+    yield put({
+      type: GET_EQUIPMENT_OH_REPORT_SUCCESS,
+      data: res.value.listEquipmentSchedule,
+      message: 'Load Success',
+    })
+  } catch (err) {
+    yield put({
+      type: GET_EQUIPMENT_OH_REPORT_ERROR,
       error: err.message,
     })
   }
@@ -65,5 +81,6 @@ export default function* rootSaga() {
   yield all([
     takeLatest(GET_EQUIPMENTSCHEDULE_OH, getEquipmentScheduleOH),
     takeLatest(POST_EQUIPMENTSCHEDULE_OH, postEquipmentScheduleOH),
+    takeLatest(GET_EQUIPMENT_OH_REPORT, getEquipmentScheduleOHReport),
   ])
 }

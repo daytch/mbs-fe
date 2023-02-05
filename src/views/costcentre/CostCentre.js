@@ -15,7 +15,7 @@ import CostCentreTree from '../../components/TreeView/CostCentreTree'
 import Equipment from './Equipment'
 import Personel from './Personnel'
 import Material from './Material'
-import Infrastructure from './Infrastructure'
+import Infrastructure from './infrastructure/Infrastructure'
 
 const CostCentre = () => {
   // eslint-disable-next-line

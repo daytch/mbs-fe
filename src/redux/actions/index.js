@@ -76,7 +76,7 @@ import {
   getLevyCategoryOption,
 } from './levyCategoriesAction'
 
-import { deleteLevy, getLevies, postLevy, putLevy } from './leviesAction'
+import { deleteLevy, getLevies, postLevy, putLevy, getLevyReport } from './leviesAction'
 import {
   getCostIndices,
   postCostIndices,
@@ -100,6 +100,7 @@ import {
   postEmployeeType,
   putEmployeeType,
   deleteEmployeeType,
+  getEmployeeTypeReport,
 } from './resourcesEmployeeTypeAction'
 import {
   getFleets,
@@ -115,7 +116,11 @@ import {
   putResourcesInfra,
   deleteResourcesInfra,
 } from './resourcesInfrastructureAction'
-import { getProjectRepresentationDetail, putIndexAllocation } from './indexAllocationAction'
+import {
+  getProjectRepresentationDetail,
+  putIndexAllocation,
+  getIndexContingencyReport,
+} from './indexAllocationAction'
 import {
   postEquipmentcc,
   getEquipmentcc,
@@ -125,16 +130,30 @@ import {
 import { postPersonelcc, getPersonelcc, putPersonelcc, deletePersonelcc } from './personelccAction'
 
 import { postMaterialcc, getMaterialcc, putMaterialcc, deleteMaterialcc } from './materialccAction'
-import { postCostCentre, getCostCentre, putCostCentre, deleteCostCentre } from './costCentreAction'
+import {
+  postCostCentre,
+  getCostCentre,
+  getCostCentreReport,
+  putCostCentre,
+  deleteCostCentre,
+} from './costCentreAction'
 
 import {
   postInfrastructurecc,
   getInfrastructrecc,
   putInfrastructurecc,
   deleteInfrastructurecc,
+  getInfrastructreccMaterial,
+  postInfrastructureccMaterial,
+  getInfrastructreccResource,
+  postInfrastructureccResource,
 } from './infrastructureccAction'
 
-import { getEquipmentScheduleOH, postEquipmentScheduleOH } from './equipmentScheduleOHAction'
+import {
+  getEquipmentScheduleOH,
+  getEquipmentScheduleOHReport,
+  postEquipmentScheduleOH,
+} from './equipmentScheduleOHAction'
 
 import {
   getRole,
@@ -155,6 +174,7 @@ import {
   postProductionSchedule,
   putProductionSchedule,
   deleteProductionSchedule,
+  getReportProductionSchedule,
 } from './productionScheduleAction'
 import {
   getProductionFactor,
@@ -162,8 +182,69 @@ import {
   putProductionFactor,
   deleteProductionFactor,
 } from './productionFactorAction'
-import { getEquipmentRoster, postEquipmentRoster } from './equipmentScheduleRosterAction'
+import {
+  getEquipmentRoster,
+  getEquipmentRosterReport,
+  postEquipmentRoster,
+} from './equipmentScheduleRosterAction'
 import { getEquipmentSchedulePA, postEquipmentSchedulePA } from './equipmentSchedulePAAction'
+import {
+  getFuntionPersonnel,
+  getFunctionPersonnelReport,
+  postFuntionPersonnel,
+} from './functionPersonnelAction'
+import { getFuntionGeneral, postFuntionGeneral } from './functionGeneralAction'
+import {
+  getFuntionCostCentre,
+  getFunctionCostCentreReport,
+  postFuntionCostCentre,
+} from './functionCostCentreAction'
+import { getMaterialFunctionReport, getMaterialInfraReport } from './materialFunctionAction'
+import {
+  showModal,
+  hideModal,
+  getCostCentreName,
+  getPeriodName,
+  testFormula,
+  getIdCell,
+} from './functionBuilderAction'
+import {
+  getEquipmentRequiredByCostCentre,
+  getEquipmentRequiredSummary,
+  getEquipmentReplacementByCostCentre,
+  getEquipmentReplacementSummary,
+  getEquipmentCommisionongByCostCentre,
+  getEquipmentDisposalExpiredByCostCentre,
+  getEquipmentDisposalExpiredSummary,
+  getEquipmentDisposalNotRequiredCostCentre,
+  getEquipmentDisposalNotRequiredSummary,
+  getEquipmentTotalDisposalByCostCentre,
+  getEquipmentTotalDisposalSummary,
+  getEquipmentFleetByCostCentre,
+  getEquipmentFleetSummary,
+  getEquipmentUtilisationByCostCentre,
+  getEquipmentUtilisationSummary,
+  getMaterialsServicesByCostCentre,
+  getMaterialsByCostCentre,
+  getServicesByCostCentre,
+  getMaterialsServicesConsumedByEquipment,
+  getMaterialsServicesNotConsumedByEquipment,
+  getMaterialsServicesSummary,
+  getEmployeeExcludingReliefByCostCentre,
+  getEmployeeRequiredReliefByCostCentre,
+  getEmployeeExcludingReliefSummary,
+  getEmployeeRequiredReliefSummary,
+  getEmployeeTotalByCostCentre,
+  getEmployeeTotalSummary,
+  getGeneralFunction,
+} from './physicalOutputAction'
+
+import {
+  getEquipmentCommissioningByCostCentre,
+  getEquipmentCommissioningSummary,
+  getEqpDispossalValueByCostCentre,
+  getEqpDispossalValueSummary,
+} from './costOutputAction'
 
 export {
   doLogin,
@@ -314,4 +395,63 @@ export {
   getEquipmentSchedulePA,
   postEquipmentSchedulePA,
   getFleetMaterialService,
+  getFuntionPersonnel,
+  postFuntionPersonnel,
+  getFuntionGeneral,
+  postFuntionGeneral,
+  getFuntionCostCentre,
+  postFuntionCostCentre,
+  getInfrastructreccMaterial,
+  postInfrastructureccMaterial,
+  getInfrastructreccResource,
+  postInfrastructureccResource,
+  getReportProductionSchedule,
+  getEmployeeTypeReport,
+  getCostCentreReport,
+  getEquipmentRosterReport,
+  getEquipmentScheduleOHReport,
+  getFunctionPersonnelReport,
+  getFunctionCostCentreReport,
+  getMaterialFunctionReport,
+  getMaterialInfraReport,
+  getLevyReport,
+  getIndexContingencyReport,
+  showModal,
+  hideModal,
+  getCostCentreName,
+  getPeriodName,
+  testFormula,
+  getIdCell,
+  getEquipmentRequiredByCostCentre,
+  getEquipmentRequiredSummary,
+  getEquipmentReplacementByCostCentre,
+  getEquipmentReplacementSummary,
+  getEquipmentCommisionongByCostCentre,
+  getEquipmentDisposalExpiredByCostCentre,
+  getEquipmentDisposalExpiredSummary,
+  getEquipmentDisposalNotRequiredCostCentre,
+  getEquipmentDisposalNotRequiredSummary,
+  getEquipmentTotalDisposalByCostCentre,
+  getEquipmentTotalDisposalSummary,
+  getEquipmentFleetByCostCentre,
+  getEquipmentFleetSummary,
+  getEquipmentUtilisationByCostCentre,
+  getEquipmentUtilisationSummary,
+  getMaterialsServicesByCostCentre,
+  getMaterialsByCostCentre,
+  getServicesByCostCentre,
+  getMaterialsServicesConsumedByEquipment,
+  getMaterialsServicesNotConsumedByEquipment,
+  getMaterialsServicesSummary,
+  getEmployeeExcludingReliefByCostCentre,
+  getEmployeeRequiredReliefByCostCentre,
+  getEmployeeExcludingReliefSummary,
+  getEmployeeRequiredReliefSummary,
+  getEmployeeTotalByCostCentre,
+  getEmployeeTotalSummary,
+  getGeneralFunction,
+  getEquipmentCommissioningByCostCentre,
+  getEquipmentCommissioningSummary,
+  getEqpDispossalValueByCostCentre,
+  getEqpDispossalValueSummary,
 }

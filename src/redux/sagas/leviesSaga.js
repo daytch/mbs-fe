@@ -5,6 +5,9 @@ import {
   DELETE_LEVY,
   ERROR_LEVY,
   SUCCESS_LEVY,
+  GET_LEVY_REPORT,
+  GET_LEVY_REPORT_FAILURE,
+  GET_LEVY_REPORT_SUCCESS,
   URL,
 } from '../../constants'
 import { all, call, put, takeLatest } from 'redux-saga/effects'
@@ -22,6 +25,23 @@ export function* getLevies(action) {
   } catch (err) {
     yield put({
       type: ERROR_LEVY,
+      error: err.message,
+    })
+  }
+}
+
+export function* getLevyReport(action) {
+  try {
+    const res = yield call(GET, URL.LEVIES + `/report/${action.payload}`)
+
+    yield put({
+      type: GET_LEVY_REPORT_SUCCESS,
+      data: res.value.listLevyDto,
+      message: 'Load Success',
+    })
+  } catch (err) {
+    yield put({
+      type: GET_LEVY_REPORT_FAILURE,
       error: err.message,
     })
   }
@@ -104,5 +124,6 @@ export default function* rootSaga() {
     takeLatest(POST_LEVY, postLevy),
     takeLatest(PUT_LEVY, putLevy),
     takeLatest(DELETE_LEVY, deleteLevy),
+    takeLatest(GET_LEVY_REPORT, getLevyReport),
   ])
 }

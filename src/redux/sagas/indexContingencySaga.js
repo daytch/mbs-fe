@@ -5,6 +5,9 @@ import {
   GET_PROJECT_REPRESENTATION_DETAIL,
   GET_PROJECT_REPRESENTATION_DETAIL_SUCCESS,
   GET_PROJECT_REPRESENTATION_DETAIL_ERROR,
+  GET_INDEX_CONTINGENCY_REPORT,
+  GET_INDEX_CONTINGENCY_REPORT_ERROR,
+  GET_INDEX_CONTINGENCY_REPORT_SUCCESS,
   URL,
 } from '../../constants'
 import { all, call, put, takeLatest } from 'redux-saga/effects'
@@ -47,9 +50,29 @@ export function* getProjectRepresentationDetail(action) {
   }
 }
 
+export function* getIndexContingencyReport(action) {
+  try {
+    let url = URL.PROJECT_REPRESENTATION + '/ReportIndexAllocation/' + action.payload
+    const res = yield call(GET, url)
+
+    if (res.isSuccess) {
+      yield put({
+        type: GET_INDEX_CONTINGENCY_REPORT_SUCCESS,
+        data: res.value,
+      })
+    }
+  } catch (err) {
+    yield put({
+      type: GET_INDEX_CONTINGENCY_REPORT_ERROR,
+      error: err.message,
+    })
+  }
+}
+
 export default function* rootSaga() {
   yield all([
     takeLatest(PUT_INDEX_ALLOCATION, putIndexAllocation),
     takeLatest(GET_PROJECT_REPRESENTATION_DETAIL, getProjectRepresentationDetail),
+    takeLatest(GET_INDEX_CONTINGENCY_REPORT, getIndexContingencyReport),
   ])
 }

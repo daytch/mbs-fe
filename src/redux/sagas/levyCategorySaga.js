@@ -42,7 +42,7 @@ export function* getLevyCategoriesOption(action) {
       }
     }
 
-    console.log('dataType', dataType)
+    // console.log('dataType', dataType)
     yield put({
       type: SUCCESS_LEVYCATEGORY,
       dataType: dataType,

@@ -26,7 +26,6 @@ export const ResourcesMaterials = (state = INIT_STATE, action) => {
     case GET_MATERIALS: {
       return {
         ...state,
-        data: action.payload,
       }
     }
     case GET_MATERIALS_SUCCESS: {

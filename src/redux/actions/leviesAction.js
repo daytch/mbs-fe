@@ -1,8 +1,15 @@
-import { GET_LEVY, POST_LEVY, PUT_LEVY, DELETE_LEVY } from '../../constants'
+import { GET_LEVY, POST_LEVY, PUT_LEVY, DELETE_LEVY, GET_LEVY_REPORT } from '../../constants'
 
 export function getLevies(payload) {
   return {
     type: GET_LEVY,
+    payload: payload,
+  }
+}
+
+export function getLevyReport(payload) {
+  return {
+    type: GET_LEVY_REPORT,
     payload: payload,
   }
 }

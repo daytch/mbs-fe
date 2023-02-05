@@ -47,7 +47,9 @@ export default function makeData(...lens) {
                 if (valData['value_' + idx]) {
                   // OH Function
                   data[valData['periodName_' + idx]] = valData['value_' + idx]
-                } else if (key === 'indexnameR' && valData['ccFleetRosterID_' + idx]) {
+                } else if (valData['periodName_' + idx] === key && valData['rosterID_' + idx]) {
+                  data[key] = valData['rosterID_' + idx]
+                } else if (key === 'indexnameR' || valData['ccFleetRosterID_' + idx]) {
                   // For Roster
                   data['indexnameR'] =
                     valData['fleetName_' + idx] +
@@ -55,8 +57,6 @@ export default function makeData(...lens) {
                     valData['ccFleetRosterID_' + idx] +
                     '~' +
                     valData['periodId_' + idx]
-                } else if (valData[item] === key && valData['rosterID_' + idx]) {
-                  data[key] = valData['rosterID_' + idx]
                 }
                 // For OH Function
                 else if (key === 'indexnameO' || valData['ccFleetOHID_' + idx]) {

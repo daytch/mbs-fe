@@ -23,7 +23,7 @@ const Personnelcc = lazyRetry(() => import('./views/personnelcc/Personnelcc'))
 const Roster = lazyRetry(() => import('./views/roster/Roster'))
 const Constants = lazyRetry(() => import('./views/constants/Constants'))
 const Report = lazyRetry(() => import('./views/report/Report'))
-const Analysis = lazyRetry(() => import('./views/analysis/Analysis'))
+// const Analysis = lazyRetry(() => import('./views/analysis/Analysis'))
 const Functions = lazyRetry(() => import('./views/function/Function'))
 const Production = lazyRetry(() => import('./views/production/Production'))
 const FinancialData = lazyRetry(() => import('./views/financialdata/FinancialData'))
@@ -71,7 +71,7 @@ const routes = [
   { path: '/financialdata', name: 'Financial Data', component: FinancialData },
   { path: '/scheduleequipment', name: 'Equipment', component: ScheduleEquipment },
   { path: '/report', name: 'Report', component: Report },
-  { path: '/analysis', name: 'Analysis', component: Analysis },
+  // { path: '/analysis', name: 'Analysis', component: Analysis },
   { path: '/function', name: 'Function', component: Functions },
   { path: '/production', name: 'Production', component: Production },
   { path: '/currentproject', name: 'Current Project', component: CurrentProject },

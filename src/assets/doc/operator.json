@@ -1,0 +1,205 @@
+[
+  {
+    "id": 1,
+    "name": "Math Functions",
+    "isActive": false,
+    "child": [
+      {
+        "name": "Abs",
+        "isActive": false,
+        "desc": "Abs(number):returns the absolute value of a number."
+      },
+      {
+        "name": "Atn",
+        "isActive": false,
+        "desc": "Atn(number):returns the arctangent of a number."
+      },
+      {
+        "name": "Cos",
+        "isActive": false,
+        "desc": "Cos(angle):returns the cosine of an angle."
+      },
+      {
+        "name": "Exp",
+        "isActive": false,
+        "desc": "Exp(number):returns e raised to the power, where e = 2.71828183."
+      },
+      {
+        "name": "Fix",
+        "isActive": false,
+        "desc": "Fix(number):returns the integer portion of a number. The fix function will return the first negative number that is greater than or equal to the expression."
+      },
+      {
+        "name": "Int",
+        "isActive": false,
+        "desc": "Int(number):returns the integer portion of a number. The fix function will return the first negative number that is less than or equal to the expression."
+      },
+      {
+        "name": "Log",
+        "isActive": false,
+        "desc": "Log(number):returns the natural logarithm of a number."
+      },
+      {
+        "name": "Sin",
+        "isActive": false,
+        "desc": "Sin(angle):returns the sine of an angle."
+      },
+      {
+        "name": "Sqr",
+        "isActive": false,
+        "desc": "Sqr(number):returns the square root of a number."
+      },
+      {
+        "name": "Tan",
+        "isActive": false,
+        "desc": "Tan(angle):returns the tangent of an angle."
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Operators",
+    "child": []
+  },
+  {
+    "id": 3,
+    "name": "→ Arithmetic",
+    "isActive": false,
+    "child": [
+      {
+        "name": "-",
+        "isActive": false,
+        "desc": "Find the difference between two number or indicate the negative value of a number."
+      },
+      {
+        "name": "*",
+        "isActive": false,
+        "desc": "Multiply two numbers."
+      },
+      {
+        "name": "/",
+        "isActive": false,
+        "desc": "Divide the first number by the second number."
+      },
+      {
+        "name": "\\",
+        "isActive": false,
+        "desc": "Round both numbers to integers, divide the first number by the second number, and then truncate the result to an integer."
+      },
+      {
+        "name": "^",
+        "isActive": false,
+        "desc": "Raise a number to the power of an exponent."
+      },
+      {
+        "name": "+",
+        "isActive": false,
+        "desc": "Sum two numbers."
+      },
+      {
+        "name": "Mod",
+        "isActive": false,
+        "desc": "Divide the first number by the second number, and then return only the remainder."
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "name": "→ Comparison",
+    "isActive": false,
+    "child": [
+      {
+        "name": "<",
+        "isActive": false,
+        "desc": "Returns True if the first value is less than the second value."
+      },
+      {
+        "name": "<=",
+        "isActive": false,
+        "desc": "Returns True if the first value is less than or equal to the second value."
+      },
+      {
+        "name": "<>",
+        "isActive": false,
+        "desc": "Returns True if the first value is not equal to the second value."
+      },
+      {
+        "name": "=",
+        "isActive": false,
+        "desc": "Returns True if the first value is equal to the second value."
+      },
+      {
+        "name": ">",
+        "isActive": false,
+        "desc": "Returns True if the first value is greater than the second value."
+      },
+      {
+        "name": ">=",
+        "isActive": false,
+        "desc": "Returns True if the first value is greater than or equal to the second value."
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "name": "→ Logical",
+    "isActive": false,
+    "child": [
+      {
+        "name": "And",
+        "isActive": false,
+        "desc": ""
+      },
+      {
+        "name": "If",
+        "isActive": false,
+        "desc": "iif(expr,truepart,falsepart)"
+      },
+      {
+        "name": "Not",
+        "isActive": false,
+        "desc": ""
+      },
+      {
+        "name": "Or",
+        "isActive": false,
+        "desc": ""
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "name": "→ Fleet Function",
+    "child": []
+  },
+  {
+    "id": 7,
+    "name": "Lookups",
+    "child": []
+  },
+  {
+    "id": 8,
+    "name": "→ Equipment OH",
+    "child": []
+  },
+  {
+    "id": 9,
+    "name": "→ Production Factor",
+    "child": []
+  },
+  {
+    "id": 10,
+    "name": "→ Production Quantity",
+    "child": []
+  },
+  {
+    "id": 11,
+    "name": "→ Constant",
+    "child": []
+  },
+  {
+    "id": 12,
+    "name": "→ Days In Periods",
+    "child": []
+  }
+]

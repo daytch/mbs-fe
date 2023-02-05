@@ -1,9 +1,10 @@
 /* eslint-disable eqeqeq */
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useCallback } from 'react'
 import CIcon from '@coreui/icons-react'
 import {
   CCard,
   CCardBody,
+  // CCardHeader,
   CCol,
   CRow,
   CToast,
@@ -30,25 +31,61 @@ import {
   deleteInfrastructurecc,
   putInfrastructurecc,
   postInfrastructurecc,
-} from '../../redux/actions'
-import Spinner from '../../components/Spinner'
+  getEmployeeType,
+  getMaterials,
+  getRoster,
+} from '../../../redux/actions'
+import Spinner from '../../../components/Spinner'
 import Swal from 'sweetalert2'
+import InfrastructureResource from './InfrastructureResource'
+import InfrastructureMaterial from './InfrastructureMaterial'
+import { useEffectOnce } from './../../../functions'
 
 const Infrastructurecc = (params) => {
   const [visible, setVisible] = useState(false)
+  const [visibleSecond, setVisibleSecond] = useState(false)
   const [toast, addToast] = useState(0)
   const toaster = useRef()
   const dispatch = useDispatch()
-  // const [costCentreResourceId, setCostCentreResourceId] = useState(0)
+  const [projectRepresentation] = useState(
+    JSON.parse(localStorage.getItem('projectRepresentation')),
+  )
   const [costCentreInfrastructureId, setCostCentreInfrastructureId] = useState(0)
 
   const [units, setUnits] = useState('')
   const [infrastructureId, setInfrastructureId] = useState(0)
   const [quantity, setQuantity] = useState(0)
+  const [selectedInfra, setSelectedInfra] = useState({ id: 0, name: '' })
 
   const [validated, setValidated] = useState(false)
   const isLoading = useSelector((state) => state.Infrastructurecc.loading)
   const datas = useSelector((state) => state.Infrastructurecc.data)
+
+  const resourceColumns = [
+    {
+      Header: 'Employee Type',
+      accessor: 'employeeType',
+      align: 'center',
+    },
+    {
+      Header: 'Roster',
+      accessor: 'roster',
+      align: 'center',
+    },
+  ]
+
+  const materialColumns = [
+    {
+      Header: 'Material/Service',
+      accessor: 'material',
+      align: 'center',
+    },
+    {
+      Header: 'Units',
+      accessor: 'unit',
+      align: 'center',
+    },
+  ]
 
   const infrastructureOptions = useSelector((state) =>
     populateOptions(state.Infrastructurecc.infrastructures),
@@ -72,6 +109,9 @@ const Infrastructurecc = (params) => {
   const message = useSelector((state) => state.Infrastructurecc.message)
   const projectRep = useSelector((state) => state.Navigation.projectRepresentation)
 
+  const dataInfrastructureResource = useSelector((state) => state.Infrastructurecc.dataResource)
+  const dataInfrastructureMaterial = useSelector((state) => state.Infrastructurecc.dataMaterial)
+
   const setMessageProcess = (isSuccess) => {
     if (isSuccess) {
       if (message === '') {
@@ -84,6 +124,46 @@ const Infrastructurecc = (params) => {
     }
   }
 
+  const handleChange = useCallback((state) => {
+    if (state) {
+      setSelectedInfra({
+        id: state.selectedRows[0].infrastructureId,
+        name: state.selectedRows[0].infraStructureName,
+      })
+    } else {
+      // let lastState = JSON.parse(localStorage.getItem('projectState'))
+      // if (lastState) {
+      //   setSelectedRows(lastState.selectedRows)
+      // }
+    }
+  }, [])
+
+  useEffectOnce(() => {
+    if (projectRepresentation.projectRepresentationId) {
+      dispatch(getEmployeeType(projectRepresentation.projectRepresentationId))
+      dispatch(getRoster(projectRepresentation.projectRepresentationId))
+
+      dispatch(
+        getMaterials({ projectRepresentationId: projectRepresentation.projectRepresentationId }),
+      )
+    }
+  })
+
+  const employeeTypes = useSelector((state) => state.ResourcesEmployeeType.data)
+  const rosters = useSelector((state) => {
+    if (state.Roster.data?.length > 0) {
+      let ros = [{ value: -1, label: 'Please select Roster' }]
+      state.Roster.data.forEach((item) => {
+        ros.push({
+          value: item.rosterId,
+          label: item.rosterName,
+        })
+      })
+      return ros
+    }
+  })
+  const materials = useSelector((state) => state.ResourcesMaterials.data)
+  console.log('materials : ', materials)
   useEffect(() => {
     if (params.selectedId != 0) {
       setMessageProcess(isSuccess)
@@ -196,6 +276,19 @@ const Infrastructurecc = (params) => {
     },
   ]
 
+  const columnsModal = [
+    {
+      name: 'Infrastructure',
+      selector: (row) => row.infraStructureName,
+      sortable: true,
+    },
+    {
+      name: 'Units',
+      selector: (row) => row.units,
+      sortable: true,
+    },
+  ]
+
   const handleSubmit = (event) => {
     const form = event.currentTarget
     event.preventDefault()
@@ -264,9 +357,7 @@ const Infrastructurecc = (params) => {
         <CCol xs={12}>
           <CCard className="mb-4">
             <CToaster ref={toaster} push={toast} placement="bottom-end" />
-            {/* <CCardHeader>
-              <strong>Infrastructure</strong>
-            </CCardHeader> */}
+
             <CCardBody>
               <CButton color="primary" size="sm" onClick={() => setVisible(!visible)}>
                 Create New
@@ -377,6 +468,78 @@ const Infrastructurecc = (params) => {
                 </CForm>
               </CModal>
               {datas && <DataTable columns={columns} data={datas} pagination />}
+
+              <CModal
+                size="xl"
+                alignment="center"
+                scrollable
+                backdrop="static"
+                visible={visibleSecond}
+                onClose={onCloseResetAll}
+              >
+                <CForm
+                  className="g-3 needs-validation"
+                  noValidate
+                  validated={validated}
+                  onSubmit={handleSubmit}
+                >
+                  <CModalHeader className="px-3">
+                    <CModalTitle>Cost Centre Infrastructure Resources</CModalTitle>
+                  </CModalHeader>
+                  <CModalBody className="px-3">
+                    <CRow>
+                      <CCol xs={4}>
+                        <CCard className="mb-4">
+                          <CCardBody>
+                            {datas && (
+                              <DataTable
+                                selectableRows
+                                onSelectedRowsChange={handleChange}
+                                selectableRowsNoSelectAll={true}
+                                columns={columnsModal}
+                                data={datas}
+                              />
+                            )}
+                          </CCardBody>
+                        </CCard>
+                      </CCol>
+                      <CCol xs={8}>
+                        {/* <CCard className="mb-4"> */}
+                        <span>Resource(s) allocated to : {selectedInfra.name}</span>
+                        {/* <CCardBody> */}
+                        <InfrastructureResource
+                          arrPeriodData={resourceColumns}
+                          dataInfrastructureResource={dataInfrastructureResource}
+                          employeeTypes={employeeTypes}
+                          rosters={rosters}
+                        />
+                        <InfrastructureMaterial
+                          arrPeriodData={materialColumns}
+                          dataInfrastructureMaterial={dataInfrastructureMaterial}
+                          materials={materials}
+                        />
+                        {/* </CCardBody> */}
+                        {/* </CCard> */}
+                      </CCol>
+                    </CRow>
+                  </CModalBody>
+                  <CModalFooter>
+                    <CButton color="secondary" onClick={() => setVisible(false)} size="sm">
+                      Close
+                    </CButton>
+                    <CButton color="primary" type="submit" size="sm">
+                      Save changes
+                    </CButton>
+                  </CModalFooter>
+                </CForm>
+              </CModal>
+              <CButton
+                color="info float-end"
+                size="sm"
+                onClick={() => setVisibleSecond(!visibleSecond)}
+              >
+                Resources
+              </CButton>
             </CCardBody>
           </CCard>
         </CCol>

@@ -11,10 +11,14 @@ import {
   DELETE_EMPLOYEE_TYPE,
   DELETE_EMPLOYEE_TYPE_SUCCESS,
   DELETE_EMPLOYEE_TYPE_ERROR,
+  GET_EMPLOYEE_TYPE_REPORT,
+  GET_EMPLOYEE_TYPE_REPORT_SUCCESS,
+  GET_EMPLOYEE_TYPE_REPORT_ERROR,
 } from '../../constants'
 
 const INIT_STATE = {
   data: [],
+  report: [],
   loading: true,
   error: '',
   message: '',
@@ -107,6 +111,24 @@ export const ResourcesEmployeeType = (state = INIT_STATE, action) => {
         ...state,
         loading: false,
         error: state.error ? action.data.message + '!' : action.data.message,
+      }
+    }
+
+    case GET_EMPLOYEE_TYPE_REPORT: {
+      return { ...state }
+    }
+    case GET_EMPLOYEE_TYPE_REPORT_SUCCESS: {
+      return {
+        ...state,
+        report: action.data,
+        loading: false,
+      }
+    }
+    case GET_EMPLOYEE_TYPE_REPORT_ERROR: {
+      return {
+        ...state,
+        loading: false,
+        error: action.error,
       }
     }
 

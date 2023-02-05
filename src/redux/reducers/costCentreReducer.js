@@ -11,10 +11,14 @@ import {
   DELETE_COST_CENTRE,
   DELETE_COST_CENTRE_SUCCESS,
   DELETE_COST_CENTRE_ERROR,
+  GET_COST_CENTRE_REPORT,
+  GET_COST_CENTRE_REPORT_ERROR,
+  GET_COST_CENTRE_REPORT_SUCCESS,
 } from '../../constants'
 
 const INIT_STATE = {
   data: [],
+  report: [],
   loading: true,
   error: '',
   message: '',
@@ -37,6 +41,26 @@ export const CostCentre = (state = INIT_STATE, action) => {
       }
     }
     case GET_COST_CENTRE_ERROR: {
+      return {
+        ...state,
+        loading: false,
+        error: action.error,
+      }
+    }
+
+    case GET_COST_CENTRE_REPORT: {
+      return {
+        ...state,
+      }
+    }
+    case GET_COST_CENTRE_REPORT_SUCCESS: {
+      return {
+        ...state,
+        report: action.data,
+        loading: false,
+      }
+    }
+    case GET_COST_CENTRE_REPORT_ERROR: {
       return {
         ...state,
         loading: false,

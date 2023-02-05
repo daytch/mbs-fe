@@ -11,6 +11,9 @@ import {
   DELETE_PRODUCTION_SCHEDULE,
   DELETE_PRODUCTION_SCHEDULE_SUCCESS,
   DELETE_PRODUCTION_SCHEDULE_ERROR,
+  GET_REPORT_PRODUCTION_SCHEDULES,
+  GET_REPORT_PRODUCTION_SCHEDULES_ERROR,
+  GET_REPORT_PRODUCTION_SCHEDULES_SUCCESS,
 } from '../../constants'
 
 const INIT_STATE = {
@@ -19,6 +22,7 @@ const INIT_STATE = {
   error: '',
   message: '',
   isDeleted: false,
+  report: [],
 }
 
 export const ProductionSchedule = (state = INIT_STATE, action) => {
@@ -105,6 +109,27 @@ export const ProductionSchedule = (state = INIT_STATE, action) => {
       }
     }
     case DELETE_PRODUCTION_SCHEDULE_ERROR: {
+      return {
+        ...state,
+        loading: false,
+        error: action.error,
+      }
+    }
+
+    case GET_REPORT_PRODUCTION_SCHEDULES: {
+      return {
+        ...state,
+        loading: true,
+      }
+    }
+    case GET_REPORT_PRODUCTION_SCHEDULES_SUCCESS: {
+      return {
+        ...state,
+        report: action.data,
+        loading: false,
+      }
+    }
+    case GET_REPORT_PRODUCTION_SCHEDULES_ERROR: {
       return {
         ...state,
         loading: false,

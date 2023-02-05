@@ -15,6 +15,7 @@ const OHFunction = (props) => {
     onClickEdit,
     onClickSave,
     onClickReset,
+    // setVisible,
   } = props
 
   return (
@@ -29,6 +30,7 @@ const OHFunction = (props) => {
                 isEdit={isEdit}
                 dataScheduleOH={dataEquipmentOH}
                 tipe={'oh'}
+                // setVisible={setVisible}
               />
             )}
             <CButton
@@ -75,6 +77,7 @@ OHFunction.propTypes = {
   onClickEdit: PropTypes.func,
   onClickSave: PropTypes.func,
   onClickReset: PropTypes.func,
+  // setVisible: PropTypes.func,
 }
 
 export default OHFunction

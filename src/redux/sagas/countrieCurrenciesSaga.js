@@ -14,6 +14,7 @@ export function* handleGetCountriesCurrencies(action) {
 
     if (response.isSuccess && response.value.length > 0) {
       localStorage.setItem('country', JSON.stringify(response.value))
+
       yield put({
         type: 'SET_COUNTRIESCURRENCIES',
         data: response.value,

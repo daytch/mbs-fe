@@ -5,10 +5,14 @@ import {
   DELETE_PERSONELCC,
   ERROR_PERSONELCC,
   SUCCESS_PERSONELCC,
+  GET_EMPLOYEE_TYPE_REPORT,
+  GET_EMPLOYEE_TYPE_REPORT_ERROR,
+  GET_EMPLOYEE_TYPE_REPORT_SUCCESS,
 } from '../../constants'
 
 const INIT_STATE = {
   data: [],
+  report: [],
   employeeTypes: [
     'Please Select employee Type',
     { label: 'Summative', value: '1' },
@@ -24,7 +28,7 @@ export const Personelcc = (state = INIT_STATE, action) => {
     case GET_PERSONELCC: {
       return {
         ...state,
-        data: action.data,
+        // data: action.data,
         message: '',
         loading: true,
         isSuccess: true,
@@ -87,6 +91,28 @@ export const Personelcc = (state = INIT_STATE, action) => {
         isSuccess: true,
       }
     }
+
+    case GET_EMPLOYEE_TYPE_REPORT: {
+      return { ...state }
+    }
+    case GET_EMPLOYEE_TYPE_REPORT_SUCCESS: {
+      return {
+        ...state,
+        report: action.data,
+        message: action.message,
+        loading: true,
+        isSuccess: true,
+      }
+    }
+    case GET_EMPLOYEE_TYPE_REPORT_ERROR: {
+      return {
+        ...state,
+        message: action.error,
+        loading: false,
+        isSuccess: true,
+      }
+    }
+
     default:
       return state
   }

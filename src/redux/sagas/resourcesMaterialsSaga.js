@@ -23,6 +23,7 @@ export function* getMaterials(action) {
       URL.MATERIALS + '?projectRepresentationId=' + action.payload.projectRepresentationId,
     )
 
+    // console.log('action.payload.projectRepresentationId: ', action.payload.projectRepresentationId)
     yield put({
       type: GET_MATERIALS_SUCCESS,
       data: res.value,

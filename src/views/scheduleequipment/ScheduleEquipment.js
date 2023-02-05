@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable no-sequences */
 import React, { useState, useEffect, useRef } from 'react'
 import {
@@ -36,27 +38,56 @@ import { useSelector, useDispatch } from 'react-redux'
 import { isEmptyNullOrUndefined, merge, returnFlattenObject } from 'src/functions'
 import Swal from 'sweetalert2'
 import Spinner from '../../components/Spinner'
+import FunctionBuilder from './../../components/FunctionBuilder/FunctionBuilder'
 
 const ScheduleEquipment = () => {
   const [projectRep] = useState(JSON.parse(localStorage.getItem('projectRepresentation')))
   const [arrPeriodData, setArrPeriodData] = useState([])
-  const [activeKey, setActiveKey] = useState(1)
-  const [selectedId, setSelectedId] = useState(1)
+  const [loading, setLoading] = useState(true)
+  const [activeKey, setActiveKey] = useState(
+    Number(localStorage.getItem('activeTab')) < 1 ? 1 : Number(localStorage.getItem('activeTab')),
+  )
+  const [selectedId, setSelectedId] = useState(
+    !isEmptyNullOrUndefined(localStorage.getItem('costcentreId'))
+      ? Number(localStorage.getItem('costcentreId'))
+      : 0,
+  )
   const toaster = useRef()
   const [toast, addToast] = useState(0)
   const dispatch = useDispatch()
   const [isEdit, setIsEdit] = useState(false)
 
-  const setMessageProcess = (isSuccess) => {
-    if (!isEmptyNullOrUndefined(isSuccess)) {
-      if (isSuccess) {
-        addToast(ToastSuccess(msg))
-      } else {
-        addToast(ToastError(msg))
-      }
+  const loadDataAfterSubmit = () => {
+    getData[activeKey]()
+    getColumn(activeKey)
+    dispatch(getRoster(projectRep.projectRepresentationId))
+  }
+  const setMessageProcessRoster = () => {
+    if (errRoster) {
+      addToast(ToastError(errRoster))
+    } else if (msgRoster) {
+      loadDataAfterSubmit()
+      addToast(ToastSuccess(msgRoster))
+    }
+  }
+  const setMessageProcessOH = () => {
+    if (errOH) {
+      addToast(ToastError(errOH))
+    } else if (msgOH) {
+      loadDataAfterSubmit()
+      addToast(ToastSuccess(msgOH))
+    }
+  }
+  const setMessageProcessPA = () => {
+    if (errPA) {
+      addToast(ToastError(errPA))
+    } else if (msgPA) {
+      loadDataAfterSubmit()
+      addToast(ToastSuccess(msgPA))
     }
   }
   const renderTabs = () => {
+    // console.log('dataEquipmentRosters :', dataEquipmentRosters)
     return (
       <>
         <CNav variant="tabs">
@@ -66,6 +97,7 @@ const ScheduleEquipment = () => {
               onClick={() => {
                 getColumn(1)
                 setActiveKey(1)
+                localStorage.setItem('activeTab', 1)
               }}
             >
               Equipment Rosters
@@ -77,6 +109,7 @@ const ScheduleEquipment = () => {
               onClick={() => {
                 getColumn(2)
                 setActiveKey(2)
+                localStorage.setItem('activeTab', 2)
               }}
             >
               Equipment OH Functions
@@ -88,6 +121,7 @@ const ScheduleEquipment = () => {
               onClick={() => {
                 getColumn(3)
                 setActiveKey(3)
+                localStorage.setItem('activeTab', 3)
               }}
             >
               Optional Availability (%)
@@ -96,8 +130,12 @@ const ScheduleEquipment = () => {
         </CNav>
         <CTabContent>
           <CTabPane role="tabpanel" aria-labelledby="roster-tab" visible={activeKey === 1}>
-            {activeKey === 1 && typeof dataEquipmentRosters !== undefined && projectRep?.periods ? (
+            {activeKey === 1 &&
+            dataEquipmentRosters &&
+            typeof dataEquipmentRosters !== undefined &&
+            projectRep?.periods ? (
               <Rosters
+                key={Math.random()}
                 isEdit={isEdit}
                 arrPeriodData={arrPeriodData}
                 onClickEdit={onClickEdit}
@@ -109,13 +147,19 @@ const ScheduleEquipment = () => {
             ) : (
               <CAlert color="warning" className="d-flex align-items-center">
                 <CIcon icon={cilWarning} className="flex-shrink-0 me-2" width={24} height={24} />
-                <div>Please Insert Periods in Project Representation first.</div>
+                <div>
+                  Please Select Costcentre Or Insert Periods in Project Representation first.
+                </div>
               </CAlert>
             )}
           </CTabPane>
           <CTabPane role="tabpanel" aria-labelledby="oh-tab" visible={activeKey === 2}>
-            {activeKey === 2 && typeof dataEquipmentOH !== undefined && projectRep?.periods ? (
+            {activeKey === 2 &&
+            dataEquipmentOH &&
+            typeof dataEquipmentOH !== undefined &&
+            projectRep?.periods ? (
               <OHFunction
+                key={Math.random()}
                 isEdit={isEdit}
                 arrPeriodData={arrPeriodData}
                 onClickEdit={onClickEdit}
@@ -126,13 +170,19 @@ const ScheduleEquipment = () => {
             ) : (
               <CAlert color="warning" className="d-flex align-items-center">
                 <CIcon icon={cilWarning} className="flex-shrink-0 me-2" width={24} height={24} />
-                <div>Please Insert Periods in Project Representation first.</div>
+                <div>
+                  Please Select Costcentre Or Insert Periods in Project Representation first.
+                </div>
               </CAlert>
             )}
           </CTabPane>
           <CTabPane role="tabpanel" aria-labelledby="pa-tab" visible={activeKey === 3}>
-            {activeKey === 3 && typeof dataEquipmentPA !== undefined && projectRep?.periods ? (
+            {activeKey === 3 &&
+            dataEquipmentPA &&
+            typeof dataEquipmentPA !== undefined &&
+            projectRep?.periods ? (
               <Availability
+                key={Math.random()}
                 isEdit={isEdit}
                 arrPeriodData={arrPeriodData}
                 onClickEdit={onClickEdit}
@@ -143,7 +193,9 @@ const ScheduleEquipment = () => {
             ) : (
               <CAlert color="warning" className="d-flex align-items-center">
                 <CIcon icon={cilWarning} className="flex-shrink-0 me-2" width={24} height={24} />
-                <div>Please Insert Periods in Project Representation first.</div>
+                <div>
+                  Please Select Costcentre Or Insert Periods in Project Representation first.
+                </div>
               </CAlert>
             )}
           </CTabPane>
@@ -172,10 +224,16 @@ const ScheduleEquipment = () => {
       </CToast>
     )
   }
+  let arrDataRosters = [],
+    arrDataOH = [],
+    arrDataPA = []
 
   useEffect(() => {
+    localStorage.setItem('costcentreId', selectedId)
     getData[activeKey]()
     getColumn(activeKey)
+    // let cc = costCentres.filter((x) => x.costCentreId === selectedId)
+    // setCostCentreName(cc.length > 0 ? cc[0].costCentreName : '')
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedId, activeKey])
 
@@ -186,8 +244,8 @@ const ScheduleEquipment = () => {
   }
 
   useEffect(() => {
-    getData[activeKey]()
-    getColumn(1)
+    // getData[activeKey]()
+    getColumn(activeKey)
     dispatch(getRoster(projectRep.projectRepresentationId))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -241,11 +299,14 @@ const ScheduleEquipment = () => {
 
       let fleetName = document.getElementById('indexname' + getPrefix[activeKey] + idx).value
       let datas = getDataRosterDetail(idx, dataPeriods)
-      // console.log('datas: ', datas)
-      if (!isEmptyNullOrUndefined(fleetName) && datas.length > 0) {
+      let dataRosterz = arrDataRosters.filter((x) => x.fleetName === fleetName)
+
+      console.log('datas: ', datas)
+      if (!isEmptyNullOrUndefined(fleetName)) {
         dataRoster.push({
-          ccFleetRosterID: Number(ccFleetRosterID),
-          ccFleetID: Number(selectedId),
+          ccFleetRosterID:
+            ccFleetRosterID && ccFleetRosterID !== 'undefined' ? Number(ccFleetRosterID) : 0,
+          ccFleetID: dataRosterz.length > 0 ? dataRosterz[0].ccFleetID : 0,
           fleetName: fleetName,
           equipmentSchedulePeriodDtos: datas,
         })
@@ -285,7 +346,7 @@ const ScheduleEquipment = () => {
         rosterData.push({
           ccFleetRosterPeriodID: CostIndexValueId === 'undefined' ? null : Number(CostIndexValueId),
           periodId: periods[index].periodId,
-          ccFleetRosterID: Number(CostIndexId),
+          ccFleetRosterID: CostIndexId && CostIndexId !== 'undefined' ? Number(CostIndexId) : 0,
           positionN: periods[index].positionN,
           rosterID: Number(rosterValue),
           rosterName: rosterText,
@@ -310,9 +371,10 @@ const ScheduleEquipment = () => {
       let datas = getDataOHDetail(idx, dataPeriods)
 
       if (!isEmptyNullOrUndefined(CostIndexName)) {
+        let dataOHz = arrDataOH.filter((x) => x.fleetName === CostIndexName)
         dataOH.push({
           ccFleetOHID: ccFleetOHID === 'undefined' ? 0 : Number(ccFleetOHID),
-          ccFleetID: Number(selectedId),
+          ccFleetID: dataOHz.length > 0 ? dataOHz[0].ccFleetID : 0,
           fleetName: CostIndexName,
           equipmentSchedulePeriodDtos: datas,
         })
@@ -359,6 +421,7 @@ const ScheduleEquipment = () => {
 
     return dataOH
   }
+
   const getDataPAHeader = () => {
     let idx = 0
     let dataPeriods = projectRep.periods
@@ -372,9 +435,10 @@ const ScheduleEquipment = () => {
       let datas = getDataPADetail(idx, dataPeriods)
 
       if (!isEmptyNullOrUndefined(CostIndexName)) {
+        let dataPAz = arrDataPA.filter((x) => x.fleetName === CostIndexName)
         dataPA.push({
           ccFleetPAID: Number(CostIndexId),
-          ccFleetID: Number(selectedId),
+          ccFleetID: dataPAz.length > 0 ? dataPAz[0].ccFleetID : 0,
           fleetName: CostIndexName,
           equipmentSchedulePAPeriodDtos: datas,
         })
@@ -443,65 +507,81 @@ const ScheduleEquipment = () => {
   const onClickEdit = () => {
     setIsEdit(true)
   }
-  const loading = useSelector((state) => {
-    const getLoading = {
-      1: state.EquipmentScheduleRoster.loading,
-      2: state.EquipmentScheduleOH.loading,
-      3: state.EquipmentSchedulePA.loading,
-    }
-    return getLoading[activeKey]
-  })
-  const msg = useSelector((state) => {
-    const getMsg = {
-      1: state.EquipmentScheduleRoster.message,
-      2: state.EquipmentScheduleOH.message,
-      3: state.EquipmentSchedulePA.message,
-    }
-    return getMsg[activeKey]
-  })
-  const err = useSelector((state) => {
-    const getErr = {
-      1: state.EquipmentScheduleRoster.error,
-      2: state.EquipmentScheduleOH.error,
-      3: state.EquipmentSchedulePA.error,
-    }
-    return getErr[activeKey]
-  })
-  const isSuccess = useSelector((state) => {
-    const getStatus = {
-      1: state.EquipmentScheduleRoster.isSuccess,
-      2: state.EquipmentScheduleOH.isSuccess,
-      3: state.EquipmentSchedulePA.isSuccess,
-    }
-    return getStatus[activeKey]
-  })
+  const loadingRoster = useSelector((state) => state.EquipmentScheduleRoster.loading)
+  const loadingOH = useSelector((state) => state.EquipmentScheduleOH.loading)
+  const loadingPA = useSelector((state) => state.EquipmentSchedulePA.loading)
+
+  const msgRoster = useSelector((state) => state.EquipmentScheduleRoster.message)
+  const msgOH = useSelector((state) => state.EquipmentScheduleOH.message)
+  const msgPA = useSelector((state) => state.EquipmentSchedulePA.message)
+
+  const errRoster = useSelector((state) => state.EquipmentScheduleRoster.error)
+  const errOH = useSelector((state) => state.EquipmentScheduleOH.error)
+  const errPA = useSelector((state) => state.EquipmentSchedulePA.error)
+
   const dataEquipmentRosters = useSelector((state) => {
     if (state.EquipmentScheduleRoster.data.length > 0) {
+      arrDataRosters = state.EquipmentScheduleRoster.data
       let transformData = []
       let currentData = state.EquipmentScheduleRoster.data
 
       for (let index = 0; index < currentData.length; index++) {
-        if (currentData[index].equipmentSchedulePeriodDtos.length > 0) {
+        if (
+          currentData[index].equipmentSchedulePeriodDtos.length > 0 ||
+          currentData[index].fleetName
+        ) {
           let periods = projectRep.periods
-
+          let emptyPeriods = [
+            {
+              ccFleetRosterPeriodID: 0,
+              ccFleetRosterID: 0,
+              rosterID: 0,
+              periodId: 0,
+              positionN: 0,
+            },
+          ]
           if (periods) {
-            let mergedArr = merge(periods, currentData[index].equipmentSchedulePeriodDtos)
+            if (currentData[index].equipmentSchedulePeriodDtos.length > 0) {
+            }
+            let mergedArr = merge(
+              periods,
+              currentData[index].equipmentSchedulePeriodDtos.length < 1
+                ? emptyPeriods
+                : currentData[index].equipmentSchedulePeriodDtos,
+            )
+            mergedArr.sort((a, b) => a.positionN - b.positionN)
             let total = 0
             localStorage.removeItem('totalArrayPerioScheduleRoster')
-            mergedArr = mergedArr.map((item) => {
-              total++
-              return {
-                periodId: item.periodId,
-                positionN: item.positionN,
-                fleetName: currentData[index].fleetName,
-                periodName: item.periodName,
-                indexnameR: currentData[index].fleetName,
-                ccFleetRosterID: item.ccFleetRosterID,
-                // ccFleetID: item.ccFleetID,
-                rosterID: item.rosterID,
-              }
-            })
-            localStorage.setItem('totalArrayPeriodScheduleOH', total)
+            if (currentData[index].equipmentSchedulePeriodDtos.length > 0) {
+              mergedArr = mergedArr
+                .filter((x) => x.ccFleetRosterID && x.rosterID)
+                .map((item) => {
+                  total++
+                  return {
+                    periodId: item.periodId,
+                    positionN: item.positionN,
+                    fleetName: currentData[index].fleetName,
+                    periodName: item.periodName,
+                    indexnameR: currentData[index].fleetName,
+                    ccFleetRosterID: item.ccFleetRosterID,
+                    rosterID: item.rosterID,
+                  }
+                })
+            } else {
+              mergedArr = mergedArr.map((item) => {
+                total++
+                return {
+                  periodId: item.periodId,
+                  positionN: item.positionN,
+                  fleetName: currentData[index].fleetName,
+                  periodName: item.periodName,
+                  indexnameR: currentData[index].fleetName,
+                  ccFleetRosterID: item.ccFleetRosterID,
+                  rosterID: item.rosterID,
+                }
+              })
+            }
+            localStorage.setItem('totalArrayPeriodScheduleRoster', total)
 
             let fixData = returnFlattenObject(mergedArr)
 
@@ -518,9 +598,9 @@ const ScheduleEquipment = () => {
             }
           }
         }
-
-        return transformData
       }
+      console.log('transformData:', transformData)
+      return transformData
     } else {
       return null
     }
@@ -529,6 +609,7 @@ const ScheduleEquipment = () => {
     if (state.EquipmentScheduleOH?.data?.length > 0) {
       let transformData = []
       let currentData = state.EquipmentScheduleOH.data
+      arrDataOH = state.EquipmentScheduleOH.data
 
       for (let index = 0; index < currentData.length; index++) {
         if (
@@ -585,22 +666,21 @@ const ScheduleEquipment = () => {
             }
           }
         }
-
-        return transformData
       }
+      return transformData
     } else {
       return null
     }
   })
   const dataEquipmentPA = useSelector((state) => {
-    // state.EquipmentSchedulePA.data
     if (state.EquipmentSchedulePA?.data?.length > 0) {
       let transformData = []
       let currentData = state.EquipmentSchedulePA?.data
+      arrDataPA = state.EquipmentSchedulePA.data
 
       for (let index = 0; index < currentData.length; index++) {
         if (
-          currentData[index].equipmentSchedulePeriodDtos?.length > 0 ||
+          currentData[index].equipmentSchedulePAPeriodDtos?.length > 0 ||
           currentData[index].fleetName
         ) {
           let periods = projectRep.periods
@@ -616,8 +696,8 @@ const ScheduleEquipment = () => {
           if (periods) {
             let mergedArr = merge(
               periods,
-              currentData[index].equipmentSchedulePeriodDtos?.length > 0
-                ? currentData[index].equipmentSchedulePeriodDtos
+              currentData[index].equipmentSchedulePAPeriodDtos?.length > 0
+                ? currentData[index].equipmentSchedulePAPeriodDtos
                 : emptyPeriods,
             )
 
@@ -636,7 +716,8 @@ const ScheduleEquipment = () => {
                 value: item.value,
               }
             })
-            localStorage.setItem('totalArrayPeriodScheduleOH', total)
+
+            localStorage.setItem('totalArrayPeriodSchedulePA', total)
 
             let fixData = returnFlattenObject(mergedArr)
 
@@ -653,9 +734,8 @@ const ScheduleEquipment = () => {
             }
           }
         }
-
-        return transformData
       }
+      return transformData
     } else {
       return null
     }
@@ -671,26 +751,37 @@ const ScheduleEquipment = () => {
     }
   })
   useEffect(() => {
-    setMessageProcess(isSuccess)
+    setMessageProcessRoster()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [msg, err])
+  }, [msgRoster, errRoster])
+  useEffect(() => {
+    setMessageProcessOH()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [msgOH, errOH])
+  useEffect(() => {
+    setMessageProcessPA()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [msgPA, errPA])
+  useEffect(() => {
+    if (!loadingRoster && !loadingOH && !loadingPA) {
+      setLoading(false)
+    } else {
+      setLoading(true)
+    }
+  }, [loadingRoster, loadingOH, loadingPA])
 
-  // console.log('dataRosters : ', dataRosters)
   return (
     <CRow>
       <Spinner loading={loading} />
       <CToaster ref={toaster} push={toast} placement="bottom-end" />
+      <FunctionBuilder />
       <CCol xs={4}>
         <CCard className="mb-4">
           <CCardHeader>
             <strong>Cost Centre Structure</strong>
           </CCardHeader>
           <CCardBody>
-            <CostCentreTree
-              canInput={false}
-              setSelectedId={setSelectedId}
-              // getData={getData}
-            />
+            <CostCentreTree canInput={false} setSelectedId={setSelectedId} />
           </CCardBody>
         </CCard>
       </CCol>

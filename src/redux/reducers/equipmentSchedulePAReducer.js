@@ -6,12 +6,15 @@ import {
   POST_EQUIPMENT_PA_ERROR,
   POST_EQUIPMENT_PA_SUCCESS,
 } from '../../constants'
+import { getExclamationMark } from '../../functions'
 
 const INIT_STATE = {
   data: [],
   loading: false,
   message: '',
+  error: '',
   isSuccess: true,
+  totalSave: 0,
 }
 
 export const EquipmentSchedulePA = (state = INIT_STATE, action) => {
@@ -36,7 +39,7 @@ export const EquipmentSchedulePA = (state = INIT_STATE, action) => {
         ...state,
         loading: false,
         isSuccess: false,
-        message: action.message,
+        error: action.message,
       }
     }
 
@@ -49,10 +52,12 @@ export const EquipmentSchedulePA = (state = INIT_STATE, action) => {
     case POST_EQUIPMENT_PA_SUCCESS: {
       return {
         ...state,
-        data: action.data,
         loading: false,
-        message: 'Data has been saved.',
-        isSuccess: true,
+        message:
+          state.totalSave < 1
+            ? 'Data Optional Availability has been saved!'
+            : state.message + getExclamationMark(state.totalSave),
+        totalSave: state.totalSave + 1,
       }
     }
     case POST_EQUIPMENT_PA_ERROR: {
@@ -60,7 +65,7 @@ export const EquipmentSchedulePA = (state = INIT_STATE, action) => {
         ...state,
         data: action.data,
         loading: false,
-        message: '',
+        error: action.message,
         isSuccess: true,
       }
     }

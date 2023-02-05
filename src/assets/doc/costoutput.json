@@ -1,0 +1,140 @@
+[
+  {
+    "id": 1,
+    "report": "Equipment Commissioning Cost By Cost Centre",
+    "rheader": "Equipment Commissioning Cost By Cost Centre",
+    "code": "EquipmentCommissioningCostByCostCentre"
+  },
+  {
+    "id": 2,
+    "report": "Equipment Commissioning Cost Summary",
+    "rheader": "Equipment Commissioning Cost Summary",
+    "code": "EquipmentCommissioningCostSummary"
+  },
+  {
+    "id": 3,
+    "report": "Equipment Replacement Cost By Cost Centre",
+    "rheader": "Equipment Replacement Cost By Cost Centre",
+    "code": "EquipmentReplacementCostByCostCentre"
+  },
+  {
+    "id": 4,
+    "report": "Equipment Repplacement Cost Summary",
+    "rheader": "Equipment Repplacement Cost Summary",
+    "code": "EquipmentReplacementCostSummary"
+  },
+  {
+    "id": 5,
+    "report": "Equipment Dispossal Value By Cost Centre",
+    "rheader": "Equipment Dispossal Value By Cost Centre",
+    "code": "EquipmentDispossalValueByCostCentre"
+  },
+  {
+    "id": 6,
+    "report": "Equipment Dispossal Value Summary",
+    "rheader": "Equipment Dispossal Value Summary",
+    "code": "EquipmentDispossalValueSummary"
+  },
+  {
+    "id": 7,
+    "report": "Materials/Services Cost By Cost Centre",
+    "rheader": "Materials/Services Cost By Cost Centre",
+    "code": "Materials/ServicesCostByCostCentre"
+  },
+  {
+    "id": 8,
+    "report": "Materials Cost By Cost Centre",
+    "rheader": "Materials Cost By Cost Centre",
+    "code": "MaterialsCostByCostCentre"
+  },
+  {
+    "id": 9,
+    "report": "Services Cost By Cost Centre",
+    "rheader": "Services Cost By Cost Centre",
+    "code": "ServicesCostByCostCentre"
+  },
+  {
+    "id": 10,
+    "report": "Materials/Services Cost (Consumed By Equipment)",
+    "rheader": "Materials/Services Cost (Consumed By Equipment)",
+    "code": "Materials/ServicesCost(ConsumedByEquipment)"
+  },
+  {
+    "id": 11,
+    "report": "Materials/Services Cost (Not Consumed By Equipment)",
+    "rheader": "Materials/Services Cost (Not Consumed By Equipment)",
+    "code": "Materials/ServicesCost(NotConsumedByEquipment)"
+  },
+  {
+    "id": 12,
+    "report": "Materials/Services Cost Summary",
+    "rheader": "Materials/Services Cost Summary",
+    "code": "Materials/ServicesCostSummary"
+  },
+  {
+    "id": 13,
+    "report": "Employee Excluding Relief Cost By Cost Centre",
+    "rheader": "Employee Excluding Relief Cost By Cost Centre",
+    "code": "EmployeeExcludingReliefCostByCostCentre"
+  },
+  {
+    "id": 14,
+    "report": "Employee Excluding Relief Cost Summary",
+    "rheader": "Employee Excluding Relief Cost Summary",
+    "code": "EmployeeExcludingReliefCostSummary"
+  },
+  {
+    "id": 15,
+    "report": "Employee Required for Relief Cost By Cost Centre",
+    "rheader": "Employee Required for Relief Cost By Cost Centre",
+    "code": "EmployeeRequiredforReliefCostByCostCentre"
+  },
+  {
+    "id": 16,
+    "report": "Employee Required for Relief Cost Summary",
+    "rheader": "Employee Required for Relief Cost Summary",
+    "code": "EmployeeRequiredforReliefCostSummary"
+  },
+  {
+    "id": 17,
+    "report": "Employee Total Cost By Cost Centre",
+    "rheader": "Employee Total Cost By Cost Centre",
+    "code": "EmployeeTotalCostByCostCentre"
+  },
+  {
+    "id": 18,
+    "report": "Emoloyee Total Cost Summary",
+    "rheader": "Emoloyee Total Cost Summary",
+    "code": "EmoloyeeTotalCostSummary"
+  },
+  {
+    "id": 19,
+    "report": "Infrastructure Cost By Cost Centre",
+    "rheader": "Infrastructure Cost By Cost Centre",
+    "code": "InfrastructureCostByCostCentre"
+  },
+  {
+    "id": 20,
+    "report": "Infrastructure Cost Summary",
+    "rheader": "Infrastructure Cost Summary",
+    "code": "InfrastructureCostSummary"
+  },
+  {
+    "id": 21,
+    "report": "Total Capital Costs",
+    "rheader": "Total Capital Costs",
+    "code": "TotalCapitalCosts"
+  },
+  {
+    "id": 22,
+    "report": "Total Operating Costs",
+    "rheader": "Total Operating Costs",
+    "code": "TotalOperatingCosts"
+  },
+  {
+    "id": 23,
+    "report": "Total Project Costs",
+    "rheader": "Total Project Costs",
+    "code": "TotalProjectCosts"
+  }
+]
