@@ -82,7 +82,6 @@
     "@react-pdf/pdfkit": "2.1.0"
   },
   "resolutions": {
-    "react-scripts/postcss-preset-env/postcss-custom-properties": "^10.0.0",
     "@react-pdf/font": "2.2.1",
     "@react-pdf/pdfkit": "2.1.0"
   },
