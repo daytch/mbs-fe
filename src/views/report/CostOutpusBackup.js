@@ -8,11 +8,6 @@ import React, {
     useRef,
     useImperativeHandle,
 } from 'react'
-import { useTable, usePagination, useRowSelect } from 'react-table'
-
-/* 
-* Icon & Styles
-*/
 import CIcon from '@coreui/icons-react'
 import styled from 'styled-components'
 import {
@@ -23,6 +18,7 @@ import {
     cilCheckAlt,
     cilX,
 } from '@coreui/icons'
+import { useTable, usePagination, useRowSelect } from 'react-table'
 import {
     CModal,
     CModalHeader,
@@ -39,15 +35,36 @@ import { jsPDF } from 'jspdf'
 import { PDFViewer } from '@react-pdf/renderer'
 import CountryPDF from './CostOutput/CountryPDF'
 
-/* 
-* Components
-*/
 import NoData from './NoData'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+    getEquipmentReplacementByCostCentre,
+    getEquipmentReplacementSummary,
+    getProjectCountry,
+    getListProjectCategories,
+    getGenericEquipment,
+    getInfraChecklist,
+    getReportProductionSchedule,
+    getRoster,
+    getFleets,
+    getConstant,
+    getMaterials,
+    getResourcesInfra,
+    getLevyCategories,
+    getCostIndices,
+    getEquipmentCommissioningByCostCentre,
+    getEquipmentCommissioningSummary,
+    getEquipmentDisposalValueByCostCentre,
+    getEquipmentDisposalValueSummary,
+} from '../../redux/actions'
+import './print.css'
+import ContextMenu from './../../components/ContextMenu'
 import EquipmentCommissioningSummary from './CostOutput/EquipmentCommissioningSummary'
 import EquipmentReplacementByCostCentre from './CostOutput/EquipmentReplacementByCostCentre'
 import EquipmentReplacementSummary from './CostOutput/EquipmentReplacementSummary'
 import EquipmentDisposalValueByCostCentre from './CostOutput/EquipmentDisposalValueByCostCentre'
 import EquipmentDisposalValueSummary from './CostOutput/EquipmentDisposalValueSummary'
+import { getEmployeeExcludingReliefCostByCostCentre, getEmployeeExcludingReliefCostSummary, getEmployeeRequiredForReliefCostByCostCentre, getEmployeeRequiredForReliefCostSummary, getEmployeeTotalCostByCostCentre, getEmployeeTotalCostSummary, getInfrastructureCostByCostCentre, getInfrastructureCostSummary, getMaterialsCostByCostCentre, getMaterialsServicesCostByCostCentre, getMaterialsServicesCostConsumedByEquipment, getMaterialsServicesCostNotConsumedByEquipment, getMaterialsServicesCostSummary, getServicesCostByCostCentre, getTotalCapitalCosts, getTotalOperatingCosts, getTotalProjectCosts } from 'src/redux/actions/costOutputAction'
 import MaterialsServicesCostByCostCentre from './CostOutput/MaterialsServicesCostByCostCentre'
 import MaterialsCostByCostCentre from './CostOutput/MaterialsCostByCostCentre'
 import ServicesCostByCostCentre from './CostOutput/ServicesCostByCostCentre'
@@ -65,39 +82,6 @@ import InfrastructureCostSummary from './CostOutput/InfrastructureCostSummary'
 import TotalCapitalCosts from './CostOutput/TotalCapitalCosts'
 import TotalOperationCosts from './CostOutput/TotalOperationCosts'
 import TotalProjectsCosts from './CostOutput/TotalProjectsCosts'
-
-/* 
-* Context and Action Reducer
-*/
-import { useDispatch, useSelector } from 'react-redux'
-import {
-    getEquipmentReplacementByCostCentre,
-    getEquipmentReplacementSummary,
-    getEquipmentCommissioningByCostCentre,
-    getEquipmentCommissioningSummary,
-    getEquipmentDisposalValueByCostCentre,
-    getEquipmentDisposalValueSummary,
-    getEmployeeExcludingReliefCostByCostCentre, 
-    getEmployeeExcludingReliefCostSummary, 
-    getEmployeeRequiredForReliefCostByCostCentre, 
-    getEmployeeRequiredForReliefCostSummary, 
-    getEmployeeTotalCostByCostCentre, 
-    getEmployeeTotalCostSummary, 
-    getInfrastructureCostByCostCentre, 
-    getInfrastructureCostSummary, 
-    getMaterialsCostByCostCentre, 
-    getMaterialsServicesCostByCostCentre, 
-    getMaterialsServicesCostConsumedByEquipment, 
-    getMaterialsServicesCostNotConsumedByEquipment, 
-    getMaterialsServicesCostSummary, 
-    getServicesCostByCostCentre, 
-    getTotalCapitalCosts, 
-    getTotalOperatingCosts, 
-    getTotalProjectCosts
-} from '../../redux/actions'
-
-import './print.css'
-import ContextMenu from './../../components/ContextMenu'
 
 const Styles = styled.div`
   padding: 1rem;
@@ -407,7 +391,7 @@ const Table = React.forwardRef((props, ref) => {
     )
 })
 
-const CostOutput = ({
+const CostOutputBackup = ({
     dataSource,
     updateEquipmentModelCosts,
     isNew,
@@ -534,6 +518,18 @@ const CostOutput = ({
     }, [code, title])
 
     useEffect(() => {
+        dispatch(getProjectCountry())
+        dispatch(getListProjectCategories())
+        dispatch(getGenericEquipment())
+        dispatch(getInfraChecklist())
+        dispatch(getReportProductionSchedule({ projectRepresentationId: projRep.projectRepresentationId }))
+        dispatch(getRoster(projRep.projectRepresentationId))
+        dispatch(getConstant(projRep.projectRepresentationId))
+        dispatch(getMaterials({ projectRepresentationId: projRep.projectRepresentationId }))
+        dispatch(getFleets({ projectRepresentationId: projRep.projectRepresentationId }))
+        dispatch(getResourcesInfra(projRep.projectRepresentationId))
+        dispatch(getLevyCategories(projRep.projectRepresentationId))
+        dispatch(getCostIndices({ projectRepresentationId: projRep.projectRepresentationId }))
 
         dispatch(getEquipmentCommissioningByCostCentre(projRep.projectRepresentationId))
         dispatch(getEquipmentCommissioningSummary(projRep.projectRepresentationId))
@@ -558,21 +554,84 @@ const CostOutput = ({
         dispatch(getEmployeeTotalCostSummary(projRep.projectRepresentationId))
         dispatch(getInfrastructureCostByCostCentre(projRep.projectRepresentationId))
         dispatch(getInfrastructureCostSummary(projRep.projectRepresentationId))
-        // dispatch(getTotalCapitalCosts(projRep.projectRepresentationId))
-        // dispatch(getTotalOperatingCosts(projRep.projectRepresentationId))
-        // dispatch(getTotalProjectCosts(projRep.projectRepresentationId))
+        dispatch(getTotalCapitalCosts(projRep.projectRepresentationId))
+        dispatch(getTotalOperatingCosts(projRep.projectRepresentationId))
+        dispatch(getTotalProjectCosts(projRep.projectRepresentationId))
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
+    const currencies = useSelector((state) => state.Country.dataCountries)
+    const projectcategories = useSelector((state) => state.ProjectCategories.datas)
+    const listequipment = useSelector((state) => state.GenericEquipment.dataEqp)
+    const infras = useSelector((state) => state.InfraChecklist.dataInfra)
+    const productionschedules = useSelector((state) => state.ProductionSchedule.report)
+    const rosters = useSelector((state) => state.Roster.data)
+    const constants = useSelector((state) => state.Constant.data)
+    const materials = useSelector((state) => state.ResourcesMaterials.data)
+    const employeetypes = useSelector((state) => state.ResourcesEmployeeType.report)
+    const fleets = useSelector((state) => {
+        if (state.Equipment.dataFleets.length > 0) {
+            let arrFleets = state.Equipment.dataFleets
+            arrFleets.forEach((item) => {
+                switch (item.source) {
+                    case '1':
+                        item.source = 'Owned Already'
+                        break
+                    case '2':
+                        item.source = 'Available New'
+                        break
+                    case '3':
+                        item.source = 'Available Used'
+                        break
+
+                    default:
+                        break
+                }
+
+                item.projectName = proj.projectName
+            })
+            return arrFleets
+        }
+    })
+    const infrastructures = useSelector((state) => state.ResourcesInfrastructure.dataInfra)
+    const levyCategories = useSelector((state) => {
+        if (state.LevyCategory?.data?.length > 0) {
+            let dat = state.LevyCategory.data
+            return data.map((i, idx) => {
+                return { id: i.levyCategoryId, name: i.levyCategoryName }
+            })
+        } else {
+            return null
+        }
+    })
+    const costCentres = useSelector((state) => state.CostCentre.report)
+    const productionFactors = useSelector((state) => state.ProductionFactor.data)
+    const equipmentRosters = useSelector((state) => state.EquipmentScheduleRoster.report)
+    const equipmentOHFunctions = useSelector((state) => state.EquipmentScheduleOH.report)
+    const personnelFunctions = useSelector((state) => state.FunctionPersonnel.report)
+    const functionCostCentres = useSelector((state) => state.FunctionCostCentre.report)
+    const materialFunctions = useSelector((state) => state.MaterialFunction.data)
+    const materialFunctionInfra = useSelector((state) => state.MaterialFunction.dataInfra)
+    const generalFunction = useSelector((state) => state.FunctionGeneral.data)
+    const exchangeRates = useSelector((state) => state.FinanceExchangeRate.dataExchangeRate)
+    let listEchangeCountries = exchangeRates
+        ? [...new Set(exchangeRates.map((x) => x.countryId))]
+        : []
+    const levies = useSelector((state) => state.Levy.report)
+    const costIndices = useSelector((state) => state.FinanceCostIndices.dataCostIndices)
+    const indexContingency = useSelector((state) => state.IndexContingency.report)
+
+    const dtEquipmentCommissioningByCostCentre = useSelector(
+        (state) => state.CostOutput.dtEquipmentCommissioningByCostCentre,
+    )
+    const dtEquipmentCommissioningSummary = useSelector(
+        (state) => state.CostOutput.dtEquipmentCommissioningSummary,
+    )
+
     useEffect(() => {
         setSkipPageReset(false)
     }, [data])
-
-
-    const dtEquipmentCommissioningByCostCentre = useSelector((state) => state.CostOutput.dtEquipmentCommissioningByCostCentre)
-    const dtEquipmentCommissioningSummary = useSelector((state) => state.CostOutput.dtEquipmentCommissioningSummary)
-
 
     const dtEquipmentReplacementByCostCentre = useSelector((state) => state.PhysicalOutput.dtEquipmentReplacementByCostCentre,)
     const dtEquipmentReplacementSummary = useSelector((state) => state.PhysicalOutput.dtEquipmentReplacementSummary,)
@@ -630,7 +689,36 @@ const CostOutput = ({
             ) : (
                 <NoData />
             ),
-
+        // EquipmentReplacementCostByCostCentre: () =>
+        //   dtEquipmentCommissioningSummary?.length ? (
+        //     <EquipmentCommissioningSummary
+        //       dtEquipmentCommissioningSummary={dtEquipmentCommissioningSummary}
+        //       project={proj}
+        //       projectRepresentation={projRep}
+        //       showHeader={headerPdf}
+        //       showFooter={footerPdf}
+        //       lastColumn={lastColumn}
+        //       decimalPoint={decimal}
+        //       pageSize={pdfSize}
+        //     />
+        //   ) : (
+        //     <NoData />
+        //   ),
+        // EquipmentReplacementCostSummary: () =>
+        //   dtEquipmentCommissioningSummary?.length ? (
+        //     <EquipmentCommissioningSummary
+        //       dtEquipmentCommissioningSummary={dtEquipmentCommissioningSummary}
+        //       project={proj}
+        //       projectRepresentation={projRep}
+        //       showHeader={headerPdf}
+        //       showFooter={footerPdf}
+        //       lastColumn={lastColumn}
+        //       decimalPoint={decimal}
+        //       pageSize={pdfSize}
+        //     />
+        //   ) : (
+        //     <NoData />
+        //   ),
         EquipmentReplacementCostByCostCentre: () =>
             dtEquipmentReplacementByCostCentre?.length ? (
                 <EquipmentReplacementByCostCentre
@@ -646,7 +734,6 @@ const CostOutput = ({
             ) : (
                 <NoData />
             ),
-
         EquipmentReplacementCostSummary: () =>
             dtEquipmentReplacementSummary?.length > 0?.length ? (
                 <EquipmentReplacementSummary
@@ -664,8 +751,7 @@ const CostOutput = ({
             ),
 
         EquipmentDisposalByCostCentre: () =>
-            // dtEquipmentDisposalByCostCentre?.length ? (
-                true ? (
+            dtEquipmentDisposalByCostCentre?.length?.length ? (
                 <EquipmentDisposalValueByCostCentre
                     dtEquipmentReplacementByCostCentre={dtEquipmentReplacementByCostCentre}
                     project={proj}
@@ -680,7 +766,7 @@ const CostOutput = ({
                 <NoData />
             ),
         EquipmentDisposalValueSummary: () =>
-            dtEquipmentDisposalValueSummary?.length ? (
+            dtEquipmentDisposalValueSummary?.length > 0?.length ? (
                 <EquipmentDisposalValueSummary
                     dtEquipmentReplacementSummary={dtEquipmentDisposalValueSummary}
                     project={proj}
@@ -1078,4 +1164,4 @@ const CostOutput = ({
     )
 }
 
-export default CostOutput
+export default CostOutputBackup

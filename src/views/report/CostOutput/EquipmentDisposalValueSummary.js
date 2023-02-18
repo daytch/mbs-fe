@@ -18,9 +18,11 @@ const EquipmentDisposalValueSummary = (props) => {
   } = props
 
   const listPeriods =
+    dtEquipmentDisposalValueSummary && dtEquipmentDisposalValueSummary?.length ?
     dtEquipmentDisposalValueSummary[0]?.rptEquipmentSchedulePeriodSummaryDtos?.map((x) => {
       return { value: x.valu, periodName: x.periodName }
     })
+    : []
 
   const HeaderTable = ({ col }) => (
     <View
@@ -106,7 +108,7 @@ const EquipmentDisposalValueSummary = (props) => {
           </View>
         </View>
 
-        {showHeader && Header('Equipment Disposal Expired Summary')}
+        {showHeader && Header('Equipment Disposal Value Summary')}
 
         <View style={{ marginTop: showHeader ? 10 : 35 }}>
           <HeaderTable col={lastColumn} />

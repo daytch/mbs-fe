@@ -1,5 +1,5 @@
 import React from 'react'
-import { Page, View, Text, Document, StyleSheet, Line } from '@react-pdf/renderer'
+import { Page, View, Text, Document, StyleSheet } from '@react-pdf/renderer'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 import { styles, Header } from './Styles'
@@ -311,118 +311,17 @@ const EquipmentDisposalValueByCostCentre = (props) => {
                     </View>
                 </View>
 
-                {showHeader && Header('Equipment Disposal Value by Cost Centre')}
+                {showHeader && Header('Equipment Replacement By Cost Centre')}
 
-
-                {/* @start section("content") */}
-
-                <View style={customStyles.container}>
-                    {/* Header */}
-                    <View style={customStyles.header}>
-                        <View style={customStyles.cell} >
-                            <Text style={[customStyles.cellText, customStyles.cellTextBold]}>Code</Text>
-                        </View>
-                        <View style={customStyles.cell} >
-                            <Text style={[customStyles.cellText, customStyles.cellTextBold]}>Description</Text>
-                        </View>
-                        <View style={customStyles.cell} >
-                            <Text style={[customStyles.cellText, customStyles.cellTextBold]}>2008</Text>
-                        </View>
-                        <View style={customStyles.cell} >
-                            <Text style={[customStyles.cellText, customStyles.cellTextBold]}>2009</Text>
-                        </View>
-                        <View style={customStyles.cell} >
-                            <Text style={[customStyles.cellText, customStyles.cellTextBold]}>2010</Text>
-                        </View>
-                        <View style={customStyles.cell} >
-                            <Text style={[customStyles.cellText, customStyles.cellTextBold]}>2011</Text>
-                        </View>
-                        <View style={customStyles.cell} >
-                            <Text style={[customStyles.cellText, customStyles.cellTextBold]}>Total</Text>
-                        </View>
-                    </View>
-
-                    {/* Content */}
-
-                    <View style={customStyles.header}>
-                        <View style={customStyles.cell} >
-                            <Text style={customStyles.cellText}>121</Text>
-                        </View>
-                        <View style={customStyles.cell} >
-                            <Text style={customStyles.cellText}>Load & Haul</Text>
-                        </View>
-                        <View style={customStyles.cell} >
-                            <Text style={customStyles.cellText}></Text>
-                        </View>
-                        <View style={customStyles.cell} >
-                            <Text style={customStyles.cellText}></Text>
-                        </View>
-                        <View style={customStyles.cell} >
-                            <Text style={customStyles.cellText}></Text>
-                        </View>
-                        <View style={customStyles.cell} >
-                            <Text style={customStyles.cellText}>10.000</Text>
-                        </View>
-                        <View style={customStyles.cell} >
-                            <Text style={customStyles.cellText}>10.000</Text>
-                        </View>
-                    </View>
-
-                    {/* Sub Total */}
-
-                    <Line />
-                    <View style={[customStyles.header, customStyles.bold]}>
-                        <View style={customStyles.cell} >
-                            <Text style={[customStyles.cellText, customStyles.cellTextBold]}></Text>
-                        </View>
-                        <View style={customStyles.cell} >
-                            <Text style={[customStyles.cellText, customStyles.cellTextBold]}>Subtotal:</Text>
-                        </View>
-                        <View style={customStyles.cell} >
-                            <Text style={[customStyles.cellText, customStyles.cellTextBold]}></Text>
-                        </View>
-                        <View style={customStyles.cell} >
-                            <Text style={[customStyles.cellText, customStyles.cellTextBold]}></Text>
-                        </View>
-                        <View style={customStyles.cell} >
-                            <Text style={[customStyles.cellText, customStyles.cellTextBold]}></Text>
-                        </View>
-                        <View style={customStyles.cell} >
-                            <Text style={[customStyles.cellText, customStyles.cellTextBold]}>10.000</Text>
-                        </View>
-                        <View style={customStyles.cell} >
-                            <Text style={[customStyles.cellText, customStyles.cellTextBold]}>10.000</Text>
-                        </View>
-                    </View>
-
-                    {/* Grand Total */}
-
-                    <Line stroke='0.2rem' />
-                    <View style={customStyles.header}>
-                        <View style={customStyles.cell}></View>
-                        <View style={customStyles.cell} >
-                            <Text style={[customStyles.cellText, customStyles.cellTextBold]}>Grand Total:</Text>
-                        </View>
-                        <View style={customStyles.fullCell}>
-                        </View>
-                        <View style={customStyles.cell} >
-                            <Text style={[customStyles.cellText, customStyles.cellTextBold]}>10.000</Text>
-                        </View>
-                    </View>
-
-                </View>
-
-                {/* <View style={{ marginTop: showHeader ? 10 : 35 }}>
+                <View style={{ marginTop: showHeader ? 10 : 35 }}>
                     <HeaderTable col={lastColumn} />
                     {listParent.map((item, idx) => {
                         return <BodyTable key={idx} item={item} />
                     })}
                     <hr />
                     
-                    {RenderGrandTotal()}
-                </View> */}
-
-                {/* @end section("content") */}
+                    {/* {RenderGrandTotal()} */}
+                </View>
                 {showFooter && (
                     <>
                         <Text style={styles.tanggal} render={() => moment().format('LLLL')} fixed />
@@ -439,35 +338,8 @@ const EquipmentDisposalValueByCostCentre = (props) => {
 }
 
 const customStyles = StyleSheet.create({
-    container: {
-        marginVertical: 15
-    },  
-    header: {
-        flexDirection: 'row',
-    },
     cell: {
-        borderWidth: 1,
-        paddingVertical: 5,
-        width: `${100 / 7}%`,
-        borderColor: '#484848',
-        flex: 'none',
-        alignItems: 'center'
-    },
-    fullCell: {
-        borderWidth: 1,
-        paddingVertical: 5,
-        borderColor: '#484848',
-        flex: 1,
-        alignItems: 'center',
-        paddingRight: 15
-    },
-    cellText: {
-        fontSize: 11,
-        textAlign: 'center'
-    },
-    cellTextBold: {
-        fontFamily: 'Sans',
-        fontWeight: 'bold'
+        backgroundColor: 'red'
     }
 })
 
