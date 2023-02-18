@@ -62,17 +62,17 @@ const EditableCell = ({
   const [visibleSelect, setVisibleSelect] = useState(false)
 
   const onChange = (e) => {
-    let isi = ''
+    // let isi = ''
     if (e.currentTarget.nodeName === 'INPUT') {
       setValue(e.target.value)
-      isi = e.target.value
+    //   isi = e.target.value
     } else {
       setValue(e.currentTarget.value)
-      isi = e.currentTarget.value
+    //   isi = e.currentTarget.value
     }
-    updateEquipmentModelCosts(index, id, isi)
-  }
-  const onBlur = () => {
+}
+const onBlur = () => {
+    updateEquipmentModelCosts(index, id, value)
     updateMyData(index, id, value)
   }
   const onClick = () => {
