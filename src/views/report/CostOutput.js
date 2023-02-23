@@ -680,7 +680,8 @@ const CostOutput = ({
                 <NoData />
             ),
         EquipmentDisposalValueSummary: () =>
-            dtEquipmentDisposalValueSummary?.length ? (
+            // dtEquipmentDisposalValueSummary?.length ? (
+                true ? (
                 <EquipmentDisposalValueSummary
                     dtEquipmentReplacementSummary={dtEquipmentDisposalValueSummary}
                     project={proj}
@@ -695,7 +696,8 @@ const CostOutput = ({
                 <NoData />
             ),
         MaterialsServicesCostByCostCentre: () =>
-            dtMaterialsServicesCostByCostCentre?.length ? (
+            // dtMaterialsServicesCostByCostCentre?.length ? (
+                true ? (
                 <MaterialsServicesCostByCostCentre
                     dtMaterialsServicesCostByCostCentre={
                         dtMaterialsServicesCostByCostCentre
@@ -712,7 +714,8 @@ const CostOutput = ({
                 <NoData />
             ),
         MaterialsCostByCostCentre: () =>
-            dtMaterialsCostByCostCentre?.length ? (
+            // dtMaterialsCostByCostCentre?.length ? (
+                true ? (
                 <MaterialsCostByCostCentre
                     dtMaterialsCostByCostCentre={dtMaterialsCostByCostCentre}
                     project={proj}
@@ -728,7 +731,8 @@ const CostOutput = ({
             ),
 
         ServicesCostByCostCentre: () =>
-            dtServicesCostByCostCentre?.length ? (
+            // dtServicesCostByCostCentre?.length ? (
+                true ? (
                 <ServicesCostByCostCentre
                     dtServicesCostByCostCentre={dtServicesCostByCostCentre}
                     project={proj}
@@ -744,7 +748,8 @@ const CostOutput = ({
             ),
 
         MaterialsServicesCostConsumedByEquipment: () =>
-            dtMaterialsServicesCostConsumedByEquipment?.length ? (
+            // dtMaterialsServicesCostConsumedByEquipment?.length ? (
+                true ? (
                 <MaterialsServicesCostConsumedByEquipment
                     dtMaterialsServicesCostConsumedByEquipment={
                         dtMaterialsServicesCostConsumedByEquipment
@@ -762,7 +767,8 @@ const CostOutput = ({
             ),
 
         MaterialsServicesCostNotConsumedByEquipment: () =>
-            dtMaterialsServicesCostNotConsumedByEquipment?.length ? (
+            // dtMaterialsServicesCostNotConsumedByEquipment?.length ? (
+                true ? (
                 <MaterialsServicesCostNotConsumedByEquipment
                     dtMaterialsServicesCostNotConsumedByEquipment={
                         dtMaterialsServicesCostNotConsumedByEquipment
@@ -780,7 +786,8 @@ const CostOutput = ({
             ),
 
         MaterialsServicesCostSummary: () =>
-            dtMaterialsServicesCostSummary?.length ? (
+            // dtMaterialsServicesCostSummary?.length ? (
+                true ? (
                 <MaterialsServicesCostSummary
                     dtMaterialsServicesCostSummary={dtMaterialsServicesCostSummary}
                     project={proj}
@@ -796,7 +803,8 @@ const CostOutput = ({
             ),
 
         EmployeeExcludingReliefCostByCostCentre: () =>
-            dtEmployeeExcludingReliefCostByCostCentre?.length ? (
+            // dtEmployeeExcludingReliefCostByCostCentre?.length ? (
+                true ? (
                 <EmployeeExcludingReliefCostByCostCentre
                     dtEmployeeExcludingReliefCostByCostCentre={
                         dtEmployeeExcludingReliefCostByCostCentre
@@ -814,7 +822,8 @@ const CostOutput = ({
             ),
 
         EmployeeExcludingReliefCostSummary: () =>
-            dtEmployeeExcludingReliefCostSummary?.length ? (
+            // dtEmployeeExcludingReliefCostSummary?.length ? (
+                true ? (
                 <EmployeeExcludingReliefCostSummary
                     dtEmployeeExcludingReliefCostSummary={
                         dtEmployeeExcludingReliefCostSummary
@@ -832,7 +841,8 @@ const CostOutput = ({
             ),
 
         EmployeeRequiredForReliefCostByCostCentre: () =>
-            dtEmployeeRequiredForReliefCostByCostCentre?.length ? (
+            // dtEmployeeRequiredForReliefCostByCostCentre?.length ? (
+                true ? (
                 <EmployeeRequiredForReliefCostByCostCentre
                     dtEmployeeRequiredForReliefCostByCostCentre={
                         dtEmployeeRequiredForReliefCostByCostCentre
@@ -850,7 +860,8 @@ const CostOutput = ({
             ),
 
         EmployeeRequiredForReliefCostSummary: () =>
-            dtEmployeeRequiredForReliefCostSummary?.length ? (
+            // dtEmployeeRequiredForReliefCostSummary?.length ? (
+                true ? (
                 <EmployeeRequiredForReliefCostSummary
                     dtEmployeeRequiredForReliefCostSummary={
                         dtEmployeeRequiredForReliefCostSummary
@@ -868,7 +879,8 @@ const CostOutput = ({
             ),
 
         EmployeeTotalCostByCostCentre: () =>
-            dtEmployeeTotalCostByCostCentre?.length ? (
+            // dtEmployeeTotalCostByCostCentre?.length ? (
+                true ? (
                 <EmployeeTotalCostByCostCentre
                     dtEmployeeTotalCostByCostCentre={dtEmployeeTotalCostByCostCentre}
                     project={proj}
@@ -884,7 +896,8 @@ const CostOutput = ({
             ),
 
         EmployeeTotalCostSummary: () =>
-            dtEmployeeTotalCostSummary?.length ? (
+            // dtEmployeeTotalCostSummary?.length ? (
+                true ? (
                 <EmployeeTotalCostSummary
                     dtEmployeeTotalCostSummary={dtEmployeeTotalCostSummary}
                     project={proj}
@@ -900,7 +913,8 @@ const CostOutput = ({
             ),
 
         InfrastructureCostByCostCentre: () =>
-            dtInfrastructureCostByCostCentre?.length ? (
+            // dtInfrastructureCostByCostCentre?.length ? (
+                true ? (
                 <InfrastructureCostByCostCentre
                     dtInfrastructureCostByCostCentre={dtInfrastructureCostByCostCentre}
                     project={proj}
@@ -916,7 +930,8 @@ const CostOutput = ({
             ),
 
         InfrastructureCostSummary: () =>
-            dtInfrastructureCostSummary?.length ? (
+            // dtInfrastructureCostSummary?.length ? (
+                true ? (
                 <InfrastructureCostSummary
                     dtInfrastructureCostSummary={dtInfrastructureCostSummary}
                     project={proj}
@@ -932,7 +947,8 @@ const CostOutput = ({
             ),
 
         TotalCapitalCosts: () =>
-            dtTotalCapitalCosts?.length ? (
+            // dtTotalCapitalCosts?.length ? (
+                true ? (
                 <TotalCapitalCosts
                     dtTotalCapitalCosts={dtTotalCapitalCosts}
                     project={proj}
@@ -948,7 +964,8 @@ const CostOutput = ({
             ),
 
         TotalOperationCosts: () =>
-            dtTotalOperationCosts?.length ? (
+            // dtTotalOperationCosts?.length ? (
+                true ? (
                 <TotalOperationCosts
                     dtTotalOperationCosts={dtTotalOperationCosts}
                     project={proj}
@@ -964,7 +981,8 @@ const CostOutput = ({
             ),
 
         TotalProjectsCosts: () =>
-            dtTotalProjectsCosts?.length ? (
+            // dtTotalProjectsCosts?.length ? (
+                true ? (
                 <TotalProjectsCosts
                     dtTotalProjectsCosts={dtTotalProjectsCosts}
                     project={proj}

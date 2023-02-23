@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import moment from 'moment'
 import { styles, Header } from './Styles'
 import { calculateLastCol, renderLastCol } from '../PyshicalOutput/GeneralFunction'
+import MyTable from './CommonFunction'
 
 // Create Document Component
 const EquipmentDisposalValueByCostCentre = (props) => {
@@ -314,104 +315,6 @@ const EquipmentDisposalValueByCostCentre = (props) => {
                 {showHeader && Header('Equipment Disposal Value by Cost Centre')}
 
 
-                {/* @start section("content") */}
-
-                <View style={customStyles.container}>
-                    {/* Header */}
-                    <View style={customStyles.header}>
-                        <View style={customStyles.cell} >
-                            <Text style={[customStyles.cellText, customStyles.cellTextBold]}>Code</Text>
-                        </View>
-                        <View style={customStyles.cell} >
-                            <Text style={[customStyles.cellText, customStyles.cellTextBold]}>Description</Text>
-                        </View>
-                        <View style={customStyles.cell} >
-                            <Text style={[customStyles.cellText, customStyles.cellTextBold]}>2008</Text>
-                        </View>
-                        <View style={customStyles.cell} >
-                            <Text style={[customStyles.cellText, customStyles.cellTextBold]}>2009</Text>
-                        </View>
-                        <View style={customStyles.cell} >
-                            <Text style={[customStyles.cellText, customStyles.cellTextBold]}>2010</Text>
-                        </View>
-                        <View style={customStyles.cell} >
-                            <Text style={[customStyles.cellText, customStyles.cellTextBold]}>2011</Text>
-                        </View>
-                        <View style={customStyles.cell} >
-                            <Text style={[customStyles.cellText, customStyles.cellTextBold]}>Total</Text>
-                        </View>
-                    </View>
-
-                    {/* Content */}
-
-                    <View style={customStyles.header}>
-                        <View style={customStyles.cell} >
-                            <Text style={customStyles.cellText}>121</Text>
-                        </View>
-                        <View style={customStyles.cell} >
-                            <Text style={customStyles.cellText}>Load & Haul</Text>
-                        </View>
-                        <View style={customStyles.cell} >
-                            <Text style={customStyles.cellText}></Text>
-                        </View>
-                        <View style={customStyles.cell} >
-                            <Text style={customStyles.cellText}></Text>
-                        </View>
-                        <View style={customStyles.cell} >
-                            <Text style={customStyles.cellText}></Text>
-                        </View>
-                        <View style={customStyles.cell} >
-                            <Text style={customStyles.cellText}>10.000</Text>
-                        </View>
-                        <View style={customStyles.cell} >
-                            <Text style={customStyles.cellText}>10.000</Text>
-                        </View>
-                    </View>
-
-                    {/* Sub Total */}
-
-                    <Line />
-                    <View style={[customStyles.header, customStyles.bold]}>
-                        <View style={customStyles.cell} >
-                            <Text style={[customStyles.cellText, customStyles.cellTextBold]}></Text>
-                        </View>
-                        <View style={customStyles.cell} >
-                            <Text style={[customStyles.cellText, customStyles.cellTextBold]}>Subtotal:</Text>
-                        </View>
-                        <View style={customStyles.cell} >
-                            <Text style={[customStyles.cellText, customStyles.cellTextBold]}></Text>
-                        </View>
-                        <View style={customStyles.cell} >
-                            <Text style={[customStyles.cellText, customStyles.cellTextBold]}></Text>
-                        </View>
-                        <View style={customStyles.cell} >
-                            <Text style={[customStyles.cellText, customStyles.cellTextBold]}></Text>
-                        </View>
-                        <View style={customStyles.cell} >
-                            <Text style={[customStyles.cellText, customStyles.cellTextBold]}>10.000</Text>
-                        </View>
-                        <View style={customStyles.cell} >
-                            <Text style={[customStyles.cellText, customStyles.cellTextBold]}>10.000</Text>
-                        </View>
-                    </View>
-
-                    {/* Grand Total */}
-
-                    <Line stroke='0.2rem' />
-                    <View style={customStyles.header}>
-                        <View style={customStyles.cell}></View>
-                        <View style={customStyles.cell} >
-                            <Text style={[customStyles.cellText, customStyles.cellTextBold]}>Grand Total:</Text>
-                        </View>
-                        <View style={customStyles.fullCell}>
-                        </View>
-                        <View style={customStyles.cell} >
-                            <Text style={[customStyles.cellText, customStyles.cellTextBold]}>10.000</Text>
-                        </View>
-                    </View>
-
-                </View>
-
                 {/* <View style={{ marginTop: showHeader ? 10 : 35 }}>
                     <HeaderTable col={lastColumn} />
                     {listParent.map((item, idx) => {
@@ -423,6 +326,10 @@ const EquipmentDisposalValueByCostCentre = (props) => {
                 </View> */}
 
                 {/* @end section("content") */}
+                <View>
+                    <MyTable />
+                </View>
+
                 {showFooter && (
                     <>
                         <Text style={styles.tanggal} render={() => moment().format('LLLL')} fixed />

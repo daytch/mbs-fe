@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import moment from 'moment'
 import { styles, Header } from './Styles'
 import { calculateLastCol, renderLastCol } from './GeneralFunction'
+import MyTable from './CommonFunction'
 
 // Create Document Component
 const EmployeeTotalCostSummary = (props) => {
@@ -158,12 +159,16 @@ const EmployeeTotalCostSummary = (props) => {
 
                 {showHeader && Header('Employee Total Cost Summary')}
 
-                <View style={{ marginTop: showHeader ? 10 : 35 }}>
+                {/* <View style={{ marginTop: showHeader ? 10 : 35 }}>
                     <HeaderTable col={lastColumn} />
                     {listParent.map((item, idx) => {
                         return <BodyTable key={idx} item={item} />
                     })}
+                </View> */}
+                <View>
+                    <MyTable type='Employee Type'/>
                 </View>
+
                 {showFooter && (
                     <>
                         <Text style={styles.tanggal} render={() => moment().format('LLLL')} fixed />
