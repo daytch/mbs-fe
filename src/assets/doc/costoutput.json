@@ -25,21 +25,21 @@
   },
   {
     "id": 5,
-    "report": "Equipment Dispossal Value By Cost Centre",
-    "rheader": "Equipment Dispossal Value By Cost Centre",
-    "code": "EquipmentDispossalValueByCostCentre"
+    "report": "Equipment Disposal Value By Cost Centre",
+    "rheader": "Equipment Disposal Value By Cost Centre",
+    "code": "EquipmentDisposalByCostCentre"
   },
   {
     "id": 6,
-    "report": "Equipment Dispossal Value Summary",
-    "rheader": "Equipment Dispossal Value Summary",
-    "code": "EquipmentDispossalValueSummary"
+    "report": "Equipment Disposal Value Summary",
+    "rheader": "Equipment Disposal Value Summary",
+    "code": "EquipmentDisposalValueSummary"
   },
   {
     "id": 7,
     "report": "Materials/Services Cost By Cost Centre",
     "rheader": "Materials/Services Cost By Cost Centre",
-    "code": "Materials/ServicesCostByCostCentre"
+    "code": "MaterialsServicesCostByCostCentre"
   },
   {
     "id": 8,
@@ -57,19 +57,19 @@
     "id": 10,
     "report": "Materials/Services Cost (Consumed By Equipment)",
     "rheader": "Materials/Services Cost (Consumed By Equipment)",
-    "code": "Materials/ServicesCost(ConsumedByEquipment)"
+    "code": "MaterialsServicesCostConsumedByEquipment"
   },
   {
     "id": 11,
     "report": "Materials/Services Cost (Not Consumed By Equipment)",
     "rheader": "Materials/Services Cost (Not Consumed By Equipment)",
-    "code": "Materials/ServicesCost(NotConsumedByEquipment)"
+    "code": "MaterialsServicesCostNotConsumedByEquipment"
   },
   {
     "id": 12,
     "report": "Materials/Services Cost Summary",
     "rheader": "Materials/Services Cost Summary",
-    "code": "Materials/ServicesCostSummary"
+    "code": "MaterialsServicesCostSummary"
   },
   {
     "id": 13,
@@ -87,13 +87,13 @@
     "id": 15,
     "report": "Employee Required for Relief Cost By Cost Centre",
     "rheader": "Employee Required for Relief Cost By Cost Centre",
-    "code": "EmployeeRequiredforReliefCostByCostCentre"
+    "code": "EmployeeRequiredForReliefCostByCostCentre"
   },
   {
     "id": 16,
     "report": "Employee Required for Relief Cost Summary",
     "rheader": "Employee Required for Relief Cost Summary",
-    "code": "EmployeeRequiredforReliefCostSummary"
+    "code": "EmployeeRequiredForReliefCostSummary"
   },
   {
     "id": 17,
@@ -105,7 +105,7 @@
     "id": 18,
     "report": "Emoloyee Total Cost Summary",
     "rheader": "Emoloyee Total Cost Summary",
-    "code": "EmoloyeeTotalCostSummary"
+    "code": "EmployeeTotalCostSummary"
   },
   {
     "id": 19,
@@ -129,12 +129,12 @@
     "id": 22,
     "report": "Total Operating Costs",
     "rheader": "Total Operating Costs",
-    "code": "TotalOperatingCosts"
+    "code": "TotalOperationCosts"
   },
   {
     "id": 23,
     "report": "Total Project Costs",
     "rheader": "Total Project Costs",
-    "code": "TotalProjectCosts"
+    "code": "TotalProjectsCosts"
   }
 ]

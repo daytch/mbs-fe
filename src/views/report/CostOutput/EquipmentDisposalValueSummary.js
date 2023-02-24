@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import moment from 'moment'
 import { styles, Header } from './Styles'
 import { calculateLastCol, renderLastCol } from './../PyshicalOutput/GeneralFunction'
+import MyTable from './CommonFunction'
 
 // Create Document Component
 const EquipmentDisposalValueSummary = (props) => {
@@ -18,9 +19,11 @@ const EquipmentDisposalValueSummary = (props) => {
   } = props
 
   const listPeriods =
+    dtEquipmentDisposalValueSummary && dtEquipmentDisposalValueSummary?.length ?
     dtEquipmentDisposalValueSummary[0]?.rptEquipmentSchedulePeriodSummaryDtos?.map((x) => {
       return { value: x.valu, periodName: x.periodName }
     })
+    : []
 
   const HeaderTable = ({ col }) => (
     <View
@@ -106,14 +109,18 @@ const EquipmentDisposalValueSummary = (props) => {
           </View>
         </View>
 
-        {showHeader && Header('Equipment Disposal Expired Summary')}
+        {showHeader && Header('Equipment Disposal Value Summary')}
 
-        <View style={{ marginTop: showHeader ? 10 : 35 }}>
+        {/* <View style={{ marginTop: showHeader ? 10 : 35 }}>
           <HeaderTable col={lastColumn} />
           {dtEquipmentDisposalValueSummary.map((item, idx) => {
             return <BodyTable key={idx} item={item} />
           })}
+        </View> */}
+        <View>
+           <MyTable type='FleetName'/>
         </View>
+
         {showFooter && (
           <>
             <Text style={styles.tanggal} render={() => moment().format('LLLL')} fixed />

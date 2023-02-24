@@ -1,14 +1,14 @@
 import React from 'react'
-import { Page, View, Text, Document } from '@react-pdf/renderer'
+import { Page, View, Text, Document, StyleSheet } from '@react-pdf/renderer'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 import { styles, Header } from './Styles'
 import { calculateLastCol, renderLastCol } from '../PyshicalOutput/GeneralFunction'
 
 // Create Document Component
-const EquipmentReplacementByCostCentre = (props) => {
+const EquipmentDisposalValueByCostCentre = (props) => {
     const {
-        dtEquipmentReplacementByCostCentre,
+        dtEquipmentDisposalValueByCostCentre,
         project,
         projectRepresentation,
         showHeader,
@@ -18,13 +18,13 @@ const EquipmentReplacementByCostCentre = (props) => {
     } = props
 
     let lastCol = []
-    const listPeriods = dtEquipmentReplacementByCostCentre[0].rptEquipmentSchedulePeriodDtos.map(
+    const listPeriods = dtEquipmentDisposalValueByCostCentre?.length ? dtEquipmentDisposalValueByCostCentre[0].rptEquipmentSchedulePeriodDtos.map(
         (x) => {
             return { periodId: x.periodId, positionN: x.positionN, periodName: x.periodName }
         },
-    )
+    ) : []
     const listParent = []
-    dtEquipmentReplacementByCostCentre.forEach((item, idx) => {
+    dtEquipmentDisposalValueByCostCentre?.length && dtEquipmentDisposalValueByCostCentre.forEach((item, idx) => {
         let i = listParent.filter((x) => x.costCentreCode === item.costCentreCode)
         if (i.length < 1) {
             listParent.push({ costCentreCode: item.costCentreCode, costCentreName: item.costCentreName })
@@ -71,7 +71,6 @@ const EquipmentReplacementByCostCentre = (props) => {
 
         return val && val.toString().indexOf('.') > -1 ? parseFloat(val).toFixed(decimalPoint) : val
     }
-    
     function renderChild(data) {
         return (
             <>
@@ -102,7 +101,7 @@ const EquipmentReplacementByCostCentre = (props) => {
     // eslint-disable-next-line react/prop-types
     const getValuePeriod = ({ costCentreCode, periodName }) => {
         if (costCentreCode) {
-            const arrFiltered = dtEquipmentReplacementByCostCentre.filter(
+            const arrFiltered = dtEquipmentDisposalValueByCostCentre.filter(
                 (x) => x.costCentreCode === costCentreCode,
             )
             if (arrFiltered.length > 0) {
@@ -120,8 +119,8 @@ const EquipmentReplacementByCostCentre = (props) => {
                 return 0
             }
         } else {
-            if (dtEquipmentReplacementByCostCentre.length > 0) {
-                const a = dtEquipmentReplacementByCostCentre.reduce((a, b) => {
+            if (dtEquipmentDisposalValueByCostCentre.length > 0) {
+                const a = dtEquipmentDisposalValueByCostCentre.reduce((a, b) => {
                     return (
                         a +
                         b.rptEquipmentSchedulePeriodDtos
@@ -156,7 +155,7 @@ const EquipmentReplacementByCostCentre = (props) => {
                     </View>
                 </View>
 
-                {dtEquipmentReplacementByCostCentre.map((i, idx) => {
+                {dtEquipmentDisposalValueByCostCentre.map((i, idx) => {
                     if (i.costCentreCode === item.costCentreCode) {
                         return (
                             <View
@@ -284,7 +283,7 @@ const EquipmentReplacementByCostCentre = (props) => {
         } else {
             let val = 0
 
-            dtEquipmentReplacementByCostCentre.forEach((data) => {
+            dtEquipmentDisposalValueByCostCentre.forEach((data) => {
                 val += parseFloat(
                     data.rptEquipmentSchedulePeriodDtos.reduce((x, i) => x + i.value, 0) > 0
                         ? calculateLastCol[lastColumn](data.rptEquipmentSchedulePeriodDtos, decimalPoint)
@@ -320,7 +319,8 @@ const EquipmentReplacementByCostCentre = (props) => {
                         return <BodyTable key={idx} item={item} />
                     })}
                     <hr />
-                    {RenderGrandTotal()}
+                    
+                    {/* {RenderGrandTotal()} */}
                 </View>
                 {showFooter && (
                     <>
@@ -337,8 +337,14 @@ const EquipmentReplacementByCostCentre = (props) => {
     )
 }
 
-EquipmentReplacementByCostCentre.propTypes = {
-    dtEquipmentReplacementByCostCentre: PropTypes.array,
+const customStyles = StyleSheet.create({
+    cell: {
+        backgroundColor: 'red'
+    }
+})
+
+EquipmentDisposalValueByCostCentre.propTypes = {
+    dtEquipmentDisposalValueByCostCentre: PropTypes.array,
     project: PropTypes.object,
     projectRepresentation: PropTypes.object,
     showHeader: PropTypes.bool,
@@ -347,4 +353,4 @@ EquipmentReplacementByCostCentre.propTypes = {
     decimalPoint: PropTypes.number,
 }
 
-export default EquipmentReplacementByCostCentre
+export default EquipmentDisposalValueByCostCentre
