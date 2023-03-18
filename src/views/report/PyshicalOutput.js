@@ -1180,9 +1180,6 @@ const PyshicalOutput = ({
         />
         <CCol className="d-flex justify-content-between">
           <div className="d-flex justify-content-between flex-row ">
-            <button className="m-2 btn btn-primary btn-sm" onClick={() => genPDF()}>
-              generate
-            </button>
             <button
               onClick={() => myRef.current.toggleAllRowsSelected()}
               className="m-2 btn btn-primary btn-sm"

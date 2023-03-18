@@ -7,6 +7,7 @@ import {
   RESET_PROJECT_REPRESENTATION_ERROR,
 } from '../../constants'
 import { all, put, takeLatest } from 'redux-saga/effects'
+import { isObjectEmpty } from '../../functions/index'
 
 export function* setProject(data) {
   try {
@@ -24,8 +25,9 @@ export function* setProject(data) {
 
 export function* setProjectRepresentation(data) {
   try {
-    console.log('navigationSaga', data.payload)
-    if (data.payload) {
+    // console.log('navigationSaga', data.payload)
+    // debugger
+    if (!isObjectEmpty(data.payload)) {
       localStorage.setItem('projectRepresentation', JSON.stringify(data.payload))
       yield put({ type: SET_PROJECT_REPRESENTATION, data: data.payload })
     }

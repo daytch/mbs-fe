@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import CIcon from '@coreui/icons-react'
 import {
   CCard,
@@ -25,7 +25,7 @@ import {
 } from '@coreui/react'
 import { cilPencil, cilTrash, cilCalendar } from '@coreui/icons'
 import { useDispatch, useSelector } from 'react-redux'
-import DataTable from 'react-data-table-component'
+// import DataTable from 'react-data-table-component'
 import {
   getProjectCountry,
   postProjectRepresentation,
@@ -50,15 +50,36 @@ import Calendar from './Calendar'
 import { isEmptyNullOrUndefined, dateToString, formatDate } from 'src/functions'
 import VerticalTab from './VerticalTab'
 
+import { makeStyles } from '@material-ui/core/styles'
+import Table from '@material-ui/core/Table'
+import TableBody from '@material-ui/core/TableBody'
+import TableCell from '@material-ui/core/TableCell'
+import TableContainer from '@material-ui/core/TableContainer'
+import TableHead from '@material-ui/core/TableHead'
+import TableRow from '@material-ui/core/TableRow'
+import Paper from '@material-ui/core/Paper'
+
+const useStyles = makeStyles({
+  table: {
+    minWidth: 650,
+    '& .MuiTableCell-sizeSmall': {
+      padding: '5px 16px 5px 16px', // <-- arbitrary value
+    },
+  },
+})
+
 const ProjectRepresentation = () => {
   const [visible, setVisible] = useState(false)
   const [calendarVisible, setCalendarVisible] = useState(false)
   const [toast, addToast] = useState(0)
   const toaster = useRef()
   const dispatch = useDispatch()
+  const classes = useStyles()
   const [id, setId] = useState(0)
   const [currProject] = useState(JSON.parse(localStorage.getItem('project')))
+  const [projRep] = useState(JSON.parse(localStorage.getItem('projectRepresentation')))
   const [projectId, setProjectId] = useState(currProject.projectId)
+  const [selected, setSelected] = useState([projRep.projectRepresentationId])
   const [projectName, setProjectName] = useState('')
   const [name, setName] = useState('')
   const [country, setCountry] = useState(0)
@@ -134,6 +155,12 @@ const ProjectRepresentation = () => {
     }
   }
 
+  const selectProject = (event, row) => {
+    let newSelected = [row.projectRepresentationId]
+    setSelected(newSelected)
+    dispatch(setProjectRepresentation(row))
+  }
+
   const loading = useSelector((state) => state.Project.loading)
   const project = useSelector((state) => state.Navigation.project)
   const err = useSelector((state) => state.ProjectRepresentation.error)
@@ -141,25 +168,6 @@ const ProjectRepresentation = () => {
   const isDeleted = useSelector((state) => state.ProjectRepresentation.isDeleted)
   const isCalendar = useSelector((state) => state.ProjectRepresentation.isCalendar)
   const yearStart = useSelector((state) => state.ProjectRepresentation.yearStartOn)
-
-  const handleChange = useCallback(
-    (state) => {
-      state.allSelected = false
-      if (state.selectedRows.length === 2) {
-        state.selectedRows.pop()
-        dispatch(setProjectRepresentation(state.selectedRows[0]))
-        setSelectedRows(state.selectedRows)
-
-        window.location.reload()
-      } else if (state.selectedRows.length < 2) {
-        dispatch(setProjectRepresentation(state.selectedRows[0]))
-        setSelectedRows(state.selectedRows)
-
-        window.location.reload()
-      }
-    },
-    [dispatch],
-  )
 
   const setMessageProcess = () => {
     if (err) {
@@ -207,12 +215,6 @@ const ProjectRepresentation = () => {
     dispatch(getCurrencies())
     dispatch(getProjectCountry())
     setMessageProcess()
-    // if (isEdit) {
-    //   console.log('useEffect')
-    //   dispatch(updateLocalStorage(projectRepresentationEdited))
-    //   setIsEdit(false)
-    // }
-    //    setProjectId(project?.projectId)
     // eslint-disable-next-line
   }, [msg, err])
 
@@ -617,28 +619,7 @@ const ProjectRepresentation = () => {
       </>
     )
   }
-  const columns = [
-    {
-      name: 'Project Representation Name',
-      selector: (row) => row.projectRepresentationName,
-      sortable: true,
-    },
-    {
-      name: 'Currency',
-      selector: (row) => row.currencyAbbr,
-      sortable: true,
-    },
-    {
-      name: 'Notes',
-      selector: (row) => row.notes,
-      sortable: true,
-    },
-    {
-      name: 'Action',
-      selector: (row) => renderButtonAction(row),
-      sortable: false,
-    },
-  ]
+
   const handleSubmitCalendar = (isReset) => {
     if (isReset) {
       let payload = {
@@ -849,6 +830,8 @@ const ProjectRepresentation = () => {
     setCountry(id)
   }
 
+  const isSelected = (row) => selected.indexOf(row.projectRepresentationId) !== -1
+
   return (
     <>
       <Spinner loading={loading} />
@@ -867,6 +850,7 @@ const ProjectRepresentation = () => {
                   setValidated(false)
                   setVisible(!visible)
                 }}
+                className="mb-2"
               >
                 Create new
               </CButton>
@@ -1134,15 +1118,62 @@ const ProjectRepresentation = () => {
               </CModal>
 
               {projects.length > 0 ? (
-                <DataTable
-                  columns={columns}
-                  data={projects}
-                  selectableRows
-                  onSelectedRowsChange={handleChange}
-                  selectableRowsNoSelectAll={true}
-                  pagination
-                />
+                <TableContainer component={Paper}>
+                  <Table className={classes.table} aria-label="Project table" size="small">
+                    <TableHead>
+                      <TableRow style={{ backgroundColor: '#c8c8c8' }}>
+                        <TableCell>
+                          <b>No.</b>
+                        </TableCell>
+                        <TableCell>
+                          <b>Project Representation Name</b>
+                        </TableCell>
+                        <TableCell>
+                          <b>Currency</b>
+                        </TableCell>
+                        <TableCell>
+                          <b>Notes</b>
+                        </TableCell>
+                        <TableCell>
+                          <b>Action</b>
+                        </TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {projects &&
+                        projects.map((row, idx) => {
+                          // debugger
+                          const isItemSelected = isSelected(row)
+                          return (
+                            <TableRow
+                              style={{ cursor: 'pointer', padding: '5px 15px 5px 15px !important' }}
+                              key={idx}
+                              hover
+                              onClick={(event) => selectProject(event, row)}
+                              selected={isItemSelected}
+                            >
+                              <TableCell component="th" scope="row">
+                                {idx + 1}
+                              </TableCell>
+                              <TableCell>{row.projectRepresentationName}</TableCell>
+                              <TableCell>{row.currencyAbbr}</TableCell>
+                              <TableCell>{row.notes}</TableCell>
+                              <TableCell>{renderButtonAction(row)}</TableCell>
+                            </TableRow>
+                          )
+                        })}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
               ) : (
+                // <DataTable
+                //   columns={columns}
+                //   data={projects}
+                //   selectableRows
+                //   onSelectedRowsChange={handleChange}
+                //   selectableRowsNoSelectAll={true}
+                //   pagination
+                // />
                 <h1>No Data.</h1>
               )}
             </CCardBody>

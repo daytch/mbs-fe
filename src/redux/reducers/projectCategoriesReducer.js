@@ -50,12 +50,13 @@ export const ProjectCategories = (state = INIT_STATE, action) => {
     case GET_PROJECT_SUBCATEGORY_BY_CATEGORYID: {
       return {
         ...state,
-        dataSubcategories: action.data,
+        // dataSubcategories: action.data,
         loading: true,
-        successMessage: '',
+        // successMessage: '',
       }
     }
     case GET_PROJECT_SUBCATEGORY_BY_CATEGORYID_SUCCESS: {
+      debugger
       return {
         ...state,
         dataSubcategories: action.data,

@@ -99,7 +99,7 @@ export const Project = (state = INIT_STATE, action) => {
     case GET_PROJECT_SUBCATEGORIES: {
       return {
         ...state,
-        dataSubcategory: action.data,
+        loading: true,
       }
     }
     case GET_PROJECT_SUBCATEGORIES_SUCCESS: {

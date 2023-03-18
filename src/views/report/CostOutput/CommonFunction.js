@@ -1,5 +1,5 @@
 import React from "react";
-import { Page, Text, View, StyleSheet } from "@react-pdf/renderer";
+import { Text, View, StyleSheet } from "@react-pdf/renderer";
 import PropTypes from 'prop-types';
 
 export const dummyData = [
