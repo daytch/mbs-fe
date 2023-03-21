@@ -3,13 +3,19 @@ import {
   SET_PROJECT_REPRESENTATION,
   RESET_PROJECT_REPRESENTATION,
 } from '../../constants'
-import { isEmptyNullOrUndefined } from 'src/functions'
+import { isEmptyNullOrUndefined, isObjectEmpty } from 'src/functions'
+import disabledNavigation from '../../_disabledNav'
+import navigation from '../../_nav'
 
 const proj = localStorage.getItem('project')
 const projRep = localStorage.getItem('projectRepresentation')
 const INIT_STATE = {
   project: !isEmptyNullOrUndefined(proj) ? JSON.parse(proj) : {},
   projectRepresentation: !isEmptyNullOrUndefined(projRep) ? JSON.parse(projRep) : {},
+  listMenu:
+    isObjectEmpty(JSON.parse(proj)) || isObjectEmpty(JSON.parse(projRep))
+      ? disabledNavigation
+      : navigation,
 }
 
 export const Navigation = (state = INIT_STATE, action) => {
@@ -21,9 +27,14 @@ export const Navigation = (state = INIT_STATE, action) => {
       }
     }
     case SET_PROJECT_REPRESENTATION: {
+      console.log('')
       return {
         ...state,
-        projectRepresentation: action.data,
+        projectRepresentation: action.payload,
+        listMenu:
+          isObjectEmpty(state.project) || isObjectEmpty(state.projectRepresentation)
+            ? disabledNavigation
+            : navigation,
       }
     }
 

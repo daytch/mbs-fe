@@ -79,7 +79,7 @@ const ProjectRepresentation = () => {
   const [currProject] = useState(JSON.parse(localStorage.getItem('project')))
   const [projRep] = useState(JSON.parse(localStorage.getItem('projectRepresentation')))
   const [projectId, setProjectId] = useState(currProject.projectId)
-  const [selected, setSelected] = useState([projRep.projectRepresentationId])
+  const [selected, setSelected] = useState([projRep?.projectRepresentationId])
   const [projectName, setProjectName] = useState('')
   const [name, setName] = useState('')
   const [country, setCountry] = useState(0)

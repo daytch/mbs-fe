@@ -4,7 +4,6 @@ const Dashboard = lazyRetry(() => import('./views/dashboard/Dashboard'))
 
 // Page MBS
 const CurrentProject = lazyRetry(() => import('./views/currentproject/CurrentProject'))
-const CurrentProjectV1 = lazyRetry(() => import('./views/currentproject/CurrentProjectV1'))
 const CountriesCurrency = lazyRetry(() => import('./views/countriescurrency/CountriesCurrencies'))
 const ProjectCategories = lazyRetry(() => import('./views/projectcategories/ProjectCategories'))
 const GenericEquipment = lazyRetry(() => import('./views/genericequipment/GenericEquipment'))
@@ -75,8 +74,7 @@ const routes = [
   // { path: '/analysis', name: 'Analysis', component: Analysis },
   { path: '/function', name: 'Function', component: Functions },
   { path: '/production', name: 'Production', component: Production },
-  { path: '/currentprojectv1', name: 'Current Project', component: CurrentProject },
-  { path: '/currentproject', name: 'Current Project', component: CurrentProjectV1 },
+  { path: '/currentproject', name: 'Current Project', component: CurrentProject },
   { path: '/projectcategories', name: 'Project Categories', component: ProjectCategories },
   { path: '/genericequipment', name: 'General Equipment', component: GenericEquipment },
   { path: '/infrachecklist', name: 'Infra Checklist', component: InfraChecklist },
