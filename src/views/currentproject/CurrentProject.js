@@ -1,4 +1,15 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react'
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useEffect, useRef } from 'react'
+import { makeStyles } from '@material-ui/core/styles'
+import Table from '@material-ui/core/Table'
+import TableBody from '@material-ui/core/TableBody'
+import TableCell from '@material-ui/core/TableCell'
+import TableContainer from '@material-ui/core/TableContainer'
+import TableHead from '@material-ui/core/TableHead'
+import TableRow from '@material-ui/core/TableRow'
+import Paper from '@material-ui/core/Paper'
+import { useDispatch, useSelector } from 'react-redux'
+import { cilPencil, cilTrash } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
 import {
   CCard,
@@ -23,9 +34,6 @@ import {
   CForm,
   CFormFeedback,
 } from '@coreui/react'
-import { cilPencil, cilTrash } from '@coreui/icons'
-import { useDispatch, useSelector } from 'react-redux'
-import DataTable from 'react-data-table-component'
 import {
   getProjectCategories,
   getProjectSubCategories,
@@ -36,68 +44,57 @@ import {
   deleteProject,
   getListProjectSubCategories,
   setProject,
-  setProjectRepresentation,
+  // setProjectRepresentation,
 } from '../../redux/actions'
-import Spinner from '../../components/Spinner'
 import Swal from 'sweetalert2'
+import Spinner from '../../components/Spinner'
 import PropTypes from 'prop-types'
 
-const CurrentProject = (props) => {
-  const [visible, setVisible] = useState(false)
-  const [toast, addToast] = useState(0)
-  const toaster = useRef()
-  const pageType = props ? props.pageType : ''
+const useStyles = makeStyles({
+  table: {
+    minWidth: 650,
+    '& .MuiTableCell-sizeSmall': {
+      padding: '5px 16px 5px 16px', // <-- arbitrary value
+    },
+  },
+})
+
+const CurrentProjectV1 = (props) => {
   const dispatch = useDispatch()
+  const classes = useStyles()
+  const proj = JSON.parse(localStorage.getItem('project'))
+  const [selected, setSelected] = useState([proj?.projectId])
   const [projectId, setProjectId] = useState(0)
+  const toaster = useRef()
+  const [toast, addToast] = useState(0)
+  const pageType = props ? props.pageType : ''
   const [name, setName] = useState('')
   const [category, setCategory] = useState(0)
   const [categoryName, setCategoryName] = useState('')
   const [subcategory, setSubcategory] = useState(0)
   const [subcategoryName, setSubcategoryName] = useState('')
   const [country, setCountry] = useState(0)
-  // eslint-disable-next-line
   const [countryName, setCountryName] = useState('')
   const [currencyAbbr, setCurrencyAbbr] = useState('')
   const [note, setNote] = useState('')
   const [validated, setValidated] = useState(false)
+  const [visible, setVisible] = useState(false)
 
-  const proj = useSelector((state) => state.Navigation.project)
-  // eslint-disable-next-line no-unused-vars
-  const [selectedRows, setSelectedRows] = useState([proj])
-  const handleChange = useCallback(
-    (state) => {
-      if (state) {
-        localStorage.setItem('projectState', JSON.stringify(state))
-        state.allSelected = false
-        if (state.selectedRows.length === 2) {
-          dispatch(setProjectRepresentation({}))
-          state.selectedRows.pop()
-          dispatch(setProject(state.selectedRows[0]))
-          setSelectedRows(state.selectedRows)
-          window.location.reload()
-        } else if (state.selectedRows.length < 2) {
-          dispatch(setProjectRepresentation({}))
-          dispatch(setProject(state.selectedRows[0]))
-          setSelectedRows(state.selectedRows)
-          window.location.reload()
-        }
-      } else {
-        let lastState = JSON.parse(localStorage.getItem('projectState'))
-        if (lastState) {
-          setSelectedRows(lastState.selectedRows)
-        }
-      }
-    },
-    [dispatch],
-  )
+  const selectProject = (event, row) => {
+    let newSelected = [row.projectId]
+    setSelected(newSelected)
+    dispatch(setProject(row))
+  }
 
-  // const rowSelectCritera = (row) => row.projectId === 17
+  useEffect(() => {
+    setMessageProcess()
+    dispatch(getProjects())
+    dispatch(getProjectCountry())
+    dispatch(getProjectCategories())
+    dispatch(getProjectSubCategories())
+    dispatch(getProjectCountry())
+  }, [])
 
-  const loading = useSelector((state) => state.Project.loading)
-
-  const err = useSelector((state) => state.Project.error)
-  const msg = useSelector((state) => state.Project.message)
-  const isDeleted = useSelector((state) => state.Project.isDeleted)
   const onCloseResetAll = () => {
     setProjectId('')
     setName('')
@@ -112,139 +109,9 @@ const CurrentProject = (props) => {
     setValidated(false)
   }
 
-  const setMessageProcess = () => {
-    if (err) {
-      addToast(ToastError(err))
-    } else if (msg && isDeleted) {
-      addToast(ToastSuccessDelete)
-    } else if (msg && !isDeleted) {
-      addToast(ToastSuccess)
-    }
-  }
-
-  // const rowSelectCritera = (row) => row.projectId === 17
-
-  useEffect(() => {
-    setMessageProcess()
-    dispatch(getProjects())
-    dispatch(getProjectCountry())
-    dispatch(getProjectCategories())
-    dispatch(getProjectSubCategories())
-    dispatch(getProjectCountry())
-    handleChange()
-    // eslint-disable-next-line
-  }, [msg, err])
-
   const projects = useSelector((state) => {
     return state.Project.dataProjects
   })
-  const categories = useSelector((state) => {
-    return state.Project.dataCategory
-  })
-  const subcategories = useSelector((state) => state.ProjectCategories.dataSubcategories)
-  const countries = useSelector((state) => state.Country.dataCountry)
-  const countriez = useSelector((state) => state.Country.dataCountries)
-
-  const ToastSuccessDelete = (
-    <CToast className="align-items-center" color="success">
-      <div className="d-flex">
-        <CToastBody>Data has been deleted!</CToastBody>
-        <CToastClose className="me-2 m-auto" />
-      </div>
-    </CToast>
-  )
-
-  console.log('subcategories:', subcategories)
-  const ToastError = (errorText) => {
-    return (
-      <CToast className="align-items-center" color="warning">
-        <div className="d-flex">
-          <CToastBody>{errorText}</CToastBody>
-          <CToastClose className="me-2 m-auto" />
-        </div>
-      </CToast>
-    )
-  }
-
-  const onClickEdit = (row) => {
-    setProjectId(row.projectId)
-    setName(row.projectName)
-
-    if (row.projectCategoryID) {
-      setCategory(row.projectCategoryID)
-    }
-    if (row.projectSubCategoryID) {
-      setSubcategory(row.projectSubCategoryID)
-    }
-    if (row.countryId) {
-      setCountry(row.countryId)
-    }
-    setNote(row.notes)
-    setVisible(!visible)
-  }
-
-  const onClickDelete = (id) => {
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        let param = { projectId: id }
-        dispatch(deleteProject(param))
-      }
-    })
-  }
-
-  const renderButtonAction = (row) => {
-    return (
-      <>
-        <CButton
-          color="warning"
-          variant="outline"
-          onClick={() => onClickEdit(row)}
-          className="mx-1"
-        >
-          <CIcon icon={cilPencil} />
-        </CButton>
-        <CButton
-          color="danger"
-          variant="outline"
-          onClick={() => onClickDelete(row.projectId)}
-          className="mx-1"
-        >
-          <CIcon icon={cilTrash} />
-        </CButton>
-      </>
-    )
-  }
-
-  const columns = [
-    {
-      name: 'Project Name',
-      selector: (row) => row.projectName,
-      sortable: true,
-    },
-    {
-      name: 'Category',
-      selector: (row) => row.projectCategoryName,
-      sortable: true,
-    },
-    {
-      name: 'Sub-category',
-      selector: (row) => row.projectSubCategoryName,
-      sortable: true,
-    },
-    {
-      name: 'Action',
-      selector: (row) => renderButtonAction(row),
-      sortable: false,
-    },
-  ]
 
   const handleSubmit = (event) => {
     const form = event.currentTarget
@@ -293,6 +160,17 @@ const CurrentProject = (props) => {
     }
   }
 
+  const ToastError = (errorText) => {
+    return (
+      <CToast className="align-items-center" color="warning">
+        <div className="d-flex">
+          <CToastBody>{errorText}</CToastBody>
+          <CToastClose className="me-2 m-auto" />
+        </div>
+      </CToast>
+    )
+  }
+
   const ToastSuccess = (
     <CToast className="align-items-center" color="success">
       <div className="d-flex">
@@ -310,6 +188,70 @@ const CurrentProject = (props) => {
       </div>
     </CToast>
   )
+
+  const onClickEdit = (row) => {
+    setProjectId(row.projectId)
+    setName(row.projectName)
+
+    if (row.projectCategoryID) {
+      setCategory(row.projectCategoryID)
+    }
+    if (row.projectSubCategoryID) {
+      setSubcategory(row.projectSubCategoryID)
+    }
+    if (row.countryId) {
+      setCountry(row.countryId)
+    }
+    setNote(row.notes)
+    setVisible(!visible)
+  }
+
+  const onClickDelete = (id) => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        let param = { projectId: id }
+        dispatch(deleteProject(param))
+      }
+    })
+  }
+  const err = useSelector((state) => state.Project.error)
+  const msg = useSelector((state) => state.Project.message)
+  const isDeleted = useSelector((state) => state.Project.isDeleted)
+
+  const setMessageProcess = () => {
+    if (err) {
+      addToast(ToastError(err))
+    } else if (msg && isDeleted) {
+      addToast(ToastSuccessDelete)
+    } else if (msg && !isDeleted) {
+      addToast(ToastSuccess)
+    }
+  }
+
+  const ToastSuccessDelete = (
+    <CToast className="align-items-center" color="success">
+      <div className="d-flex">
+        <CToastBody>Data has been deleted!</CToastBody>
+        <CToastClose className="me-2 m-auto" />
+      </div>
+    </CToast>
+  )
+
+  const loading = useSelector((state) => state.Project.loading)
+  const categories = useSelector((state) => state.Project.dataCategory)
+  const subcategories = useSelector((state) => state.Project.dataSubcategory)
+  const countries = useSelector((state) => state.Country.dataCountry)
+  const countriez = useSelector((state) => state.Country.dataCountries)
+  // console.log('subcategories:', subcategories)
+  const isSelected = (row) => selected.indexOf(row.projectId) !== -1
 
   const onChangeDropdown = (e) => {
     let id = Number(e.target.value)
@@ -351,7 +293,12 @@ const CurrentProject = (props) => {
             )}
             <CCardBody>
               {!pageType && (
-                <CButton color="primary" size="sm" onClick={() => setVisible(!visible)}>
+                <CButton
+                  color="primary"
+                  size="sm"
+                  className="mb-2"
+                  onClick={() => setVisible(!visible)}
+                >
                   Create New
                 </CButton>
               )}
@@ -466,18 +413,73 @@ const CurrentProject = (props) => {
                   </CModalFooter>
                 </CForm>
               </CModal>
-              {projects.length > 0 ? (
-                <DataTable
-                  columns={columns}
-                  data={projects}
-                  selectableRows
-                  onSelectedRowsChange={handleChange}
-                  selectableRowsNoSelectAll={true}
-                  pagination
-                />
-              ) : (
-                <h1>Loading. . .</h1>
-              )}
+
+              <TableContainer component={Paper}>
+                <Table className={classes.table} aria-label="Project table" size="small">
+                  <TableHead>
+                    <TableRow style={{ backgroundColor: '#c8c8c8' }}>
+                      <TableCell>
+                        <b>No.</b>
+                      </TableCell>
+                      <TableCell>
+                        <b>Project Name</b>
+                      </TableCell>
+                      <TableCell>
+                        <b>Category</b>
+                      </TableCell>
+                      <TableCell>
+                        <b>Sub-category</b>
+                      </TableCell>
+                      <TableCell>
+                        <b>Action</b>
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {projects &&
+                      projects.map((row, idx) => {
+                        // debugger
+                        const isItemSelected = isSelected(row)
+                        return (
+                          <TableRow
+                            // sx={{ cursor: 'pointer' }}
+                            style={{ cursor: 'pointer', padding: '5px 15px 5px 15px !important' }}
+                            key={idx}
+                            hover
+                            onClick={(event) => selectProject(event, row)}
+                            selected={isItemSelected}
+                          >
+                            <TableCell component="th" scope="row">
+                              {idx + 1}
+                            </TableCell>
+                            <TableCell>{row.projectName}</TableCell>
+                            <TableCell>{row.projectCategoryName}</TableCell>
+                            <TableCell>{row.projectSubCategoryName}</TableCell>
+                            <TableCell>
+                              <CButton
+                                color="warning"
+                                variant="outline"
+                                onClick={() => onClickEdit(row)}
+                                className="mx-1"
+                                style={{ zIndex: 1 }}
+                              >
+                                <CIcon icon={cilPencil} />
+                              </CButton>
+                              <CButton
+                                color="danger"
+                                variant="outline"
+                                onClick={() => onClickDelete(row.projectId)}
+                                className="mx-1"
+                              >
+                                <CIcon icon={cilTrash} />
+                              </CButton>
+                            </TableCell>
+                          </TableRow>
+                        )
+                      })}
+                  </TableBody>
+                </Table>
+              </TableContainer>
             </CCardBody>
           </CCard>
         </CCol>
@@ -486,8 +488,8 @@ const CurrentProject = (props) => {
   )
 }
 
-export default CurrentProject
+export default CurrentProjectV1
 
-CurrentProject.propTypes = {
+CurrentProjectV1.propTypes = {
   pageType: PropTypes.string,
 }
