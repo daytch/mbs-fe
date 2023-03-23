@@ -478,16 +478,6 @@ const PyshicalOutput = ({
     [],
   )
 
-  const genPDF = () => {
-    // Default export is a4 paper, portrait, using millimeters for units
-    const doc = new jsPDF()
-    doc.text('Hello world!', 50, 10)
-    // doc.save("a4.pdf");
-    // doc.output('save', 'filename.pdf') //Try to save PDF as a file (not works on ie before 10, and some mobile devices)
-    doc.output('datauristring') //returns the data uri string
-    doc.output('datauri') //opens the data uri in current window
-    doc.output('dataurlnewwindow')
-  }
   const myRef = useRef()
   const [loading, setLoading] = useState(true)
 
@@ -500,8 +490,8 @@ const PyshicalOutput = ({
   // const [selectedRowCount, setSelectedRowCount] = useState(0)
   const [selectedRow, setSelectedRow] = useState([])
   const [visibleMaterialQuantity, setVisibleMaterialQuantity] = useState(true)
-  const [title, setTitle] = useState('MaterialsByCostCentre')
-  const [code, setCode] = useState('MaterialsByCostCentre')
+  const [title, setTitle] = useState('EquipmentOperatingHoursByCostCentre')
+  const [code, setCode] = useState('EquipmentOperatingHoursByCostCentre')
   const [decimal, setDecimal] = useState(2)
   const [pdfSize, setPdfSize] = useState('A4')
   const [headerPdf, setHeaderPdf] = useState(true)
@@ -666,7 +656,6 @@ const PyshicalOutput = ({
   )
   const dtEmployeeTotalSummary = useSelector((state) => state.PhysicalOutput.dtEmployeeTotalSummary)
   const dtGeneralFunction = useSelector((state) => state.PhysicalOutput.dtGeneralFunction)
-  console.log('dtGeneralFunction: ', dtGeneralFunction)
 
   const fleets = useSelector((state) => {
     if (state.Equipment.dataFleets.length > 0) {
@@ -707,7 +696,25 @@ const PyshicalOutput = ({
   }, [data])
 
   const renderPyshicalOutput = {
-    EquipmentRequiredByCostCentre: () =>
+    EquipmentOperatingHoursByCostCentre: () =>
+      dtEquipmentRequiredByCostCentre && fleets && costCentres ? (
+        <EquipmentRequiredByCostCentre
+          dtEquipmentRequiredByCostCentre={dtEquipmentRequiredByCostCentre}
+          groupDtEquipmentRequiredByCostCentre={groupDtEquipmentRequiredByCostCentre}
+          fleets={fleets}
+          costCentres={costCentres}
+          project={proj}
+          projectRepresentation={projRep}
+          showHeader={headerPdf}
+          showFooter={footerPdf}
+          lastColumn={lastColumn}
+          decimalPoint={decimal}
+          pageSize={pdfSize}
+        />
+      ) : (
+        <NoData />
+      ),
+    EquipmentOperatingHoursSummary: () =>
       dtEquipmentRequiredByCostCentre && fleets && costCentres ? (
         <EquipmentRequiredByCostCentre
           dtEquipmentRequiredByCostCentre={dtEquipmentRequiredByCostCentre}
@@ -1125,7 +1132,7 @@ const PyshicalOutput = ({
         <NoData />
       ),
   }
-
+  console.log('code: ', code)
   const onPreviewPDF = () => {}
 
   return (
