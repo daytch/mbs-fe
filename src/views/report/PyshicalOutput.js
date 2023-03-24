@@ -99,6 +99,7 @@ import {
 import './print.css'
 import ContextMenu from './../../components/ContextMenu'
 import Spinner from '../../components/Spinner'
+import { callExport } from './ExcelOutput'
 
 const Styles = styled.div`
   padding: 1rem;
@@ -143,6 +144,41 @@ const Styles = styled.div`
     text-align: center;
   }
 `
+
+const excelExportData = [
+  {
+    'first name': 'arul',
+    'Last Name': 'prasat',
+    'employee code': '001',
+    'mobile phone': '1234567890',
+    DOB: '01-01-1995',
+    Address: 'Chennai',
+  },
+  {
+    'first name': 'arul',
+    'Last Name': 'prasat',
+    'employee code': '001',
+    'mobile phone': '1234567890',
+    DOB: '01-01-1995',
+    Address: 'Chennai',
+  },
+  {
+    'first name': 'arul',
+    'Last Name': 'prasat',
+    'employee code': '001',
+    'mobile phone': '1234567890',
+    DOB: '01-01-1995',
+    Address: 'Chennai',
+  },
+  {
+    'first name': 'arul',
+    'Last Name': 'prasat',
+    'employee code': '001',
+    'mobile phone': '1234567890',
+    DOB: '01-01-1995',
+    Address: 'Chennai',
+  },
+]
 
 const EditableCell = ({
   updateEquipmentModelCosts,
@@ -478,16 +514,6 @@ const PyshicalOutput = ({
     [],
   )
 
-  const genPDF = () => {
-    // Default export is a4 paper, portrait, using millimeters for units
-    const doc = new jsPDF()
-    doc.text('Hello world!', 50, 10)
-    // doc.save("a4.pdf");
-    // doc.output('save', 'filename.pdf') //Try to save PDF as a file (not works on ie before 10, and some mobile devices)
-    doc.output('datauristring') //returns the data uri string
-    doc.output('datauri') //opens the data uri in current window
-    doc.output('dataurlnewwindow')
-  }
   const myRef = useRef()
   const [loading, setLoading] = useState(true)
 
@@ -500,8 +526,8 @@ const PyshicalOutput = ({
   // const [selectedRowCount, setSelectedRowCount] = useState(0)
   const [selectedRow, setSelectedRow] = useState([])
   const [visibleMaterialQuantity, setVisibleMaterialQuantity] = useState(true)
-  const [title, setTitle] = useState('MaterialsByCostCentre')
-  const [code, setCode] = useState('MaterialsByCostCentre')
+  const [title, setTitle] = useState('EquipmentOperatingHoursByCostCentre')
+  const [code, setCode] = useState('EquipmentOperatingHoursByCostCentre')
   const [decimal, setDecimal] = useState(2)
   const [pdfSize, setPdfSize] = useState('A4')
   const [headerPdf, setHeaderPdf] = useState(true)
@@ -666,7 +692,6 @@ const PyshicalOutput = ({
   )
   const dtEmployeeTotalSummary = useSelector((state) => state.PhysicalOutput.dtEmployeeTotalSummary)
   const dtGeneralFunction = useSelector((state) => state.PhysicalOutput.dtGeneralFunction)
-  console.log('dtGeneralFunction: ', dtGeneralFunction)
 
   const fleets = useSelector((state) => {
     if (state.Equipment.dataFleets.length > 0) {
@@ -707,7 +732,25 @@ const PyshicalOutput = ({
   }, [data])
 
   const renderPyshicalOutput = {
-    EquipmentRequiredByCostCentre: () =>
+    EquipmentOperatingHoursByCostCentre: () =>
+      dtEquipmentRequiredByCostCentre && fleets && costCentres ? (
+        <EquipmentRequiredByCostCentre
+          dtEquipmentRequiredByCostCentre={dtEquipmentRequiredByCostCentre}
+          groupDtEquipmentRequiredByCostCentre={groupDtEquipmentRequiredByCostCentre}
+          fleets={fleets}
+          costCentres={costCentres}
+          project={proj}
+          projectRepresentation={projRep}
+          showHeader={headerPdf}
+          showFooter={footerPdf}
+          lastColumn={lastColumn}
+          decimalPoint={decimal}
+          pageSize={pdfSize}
+        />
+      ) : (
+        <NoData />
+      ),
+    EquipmentOperatingHoursSummary: () =>
       dtEquipmentRequiredByCostCentre && fleets && costCentres ? (
         <EquipmentRequiredByCostCentre
           dtEquipmentRequiredByCostCentre={dtEquipmentRequiredByCostCentre}
@@ -1125,8 +1168,43 @@ const PyshicalOutput = ({
         <NoData />
       ),
   }
-
+  console.log('code: ', code)
   const onPreviewPDF = () => {}
+
+  const handleExport = () => {
+    const excelDataExport = {
+      EquipmentRequiredByCostCentre: dtEquipmentRequiredByCostCentre,
+      EquipmentRequiredSummary:dtEquipmentRequiredSummary,
+      EquipmentReplacementByCostCentre: dtEquipmentReplacementByCostCentre,
+      EquipmentReplacementSummary:dtEquipmentReplacementSummary,
+      EquipmentDisposalExpiredByCostCentre:dtEquipmentDisposalExpiredByCostCentre,
+      EquipmentDisposalExpiredSummary:dtEquipmentDisposalExpiredSummary,
+      EquipmentDisposalNotRequiredCostCentre:dtEquipmentDisposalNotRequiredByCostCentre,
+      EquipmentDisposalNotRequiredSummary:dtEquipmentDisposalNotRequiredSummary,
+      EquipmentTotalDisposalByCostCentre:dtEquipmentTotalDisposalByCostCentre,
+      EquipmentTotalDisposalSummary: dtEquipmentTotalDisposalSummary,
+      EquipmentFleetByCostCentre: dtEquipmentFleetByCostCentre,
+      EquipmentFleetSummary: dtEquipmentFleetSummary,
+      EquipmentUtilisationByCostCentre:dtEquipmentFleetByCostCentre,
+      EquipmentUtilisationSummary:dtEquipmentUtilisationSummary,
+      MaterialsServicesByCostCentre:dtMaterialsServicesByCostCentre,
+      MaterialsByCostCentre:dtMaterialsByCostCentre,
+      ServicesByCostCentre:dtServicesByCostCentre,
+      MaterialsServicesConsumedByEquipment:dtMaterialsConsumedByEquipment,
+      MaterialsServicesNotConsumedByEquipment:dtMaterialsNotConsumedByEquipment,
+      MaterialsServicesSummary:dtMaterialsServicesSummary,
+      EmployeeExcludingReliefByCostCentre:dtEmployeeExcludingReliefByCostCentre,
+      EmployeeExcludingReliefSummary:dtEmployeeExcludingReliefSummary,
+      EmployeeRequiredforReliefByCostCentre:dtEmployeeRequiredReliefByCostCentre,
+      EmployeeRequiredforReliefSummary:dtEmployeeRequiredReliefSummary,
+      EmployeeTotalByCostCentre:dtEmployeeTotalByCostCentre,
+      EmployeeTotalSummary:dtEmployeeTotalSummary,
+      GeneralFunction:dtGeneralFunction,
+    }
+    console.log('code',code)
+    console.log('excelDataExport',excelDataExport[code])
+    callExport[code]({ excelData: excelDataExport[code], project: proj, projectRepresentation: projRep })
+  }
 
   return (
     <>
@@ -1212,7 +1290,11 @@ const PyshicalOutput = ({
               <CIcon icon={cilFindInPage} />
               <span className="mx-2">Preview</span>
             </button>
-            <button className="m-2 btn btn-primary btn-sm" type="button">
+            <button
+              className="m-2 btn btn-primary btn-sm"
+              type="button"
+              onClick={() => handleExport()}
+            >
               <CIcon icon={cilDescription} />
               <span className="mx-2">Export</span>
             </button>
