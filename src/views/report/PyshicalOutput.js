@@ -99,6 +99,7 @@ import {
 import './print.css'
 import ContextMenu from './../../components/ContextMenu'
 import Spinner from '../../components/Spinner'
+import { callExport } from './ExcelOutput'
 
 const Styles = styled.div`
   padding: 1rem;
@@ -143,6 +144,41 @@ const Styles = styled.div`
     text-align: center;
   }
 `
+
+const excelExportData = [
+  {
+    'first name': 'arul',
+    'Last Name': 'prasat',
+    'employee code': '001',
+    'mobile phone': '1234567890',
+    DOB: '01-01-1995',
+    Address: 'Chennai',
+  },
+  {
+    'first name': 'arul',
+    'Last Name': 'prasat',
+    'employee code': '001',
+    'mobile phone': '1234567890',
+    DOB: '01-01-1995',
+    Address: 'Chennai',
+  },
+  {
+    'first name': 'arul',
+    'Last Name': 'prasat',
+    'employee code': '001',
+    'mobile phone': '1234567890',
+    DOB: '01-01-1995',
+    Address: 'Chennai',
+  },
+  {
+    'first name': 'arul',
+    'Last Name': 'prasat',
+    'employee code': '001',
+    'mobile phone': '1234567890',
+    DOB: '01-01-1995',
+    Address: 'Chennai',
+  },
+]
 
 const EditableCell = ({
   updateEquipmentModelCosts,
@@ -1128,6 +1164,41 @@ const PyshicalOutput = ({
 
   const onPreviewPDF = () => {}
 
+  const handleExport = () => {
+    const excelDataExport = {
+      EquipmentRequiredByCostCentre: dtEquipmentRequiredByCostCentre,
+      EquipmentRequiredSummary:dtEquipmentRequiredSummary,
+      EquipmentReplacementByCostCentre: dtEquipmentReplacementByCostCentre,
+      EquipmentReplacementSummary:dtEquipmentReplacementSummary,
+      EquipmentDisposalExpiredByCostCentre:dtEquipmentDisposalExpiredByCostCentre,
+      EquipmentDisposalExpiredSummary:dtEquipmentDisposalExpiredSummary,
+      EquipmentDisposalNotRequiredCostCentre:dtEquipmentDisposalNotRequiredByCostCentre,
+      EquipmentDisposalNotRequiredSummary:dtEquipmentDisposalNotRequiredSummary,
+      EquipmentTotalDisposalByCostCentre:dtEquipmentTotalDisposalByCostCentre,
+      EquipmentTotalDisposalSummary: dtEquipmentTotalDisposalSummary,
+      EquipmentFleetByCostCentre: dtEquipmentFleetByCostCentre,
+      EquipmentFleetSummary: dtEquipmentFleetSummary,
+      EquipmentUtilisationByCostCentre:dtEquipmentFleetByCostCentre,
+      EquipmentUtilisationSummary:dtEquipmentUtilisationSummary,
+      MaterialsServicesByCostCentre:dtMaterialsServicesByCostCentre,
+      MaterialsByCostCentre:dtMaterialsByCostCentre,
+      ServicesByCostCentre:dtServicesByCostCentre,
+      MaterialsServicesConsumedByEquipment:dtMaterialsConsumedByEquipment,
+      MaterialsServicesNotConsumedByEquipment:dtMaterialsNotConsumedByEquipment,
+      MaterialsServicesSummary:dtMaterialsServicesSummary,
+      EmployeeExcludingReliefByCostCentre:dtEmployeeExcludingReliefByCostCentre,
+      EmployeeExcludingReliefSummary:dtEmployeeExcludingReliefSummary,
+      EmployeeRequiredforReliefByCostCentre:dtEmployeeRequiredReliefByCostCentre,
+      EmployeeRequiredforReliefSummary:dtEmployeeRequiredReliefSummary,
+      EmployeeTotalByCostCentre:dtEmployeeTotalByCostCentre,
+      EmployeeTotalSummary:dtEmployeeTotalSummary,
+      GeneralFunction:dtGeneralFunction,
+    }
+    console.log('code',code)
+    console.log('excelDataExport',excelDataExport[code])
+    callExport[code]({ excelData: excelDataExport[code], project: proj, projectRepresentation: projRep })
+  }
+
   return (
     <>
       <Spinner loading={loading} />
@@ -1215,7 +1286,11 @@ const PyshicalOutput = ({
               <CIcon icon={cilFindInPage} />
               <span className="mx-2">Preview</span>
             </button>
-            <button className="m-2 btn btn-primary btn-sm" type="button">
+            <button
+              className="m-2 btn btn-primary btn-sm"
+              type="button"
+              onClick={() => handleExport()}
+            >
               <CIcon icon={cilDescription} />
               <span className="mx-2">Export</span>
             </button>
