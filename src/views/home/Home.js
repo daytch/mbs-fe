@@ -440,7 +440,7 @@ const Home = () => {
         alignment="center"
         scrollable
         visible={visible}
-        onClose={() => setVisible(false)}
+        // onClose={() => setVisible(false)}
         className="login-card"
       >
         <CCol md={12}>
@@ -643,7 +643,7 @@ const Home = () => {
       </CModal>
     )
   }
-
+  console.log('visible:', visible)
   return (
     <React.Fragment>
       <Spinner loading={loading} />
