@@ -1,5 +1,20 @@
-import React from 'react'
-import { CCol, CRow, CCard } from '@coreui/react'
+import React, { useState } from 'react'
+import {
+  CCol,
+  CRow,
+  CCard,
+  CModal,
+  CModalHeader,
+  CModalTitle,
+  CModalBody,
+  CModalFooter,
+  CButton,
+  CNav,
+  CNavItem,
+  CNavLink,
+  CTabContent,
+  CTabPane,
+} from '@coreui/react'
 import { makeStyles } from '@material-ui/core/styles'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
@@ -17,10 +32,239 @@ const useStyles = makeStyles({
 
 const Analysis = () => {
   const classes = useStyles()
+  const [radioTop, setRadioTop] = useState({ full: true, physical: false, cost: false })
+  const [radioLeft, setRadioLeft] = useState({ from: true, restart: false, one: false })
+  const [visible, setVisible] = useState(false)
+  const [isEquipment, setIsEquipment] = useState(true)
+  const [eActiveTab, setEActiveTab] = useState(1)
+
+  const handleOpen = (e) => {
+    e.nativeEvent.stopImmediatePropagation()
+    setVisible(true)
+  }
+
+  const renderTab = () => (
+    <>
+      <CNav variant="tabs">
+        <CNavItem>
+          <CNavLink href="#!" active={eActiveTab === 1} onClick={() => setEActiveTab(1)}>
+            General
+          </CNavLink>
+        </CNavItem>
+        <CNavItem>
+          <CNavLink href="#!" active={eActiveTab === 2} onClick={() => setEActiveTab(2)}>
+            Replacement
+          </CNavLink>
+        </CNavItem>
+        <CNavItem>
+          <CNavLink href="#!" active={eActiveTab === 3} onClick={() => setEActiveTab(3)}>
+            Disposal
+          </CNavLink>
+        </CNavItem>
+      </CNav>
+      <CTabContent>
+        <CTabPane role="tabpanel" aria-labelledby="home-tab" visible={eActiveTab === 1}>
+          <CCard className="p-4">
+            If availble used and owned already equipment operating hours exceeds the fleet
+            potential:
+            <div className="row">
+              <div className="col-12 ms-2 form-check">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="eg1"
+                  id="radiotop1"
+                  // value={actMenu}
+                  checked={radioLeft.from}
+                  onChange={() => setRadioLeft({ from: true, restart: false, one: false })}
+                />
+                <label className="form-check-label" htmlFor="reportType1">
+                  Adjust to the maximum available OH
+                </label>
+              </div>
+              <div className="col-12 ms-2 form-check">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="eg1"
+                  id="radiotop2"
+                  // value={actMenu}
+                  checked={radioLeft.restart}
+                  onChange={() => setRadioLeft({ from: false, restart: true, one: false })}
+                />
+                <label className="form-check-label" htmlFor="reportType1">
+                  Abort with error message
+                </label>
+              </div>
+            </div>
+          </CCard>
+          <CCard className="p-4">
+            If project calendar has insuffient for equipment disposal:
+            <div className="row">
+              <div className="col-5 ms-2 form-check">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="eg1"
+                  id="radiotop1"
+                  // value={actMenu}
+                  checked={radioLeft.from}
+                  onChange={() => setRadioLeft({ from: true, restart: false, one: false })}
+                />
+                <label className="form-check-label" htmlFor="reportType1">
+                  Create an additional period
+                </label>
+              </div>
+              <div className="col-5 ms-2 form-check">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="eg1"
+                  id="radiotop2"
+                  // value={actMenu}
+                  checked={radioLeft.restart}
+                  onChange={() => setRadioLeft({ from: false, restart: true, one: false })}
+                />
+                <label className="form-check-label" htmlFor="reportType1">
+                  Abort with error message
+                </label>
+              </div>
+            </div>
+          </CCard>
+        </CTabPane>
+        <CTabPane role="tabpanel" aria-labelledby="profile-tab" visible={eActiveTab === 2}>
+          <CCard className="p-4">
+            Commission equipment units as:
+            <div className="row">
+              <div className="col-12 ms-2 form-check">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="eg1"
+                  id="radiotop1"
+                  // value={actMenu}
+                  checked={radioLeft.from}
+                  onChange={() => setRadioLeft({ from: true, restart: false, one: false })}
+                />
+                <label className="form-check-label" htmlFor="reportType1">
+                  Always replacement if spares available
+                </label>
+              </div>
+              <div className="col-12 ms-2 form-check">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="eg1"
+                  id="radiotop2"
+                  // value={actMenu}
+                  checked={radioLeft.restart}
+                  onChange={() => setRadioLeft({ from: false, restart: true, one: false })}
+                />
+                <label className="form-check-label" htmlFor="reportType1">
+                  Commissioning if the number of lapse days exceed: <input className="w-25" />
+                </label>
+              </div>
+            </div>
+          </CCard>
+        </CTabPane>
+        <CTabPane role="tabpanel" aria-labelledby="profile-tab" visible={eActiveTab === 3}>
+          <CCard className="p-4">
+            <div className="form-inline">
+              Number of replacement Exclusion Periods at end of Project Calendar:{' '}
+              <input style={{ width: '35px' }} />
+            </div>
+            <div className="form-inline">
+              Dispose equipment when no longer required: <input type="checkbox" />
+            </div>
+            <CCard className="p-2">
+              Commission equipment units as:
+              <div className="row">
+                <div className="col-12 ms-2 form-check">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="eg1"
+                    id="radiotop1"
+                    // value={actMenu}
+                    checked={radioLeft.from}
+                    onChange={() => setRadioLeft({ from: true, restart: false, one: false })}
+                  />
+                  <label className="form-check-label" htmlFor="reportType1">
+                    Always replacement if spares available
+                  </label>
+                </div>
+                <div className="col-12 ms-2 form-check">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="eg1"
+                    id="radiotop2"
+                    // value={actMenu}
+                    checked={radioLeft.restart}
+                    onChange={() => setRadioLeft({ from: false, restart: true, one: false })}
+                  />
+                  <label className="form-check-label" htmlFor="reportType1">
+                    Commissioning if the number of lapse days exceed:{' '}
+                    <input style={{ width: '35px' }} />
+                  </label>
+                </div>
+              </div>
+            </CCard>
+          </CCard>
+        </CTabPane>
+      </CTabContent>
+    </>
+  )
+
+  const renderModal = () => {
+    return (
+      <CModal
+        size="lg"
+        alignment="center"
+        scrollable
+        visible={visible}
+        onClose={() => setVisible(false)}
+      >
+        <CModalHeader onClose={() => setVisible(false)}>
+          <CModalTitle>Options</CModalTitle>
+        </CModalHeader>
+        <CModalBody>
+          <CNav variant="tabs">
+            <CNavItem>
+              <CNavLink href="#!" active={isEquipment} onClick={() => setIsEquipment(true)}>
+                Equipment
+              </CNavLink>
+            </CNavItem>
+            <CNavItem>
+              <CNavLink href="#!" active={!isEquipment} onClick={() => setIsEquipment(false)}>
+                Personnel
+              </CNavLink>
+            </CNavItem>
+          </CNav>
+          <CTabContent>
+            <CTabPane role="tabpanel" aria-labelledby="home-tab" visible={isEquipment}>
+              <CCard className="p-4"> {renderTab()}</CCard>
+            </CTabPane>
+            <CTabPane role="tabpanel" aria-labelledby="profile-tab" visible={!isEquipment}>
+              <CCard className="p-4"> Personnel</CCard>
+            </CTabPane>
+          </CTabContent>
+        </CModalBody>
+        <CModalFooter>
+          <CButton color="secondary" onClick={() => setVisible(false)}>
+            Close
+          </CButton>
+          <CButton color="primary">Save changes</CButton>
+        </CModalFooter>
+      </CModal>
+    )
+  }
+  console.log('visible:', visible)
   return (
     <CRow>
       <CCol xs={12}>
         <CCard className="p-4">
+          {renderModal()}
           <div className="container">
             <div className="row border border-dark p-2">
               <div className="row">
@@ -28,51 +272,42 @@ const Analysis = () => {
                   <input
                     className="form-check-input"
                     type="radio"
-                    name="reportType"
-                    id="reportType1"
+                    name="radiotop"
+                    id="radiotop1"
                     // value={actMenu}
-                    // checked={actMenu === '1'}
-                    // onChange={() => {
-                    //   localStorage.setItem('actMenu', '1')
-                    //   setActMenu('1')
-                    // }}
+                    checked={radioTop.full}
+                    onChange={() => setRadioTop({ full: true, physical: false, cost: false })}
                   />
                   <label className="form-check-label" htmlFor="reportType1">
-                    Input Data
+                    Full Analysis
                   </label>
                 </div>
                 <div className="col-5 form-check">
                   <input
                     className="form-check-input"
                     type="radio"
-                    name="reportType"
-                    id="reportType2"
+                    name="radiotop"
+                    id="radiotop2"
                     // value={actMenu}
-                    // checked={actMenu === '2'}
-                    // onChange={() => {
-                    //   localStorage.setItem('actMenu', '2')
-                    //   setActMenu('2')
-                    // }}
+                    checked={radioTop.physical}
+                    onChange={() => setRadioTop({ full: false, physical: true, cost: false })}
                   />
                   <label className="form-check-label" htmlFor="reportType2">
-                    Pyshical Output Schedules
+                    Pyshical Analysis only
                   </label>
                 </div>
                 <div className="col-4 form-check">
                   <input
                     className="form-check-input"
                     type="radio"
-                    name="reportType"
-                    id="reportType3"
+                    name="radiotop"
+                    id="radiotop3"
                     // value={actMenu}
-                    // onChange={() => {
-                    //   localStorage.setItem('actMenu', '3')
-                    //   setActMenu('3')
-                    // }}
-                    // checked={actMenu === '3'}
+                    checked={radioTop.cost}
+                    onChange={() => setRadioTop({ full: false, physical: false, cost: true })}
                   />
                   <label className="form-check-label" htmlFor="reportType3">
-                    Cost Output Schedules
+                    Cost Analysis only
                   </label>
                 </div>
               </div>
@@ -85,14 +320,11 @@ const Analysis = () => {
                     <input
                       className="form-check-input"
                       type="radio"
-                      name="reportType"
-                      id="reportType1"
+                      name="radioleft"
+                      id="radiotop1"
                       // value={actMenu}
-                      // checked={actMenu === '1'}
-                      // onChange={() => {
-                      //   localStorage.setItem('actMenu', '1')
-                      //   setActMenu('1')
-                      // }}
+                      checked={radioLeft.from}
+                      onChange={() => setRadioLeft({ from: true, restart: false, one: false })}
                     />
                     <label className="form-check-label" htmlFor="reportType1">
                       From beginning
@@ -102,14 +334,11 @@ const Analysis = () => {
                     <input
                       className="form-check-input"
                       type="radio"
-                      name="reportType"
-                      id="reportType1"
+                      name="radioleft"
+                      id="radiotop2"
                       // value={actMenu}
-                      // checked={actMenu === '1'}
-                      // onChange={() => {
-                      //   localStorage.setItem('actMenu', '1')
-                      //   setActMenu('1')
-                      // }}
+                      checked={radioLeft.restart}
+                      onChange={() => setRadioLeft({ from: false, restart: true, one: false })}
                     />
                     <label className="form-check-label" htmlFor="reportType1">
                       Restart from:
@@ -119,14 +348,11 @@ const Analysis = () => {
                     <input
                       className="form-check-input"
                       type="radio"
-                      name="reportType"
-                      id="reportType1"
+                      name="radioleft"
+                      id="radiotop3"
                       // value={actMenu}
-                      // checked={actMenu === '1'}
-                      // onChange={() => {
-                      //   localStorage.setItem('actMenu', '1')
-                      //   setActMenu('1')
-                      // }}
+                      checked={radioLeft.one}
+                      onChange={() => setRadioLeft({ from: false, restart: false, one: true })}
                     />
                     <label className="form-check-label" htmlFor="reportType1">
                       Do one part only
@@ -138,46 +364,54 @@ const Analysis = () => {
                 <div className="overflow-auto">
                   <Table className={classes.table} aria-label="Project table" size="small">
                     <TableBody>
-                      <TableRow
-                        // sx={{ cursor: 'pointer' }}
-                        style={{ cursor: 'pointer', padding: '5px 15px 5px 15px !important' }}
-                        // key={idx}
-                        hover
-                        // onClick={(event) => selectProject(event, row)}
-                        // selected={isItemSelected}
-                      >
-                        <TableCell>Equipment Operating Hours</TableCell>
-                      </TableRow>
-                      <TableRow hover>
-                        <TableCell>Materials and Services</TableCell>
-                      </TableRow>
-                      <TableRow hover>
-                        <TableCell>Required Equipment</TableCell>
-                      </TableRow>
-                      <TableRow hover>
-                        <TableCell>Commissioning and Disposal</TableCell>
-                      </TableRow>
-                      <TableRow hover>
-                        <TableCell>Equipment</TableCell>
-                      </TableRow>
-                      <TableRow hover>
-                        <TableCell>Equipment Utilization</TableCell>
-                      </TableRow>
-                      <TableRow hover>
-                        <TableCell>Employees</TableCell>
-                      </TableRow>
-                      <TableRow hover>
-                        <TableCell>General Functiomn Output</TableCell>
-                      </TableRow>
-                      <TableRow hover>
-                        <TableCell>Costs</TableCell>
-                      </TableRow>
+                      {radioTop.full || radioTop.physical ? (
+                        <>
+                          <TableRow hover>
+                            <TableCell>Equipment Operating Hours</TableCell>
+                          </TableRow>
+                          <TableRow hover>
+                            <TableCell>Materials and Services</TableCell>
+                          </TableRow>
+                          <TableRow hover>
+                            <TableCell>Required Equipment</TableCell>
+                          </TableRow>
+                          <TableRow hover>
+                            <TableCell>Commissioning and Disposal</TableCell>
+                          </TableRow>
+                          <TableRow hover>
+                            <TableCell>Equipment</TableCell>
+                          </TableRow>
+                          <TableRow hover>
+                            <TableCell>Equipment Utilization</TableCell>
+                          </TableRow>
+                          <TableRow hover>
+                            <TableCell>Employees</TableCell>
+                          </TableRow>
+                          <TableRow hover>
+                            <TableCell>General Functiomn Output</TableCell>
+                          </TableRow>
+                        </>
+                      ) : null}
+                      {radioTop.full || radioTop.cost ? (
+                        <TableRow hover>
+                          <TableCell>Costs</TableCell>
+                        </TableRow>
+                      ) : null}
                     </TableBody>
                   </Table>
                 </div>
               </div>
             </div>
           </div>
+
+          <CModalFooter className="mt-2">
+            <CButton color="secondary" onClick={handleOpen} size="sm">
+              Options
+            </CButton>
+            <CButton color="primary" type="submit" size="sm" className="ms-2">
+              Compute
+            </CButton>
+          </CModalFooter>
         </CCard>
       </CCol>
     </CRow>
