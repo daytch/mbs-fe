@@ -20,6 +20,7 @@ import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
 import TableRow from '@material-ui/core/TableRow'
 import TableCell from '@material-ui/core/TableCell'
+// import './analysis.css'
 
 const useStyles = makeStyles({
   table: {
@@ -37,6 +38,7 @@ const Analysis = () => {
   const [visible, setVisible] = useState(false)
   const [isEquipment, setIsEquipment] = useState(true)
   const [eActiveTab, setEActiveTab] = useState(1)
+  const [pActiveTab, setPActiveTab] = useState(1)
 
   const handleOpen = (e) => {
     e.nativeEvent.stopImmediatePropagation()
@@ -216,6 +218,297 @@ const Analysis = () => {
     </>
   )
 
+  const renderPersonnelTab = () => (
+    <>
+      <CNav variant="tabs">
+        <CNavItem>
+          <CNavLink href="#!" active={pActiveTab === 1} onClick={() => setPActiveTab(1)}>
+            Operator Basis
+          </CNavLink>
+        </CNavItem>
+        <CNavItem>
+          <CNavLink href="#!" active={pActiveTab === 2} onClick={() => setPActiveTab(2)}>
+            Rounding
+          </CNavLink>
+        </CNavItem>
+        <CNavItem>
+          <CNavLink href="#!" active={pActiveTab === 3} onClick={() => setPActiveTab(3)}>
+            Maintenance Personnel Allocation
+          </CNavLink>
+        </CNavItem>
+      </CNav>
+      <CTabContent>
+        <CTabPane role="tabpanel" aria-labelledby="home-tab" visible={eActiveTab === 1}>
+          <CCard className="p-4">
+            <fieldset>
+              <legend>Base required number of operators on:</legend>
+              <div className="row">
+                <div className="col-12 ms-2 form-check">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="eg1"
+                    id="radiotop1"
+                    // value={actMenu}
+                    checked={radioLeft.from}
+                    onChange={() => setRadioLeft({ from: true, restart: false, one: false })}
+                  />
+                  <label className="form-check-label" htmlFor="reportType1">
+                    Available Required Equipment
+                  </label>
+                </div>
+                <div className="col-12 ms-2 form-check">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="eg1"
+                    id="radiotop2"
+                    // value={actMenu}
+                    checked={radioLeft.restart}
+                    onChange={() => setRadioLeft({ from: false, restart: true, one: false })}
+                  />
+                  <label className="form-check-label" htmlFor="reportType1">
+                    Rounded up Available Required Equipment
+                  </label>
+                </div>
+                <div className="col-12 ms-2 form-check">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="eg1"
+                    id="radiotop2"
+                    // value={actMenu}
+                    checked={radioLeft.restart}
+                    onChange={() => setRadioLeft({ from: false, restart: true, one: false })}
+                  />
+                  <label className="form-check-label" htmlFor="reportType1">
+                    Available Equipment
+                  </label>
+                </div>
+                <div className="col-12 ms-2 form-check">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="eg1"
+                    id="radiotop2"
+                    // value={actMenu}
+                    checked={radioLeft.restart}
+                    onChange={() => setRadioLeft({ from: false, restart: true, one: false })}
+                  />
+                  <label className="form-check-label" htmlFor="reportType1">
+                    Rounded up Available Equipment
+                  </label>
+                </div>
+                <div className="col-12 ms-2 form-check">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="eg1"
+                    id="radiotop2"
+                    // value={actMenu}
+                    checked={radioLeft.restart}
+                    onChange={() => setRadioLeft({ from: false, restart: true, one: false })}
+                  />
+                  <label className="form-check-label" htmlFor="reportType1">
+                    All Equipment
+                  </label>
+                </div>
+              </div>
+            </fieldset>
+          </CCard>
+          <CCard className="p-4">
+            If project calendar has insuffient for equipment disposal:
+            <div className="row">
+              <div className="col-5 ms-2 form-check">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="eg1"
+                  id="radiotop1"
+                  // value={actMenu}
+                  checked={radioLeft.from}
+                  onChange={() => setRadioLeft({ from: true, restart: false, one: false })}
+                />
+                <label className="form-check-label" htmlFor="reportType1">
+                  Create an additional period
+                </label>
+              </div>
+              <div className="col-5 ms-2 form-check">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="eg1"
+                  id="radiotop2"
+                  // value={actMenu}
+                  checked={radioLeft.restart}
+                  onChange={() => setRadioLeft({ from: false, restart: true, one: false })}
+                />
+                <label className="form-check-label" htmlFor="reportType1">
+                  Abort with error message
+                </label>
+              </div>
+            </div>
+          </CCard>
+        </CTabPane>
+        <CTabPane role="tabpanel" aria-labelledby="profile-tab" visible={eActiveTab === 2}>
+          <CCard className="p-4">
+            <div className="row">
+              <div className="col-6 form-inline">
+                <div className="row">
+                  <div className="col-4">Round:</div>
+                  <div className="col-4">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="rounding"
+                      id="rounding1"
+                      // value={actMenu}
+                      checked={radioLeft.from}
+                      onChange={() => setRadioLeft({ from: true, restart: false, one: false })}
+                    />
+                    <label className="form-check-label ms-1" htmlFor="rounding1">
+                      Up
+                    </label>
+                  </div>
+                  <div className="col-4">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="rounding"
+                      id="rounding2"
+                      // value={actMenu}
+                      checked={radioLeft.from}
+                      onChange={() => setRadioLeft({ from: true, restart: false, one: false })}
+                    />
+                    <label className="form-check-label ms-1" htmlFor="rounding2">
+                      Down
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div className="col-6 form-inline">
+                By Level:
+                <select className="ms-2">
+                  <option>None</option>
+                  <option>Level 1</option>
+                  <option>Level 2</option>
+                  <option>Level 3</option>
+                </select>
+              </div>
+            </div>
+            <hr />
+            <div className="row">
+              <div className="col-12 form-inline">
+                <div className="row">
+                  <div className="col-2">Relief:</div>
+                  <div className="col-4">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="rounding"
+                      id="rounding1"
+                      // value={actMenu}
+                      checked={radioLeft.from}
+                      onChange={() => setRadioLeft({ from: true, restart: false, one: false })}
+                    />
+                    <label className="form-check-label ms-1" htmlFor="rounding1">
+                      Add in
+                    </label>
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col-2"></div>
+                  <div className="col-10 form-inline">
+                    <div className="row">
+                      <div className="col-6">
+                        <input
+                          className="form-check-input"
+                          type="radio"
+                          name="rounding"
+                          id="rounding2"
+                          // value={actMenu}
+                          checked={radioLeft.from}
+                          onChange={() => setRadioLeft({ from: true, restart: false, one: false })}
+                        />
+                        <label className="form-check-label ms-1" htmlFor="rounding2">
+                          Keep separate and round:
+                        </label>
+                      </div>
+                      <div className="col-2">
+                        <input
+                          className="form-check-input"
+                          type="radio"
+                          name="rounding"
+                          id="rounding1"
+                          // value={actMenu}
+                          checked={radioLeft.from}
+                          onChange={() => setRadioLeft({ from: true, restart: false, one: false })}
+                        />
+                        <label className="form-check-label ms-1" htmlFor="rounding1">
+                          Up
+                        </label>
+                      </div>
+
+                      <div className="col-2">
+                        <input
+                          className="form-check-input"
+                          type="radio"
+                          name="rounding"
+                          id="rounding2"
+                          // value={actMenu}
+                          checked={radioLeft.from}
+                          onChange={() => setRadioLeft({ from: true, restart: false, one: false })}
+                        />
+                        <label className="form-check-label ms-1" htmlFor="rounding2">
+                          Down
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </CCard>
+        </CTabPane>
+        <CTabPane role="tabpanel" aria-labelledby="profile-tab" visible={eActiveTab === 3}>
+          <CCard className="p-4">
+            Allocation oof Maintenance Personnel
+            <div className="row">
+              <div className="col-12 ms-2 form-check">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="eg1"
+                  id="radiotop1"
+                  // value={actMenu}
+                  checked={radioLeft.from}
+                  onChange={() => setRadioLeft({ from: true, restart: false, one: false })}
+                />
+                <label className="form-check-label" htmlFor="reportType1">
+                  To the associated equipment cost centre
+                </label>
+              </div>
+              <div className="col-12 ms-2 form-check">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  name="eg1"
+                  id="radiotop2"
+                  // value={actMenu}
+                  checked={radioLeft.restart}
+                  onChange={() => setRadioLeft({ from: false, restart: true, one: false })}
+                />
+                <label className="form-check-label" htmlFor="reportType1">
+                  To the single specified cost centre
+                </label>
+              </div>
+            </div>
+          </CCard>
+        </CTabPane>
+      </CTabContent>
+    </>
+  )
+
   const renderModal = () => {
     return (
       <CModal
@@ -246,7 +539,7 @@ const Analysis = () => {
               <CCard className="p-4"> {renderTab()}</CCard>
             </CTabPane>
             <CTabPane role="tabpanel" aria-labelledby="profile-tab" visible={!isEquipment}>
-              <CCard className="p-4"> Personnel</CCard>
+              <CCard className="p-4"> {renderPersonnelTab()}</CCard>
             </CTabPane>
           </CTabContent>
         </CModalBody>
