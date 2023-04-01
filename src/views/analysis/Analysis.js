@@ -39,6 +39,16 @@ const Analysis = () => {
   const [isEquipment, setIsEquipment] = useState(true)
   const [eActiveTab, setEActiveTab] = useState(1)
   const [pActiveTab, setPActiveTab] = useState(1)
+  const [fleetpotential, setFleetPotential] = useState(1)
+  const [insufficientPeriod, setInsufficientPeriod] = useState(2)
+  const [commissionEquipment, setCommissionEquipment] = useState(1)
+  const [exclusionPeriod, setExclusionPeriod] = useState(0)
+  const [disposeTime, setDisposeTime] = useState(1)
+  const [baseRequired, setBaseRequired] = useState(1)
+  const [relief, setRelief] = useState(1)
+  const [round, setRound] = useState(1)
+  const [separateRound, setSeparateRound] = useState(1)
+  const [allocationMaintenance, setAllocationMaintenance] = useState(1)
 
   const handleOpen = (e) => {
     e.nativeEvent.stopImmediatePropagation()
@@ -67,18 +77,18 @@ const Analysis = () => {
       <CTabContent>
         <CTabPane role="tabpanel" aria-labelledby="home-tab" visible={eActiveTab === 1}>
           <CCard className="p-4">
-            If availble used and owned already equipment operating hours exceeds the fleet
+            If available used and owned already equipment operating hours exceeds the fleet
             potential:
             <div className="row">
               <div className="col-12 ms-2 form-check">
                 <input
                   className="form-check-input"
                   type="radio"
-                  name="eg1"
-                  id="radiotop1"
-                  // value={actMenu}
-                  checked={radioLeft.from}
-                  onChange={() => setRadioLeft({ from: true, restart: false, one: false })}
+                  name="fleetPotential"
+                  id="fleetPotential1"
+                  value="1"
+                  checked={fleetpotential === 1}
+                  onChange={() => setFleetPotential(1)}
                 />
                 <label className="form-check-label" htmlFor="reportType1">
                   Adjust to the maximum available OH
@@ -88,11 +98,11 @@ const Analysis = () => {
                 <input
                   className="form-check-input"
                   type="radio"
-                  name="eg1"
-                  id="radiotop2"
-                  // value={actMenu}
-                  checked={radioLeft.restart}
-                  onChange={() => setRadioLeft({ from: false, restart: true, one: false })}
+                  name="fleetPotential"
+                  id="fleetPotential2"
+                  value="2"
+                  checked={fleetpotential === 2}
+                  onChange={() => setFleetPotential(2)}
                 />
                 <label className="form-check-label" htmlFor="reportType1">
                   Abort with error message
@@ -107,11 +117,11 @@ const Analysis = () => {
                 <input
                   className="form-check-input"
                   type="radio"
-                  name="eg1"
-                  id="radiotop1"
-                  // value={actMenu}
-                  checked={radioLeft.from}
-                  onChange={() => setRadioLeft({ from: true, restart: false, one: false })}
+                  name="insufficientPeriod"
+                  id="insufficientPeriod1"
+                  value="1"
+                  checked={insufficientPeriod === 1}
+                  onChange={() => setInsufficientPeriod(1)}
                 />
                 <label className="form-check-label" htmlFor="reportType1">
                   Create an additional period
@@ -121,11 +131,11 @@ const Analysis = () => {
                 <input
                   className="form-check-input"
                   type="radio"
-                  name="eg1"
-                  id="radiotop2"
-                  // value={actMenu}
-                  checked={radioLeft.restart}
-                  onChange={() => setRadioLeft({ from: false, restart: true, one: false })}
+                  name="insufficientPeriod"
+                  id="insufficientPeriod2"
+                  value="2"
+                  checked={insufficientPeriod === 2}
+                  onChange={() => setInsufficientPeriod(2)}
                 />
                 <label className="form-check-label" htmlFor="reportType1">
                   Abort with error message
@@ -142,11 +152,11 @@ const Analysis = () => {
                 <input
                   className="form-check-input"
                   type="radio"
-                  name="eg1"
-                  id="radiotop1"
-                  // value={actMenu}
-                  checked={radioLeft.from}
-                  onChange={() => setRadioLeft({ from: true, restart: false, one: false })}
+                  name="commissionEquipment"
+                  id="commissionEquipment1"
+                  value="1"
+                  checked={commissionEquipment === 1}
+                  onChange={() => setCommissionEquipment(1)}
                 />
                 <label className="form-check-label" htmlFor="reportType1">
                   Always replacement if spares available
@@ -156,14 +166,20 @@ const Analysis = () => {
                 <input
                   className="form-check-input"
                   type="radio"
-                  name="eg1"
-                  id="radiotop2"
-                  // value={actMenu}
-                  checked={radioLeft.restart}
-                  onChange={() => setRadioLeft({ from: false, restart: true, one: false })}
+                  name="commissionEquipment"
+                  id="commissionEquipment2"
+                  value="2"
+                  checked={commissionEquipment === 2}
+                  onChange={() => setCommissionEquipment(2)}
                 />
                 <label className="form-check-label" htmlFor="reportType1">
-                  Commissioning if the number of lapse days exceed: <input className="w-25" />
+                  Commissioning if the number of lapse days exceed:
+                  <input
+                    disabled={commissionEquipment === 1}
+                    value="1"
+                    type="number"
+                    style={{ width: '35px' }}
+                  />
                 </label>
               </div>
             </div>
@@ -173,41 +189,44 @@ const Analysis = () => {
           <CCard className="p-4">
             <div className="form-inline">
               Number of replacement Exclusion Periods at end of Project Calendar:{' '}
-              <input style={{ width: '35px' }} />
+              <input
+                style={{ width: '35px' }}
+                value={exclusionPeriod}
+                onChange={(e) => setExclusionPeriod(e.current.value)}
+              />
             </div>
             <div className="form-inline">
-              Dispose equipment when no longer required: <input type="checkbox" />
+              Dispose equipment when no longer required: <input checked type="checkbox" />
             </div>
             <CCard className="p-2">
-              Commission equipment units as:
+              When an equipment disposal is identified, dispose:
               <div className="row">
-                <div className="col-12 ms-2 form-check">
+                <div className="col-6 ms-2 form-check">
                   <input
                     className="form-check-input"
                     type="radio"
-                    name="eg1"
-                    id="radiotop1"
-                    // value={actMenu}
-                    checked={radioLeft.from}
-                    onChange={() => setRadioLeft({ from: true, restart: false, one: false })}
+                    name="disposeTime"
+                    id="disposeTime1"
+                    value="1"
+                    checked={disposeTime === 1}
+                    onChange={() => setDisposeTime(1)}
                   />
                   <label className="form-check-label" htmlFor="reportType1">
-                    Always replacement if spares available
+                    In the identified period
                   </label>
                 </div>
-                <div className="col-12 ms-2 form-check">
+                <div className="col-6 ms-2 form-check">
                   <input
                     className="form-check-input"
                     type="radio"
-                    name="eg1"
-                    id="radiotop2"
-                    // value={actMenu}
-                    checked={radioLeft.restart}
-                    onChange={() => setRadioLeft({ from: false, restart: true, one: false })}
+                    name="disposeTime"
+                    id="disposeTime2"
+                    value="2"
+                    checked={disposeTime === 2}
+                    onChange={() => setDisposeTime(2)}
                   />
                   <label className="form-check-label" htmlFor="reportType1">
-                    Commissioning if the number of lapse days exceed:{' '}
-                    <input style={{ width: '35px' }} />
+                    In the next period
                   </label>
                 </div>
               </div>
@@ -238,7 +257,7 @@ const Analysis = () => {
         </CNavItem>
       </CNav>
       <CTabContent>
-        <CTabPane role="tabpanel" aria-labelledby="home-tab" visible={eActiveTab === 1}>
+        <CTabPane role="tabpanel" aria-labelledby="home-tab" visible={pActiveTab === 1}>
           <CCard className="p-4">
             <fieldset>
               <legend>Base required number of operators on:</legend>
@@ -247,11 +266,11 @@ const Analysis = () => {
                   <input
                     className="form-check-input"
                     type="radio"
-                    name="eg1"
-                    id="radiotop1"
-                    // value={actMenu}
-                    checked={radioLeft.from}
-                    onChange={() => setRadioLeft({ from: true, restart: false, one: false })}
+                    name="baseRequired"
+                    id="baseRequired1"
+                    value="1"
+                    checked={baseRequired === 1}
+                    onChange={() => setBaseRequired(1)}
                   />
                   <label className="form-check-label" htmlFor="reportType1">
                     Available Required Equipment
@@ -261,11 +280,11 @@ const Analysis = () => {
                   <input
                     className="form-check-input"
                     type="radio"
-                    name="eg1"
-                    id="radiotop2"
-                    // value={actMenu}
-                    checked={radioLeft.restart}
-                    onChange={() => setRadioLeft({ from: false, restart: true, one: false })}
+                    name="baseRequired"
+                    id="baseRequired2"
+                    value="2"
+                    checked={baseRequired === 2}
+                    onChange={() => setBaseRequired(2)}
                   />
                   <label className="form-check-label" htmlFor="reportType1">
                     Rounded up Available Required Equipment
@@ -275,11 +294,11 @@ const Analysis = () => {
                   <input
                     className="form-check-input"
                     type="radio"
-                    name="eg1"
-                    id="radiotop2"
-                    // value={actMenu}
-                    checked={radioLeft.restart}
-                    onChange={() => setRadioLeft({ from: false, restart: true, one: false })}
+                    name="baseRequired"
+                    id="baseRequired3"
+                    value="3"
+                    checked={baseRequired === 3}
+                    onChange={() => setBaseRequired(3)}
                   />
                   <label className="form-check-label" htmlFor="reportType1">
                     Available Equipment
@@ -289,11 +308,11 @@ const Analysis = () => {
                   <input
                     className="form-check-input"
                     type="radio"
-                    name="eg1"
-                    id="radiotop2"
-                    // value={actMenu}
-                    checked={radioLeft.restart}
-                    onChange={() => setRadioLeft({ from: false, restart: true, one: false })}
+                    name="baseRequired"
+                    id="baseRequired4"
+                    value="4"
+                    checked={baseRequired === 4}
+                    onChange={() => setBaseRequired(4)}
                   />
                   <label className="form-check-label" htmlFor="reportType1">
                     Rounded up Available Equipment
@@ -303,11 +322,11 @@ const Analysis = () => {
                   <input
                     className="form-check-input"
                     type="radio"
-                    name="eg1"
-                    id="radiotop2"
-                    // value={actMenu}
-                    checked={radioLeft.restart}
-                    onChange={() => setRadioLeft({ from: false, restart: true, one: false })}
+                    name="baseRequired"
+                    id="baseRequired5"
+                    value="5"
+                    checked={baseRequired === 5}
+                    onChange={() => setBaseRequired(5)}
                   />
                   <label className="form-check-label" htmlFor="reportType1">
                     All Equipment
@@ -350,7 +369,7 @@ const Analysis = () => {
             </div>
           </CCard>
         </CTabPane>
-        <CTabPane role="tabpanel" aria-labelledby="profile-tab" visible={eActiveTab === 2}>
+        <CTabPane role="tabpanel" aria-labelledby="profile-tab" visible={pActiveTab === 2}>
           <CCard className="p-4">
             <div className="row">
               <div className="col-6 form-inline">
@@ -360,11 +379,11 @@ const Analysis = () => {
                     <input
                       className="form-check-input"
                       type="radio"
-                      name="rounding"
-                      id="rounding1"
-                      // value={actMenu}
-                      checked={radioLeft.from}
-                      onChange={() => setRadioLeft({ from: true, restart: false, one: false })}
+                      name="round"
+                      id="round1"
+                      value="1"
+                      checked={round === 1}
+                      onChange={() => setRound(1)}
                     />
                     <label className="form-check-label ms-1" htmlFor="rounding1">
                       Up
@@ -374,11 +393,11 @@ const Analysis = () => {
                     <input
                       className="form-check-input"
                       type="radio"
-                      name="rounding"
-                      id="rounding2"
-                      // value={actMenu}
-                      checked={radioLeft.from}
-                      onChange={() => setRadioLeft({ from: true, restart: false, one: false })}
+                      name="round"
+                      id="round2"
+                      value="2"
+                      checked={round === 2}
+                      onChange={() => setRound(2)}
                     />
                     <label className="form-check-label ms-1" htmlFor="rounding2">
                       Down
@@ -405,11 +424,11 @@ const Analysis = () => {
                     <input
                       className="form-check-input"
                       type="radio"
-                      name="rounding"
-                      id="rounding1"
-                      // value={actMenu}
-                      checked={radioLeft.from}
-                      onChange={() => setRadioLeft({ from: true, restart: false, one: false })}
+                      name="relief"
+                      id="relief1"
+                      value="1"
+                      checked={relief === 1}
+                      onChange={() => setRelief(1)}
                     />
                     <label className="form-check-label ms-1" htmlFor="rounding1">
                       Add in
@@ -424,11 +443,11 @@ const Analysis = () => {
                         <input
                           className="form-check-input"
                           type="radio"
-                          name="rounding"
-                          id="rounding2"
-                          // value={actMenu}
-                          checked={radioLeft.from}
-                          onChange={() => setRadioLeft({ from: true, restart: false, one: false })}
+                          name="relief"
+                          id="relief2"
+                          value="2"
+                          checked={relief === 2}
+                          onChange={() => setRelief(2)}
                         />
                         <label className="form-check-label ms-1" htmlFor="rounding2">
                           Keep separate and round:
@@ -438,13 +457,14 @@ const Analysis = () => {
                         <input
                           className="form-check-input"
                           type="radio"
-                          name="rounding"
-                          id="rounding1"
-                          // value={actMenu}
-                          checked={radioLeft.from}
-                          onChange={() => setRadioLeft({ from: true, restart: false, one: false })}
+                          name="separateRound"
+                          id="separateRound1"
+                          value="1"
+                          disabled={relief === 1}
+                          checked={separateRound === 1}
+                          onChange={() => setSeparateRound(1)}
                         />
-                        <label className="form-check-label ms-1" htmlFor="rounding1">
+                        <label className="form-check-label ms-1" htmlFor="separateRound1">
                           Up
                         </label>
                       </div>
@@ -453,11 +473,12 @@ const Analysis = () => {
                         <input
                           className="form-check-input"
                           type="radio"
-                          name="rounding"
-                          id="rounding2"
-                          // value={actMenu}
-                          checked={radioLeft.from}
-                          onChange={() => setRadioLeft({ from: true, restart: false, one: false })}
+                          name="separateRound"
+                          id="separateRound2"
+                          value="2"
+                          checked={separateRound === 2}
+                          disabled={relief === 1}
+                          onChange={() => setSeparateRound(2)}
                         />
                         <label className="form-check-label ms-1" htmlFor="rounding2">
                           Down
@@ -470,19 +491,19 @@ const Analysis = () => {
             </div>
           </CCard>
         </CTabPane>
-        <CTabPane role="tabpanel" aria-labelledby="profile-tab" visible={eActiveTab === 3}>
+        <CTabPane role="tabpanel" aria-labelledby="profile-tab" visible={pActiveTab === 3}>
           <CCard className="p-4">
-            Allocation oof Maintenance Personnel
+            Allocation of Maintenance Personnel
             <div className="row">
               <div className="col-12 ms-2 form-check">
                 <input
                   className="form-check-input"
                   type="radio"
-                  name="eg1"
-                  id="radiotop1"
-                  // value={actMenu}
-                  checked={radioLeft.from}
-                  onChange={() => setRadioLeft({ from: true, restart: false, one: false })}
+                  name="allocationMaintenance"
+                  id="allocationMaintenance1"
+                  value="1"
+                  checked={allocationMaintenance === 1}
+                  onChange={() => setAllocationMaintenance(1)}
                 />
                 <label className="form-check-label" htmlFor="reportType1">
                   To the associated equipment cost centre
@@ -492,11 +513,11 @@ const Analysis = () => {
                 <input
                   className="form-check-input"
                   type="radio"
-                  name="eg1"
-                  id="radiotop2"
-                  // value={actMenu}
-                  checked={radioLeft.restart}
-                  onChange={() => setRadioLeft({ from: false, restart: true, one: false })}
+                  name="allocationMaintenance"
+                  id="allocationMaintenance2"
+                  value="2"
+                  checked={allocationMaintenance === 2}
+                  onChange={() => setAllocationMaintenance(2)}
                 />
                 <label className="form-check-label" htmlFor="reportType1">
                   To the single specified cost centre
