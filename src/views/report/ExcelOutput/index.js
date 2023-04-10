@@ -1,12 +1,12 @@
 import EmployeeExcludingReliefByCostCentre from './EmployeeExcludingReliefByCostCentre'
 import EmployeeExcludingReliefSummary from './EmployeeExcludingReliefSummary'
-import EmployeeRequiredReliefByCostCentre from './EmployeeRequiredReliefByCostCentre'
+import EmployeeRequiredforReliefByCostCentre from './EmployeeRequiredforReliefByCostCentre'
 import EmployeeRequiredReliefSummary from './EmployeeRequiredReliefSummary'
 import EmployeeTotalByCostCentre from './EmployeeTotalByCostCentre'
 import EmployeeTotalSummary from './EmployeeTotalSummary'
 import EquipmentDisposalExpiredByCostCentre from './EquipmentDisposalExpiredByCostCentre'
 import EquipmentDisposalExpiredSummary from './EquipmentDisposalExpiredSummary'
-import EquipmentDisposalNotRequiredByCostCentre from './EquipmentDisposalNotRequiredByCostCentre'
+import EquipmentDisposalNotRequiredCostCentre from './EquipmentDisposalNotRequiredCostCentre'
 import EquipmentDisposalNotRequiredSummary from './EquipmentDisposalNotRequiredSummary'
 import EquipmentFleetByCostCentre from './EquipmentFleetByCostCentre'
 import EquipmentFleetSummary from './EquipmentFleetSummary'
@@ -22,20 +22,20 @@ import GeneralFunction from './GeneralFunctionPDF'
 import MaterialsByCostCentre from './MaterialsByCostCentre'
 import MaterialsServicesByCostCentre from './MaterialsServicesByCostCentre'
 import MaterialsServicesConsumedByEquipment from './MaterialsServicesConsumedByEquipment'
+import MaterialsServicesNotConsumedByEquipment from './MaterialsServicesNotConsumedByEquipment'
 import MaterialsServicesSummary from './MaterialsServicesSummary'
 import ServicesByCostCentre from './ServicesByCostCentre'
 
 export const callExport = {
   EmployeeExcludingReliefByCostCentre: (data) => EmployeeExcludingReliefByCostCentre(data),
   EmployeeExcludingReliefSummary: (data) => EmployeeExcludingReliefSummary(data),
-  EmployeeRequiredReliefByCostCentre: (data) => EmployeeRequiredReliefByCostCentre(data),
+  EmployeeRequiredforReliefByCostCentre: (data) => EmployeeRequiredforReliefByCostCentre(data),
   EmployeeRequiredReliefSummary: (data) => EmployeeRequiredReliefSummary(data),
   EmployeeTotalByCostCentre: (data) => EmployeeTotalByCostCentre(data),
   EmployeeTotalSummary: (data) => EmployeeTotalSummary(data),
   EquipmentDisposalExpiredByCostCentre: (data) => EquipmentDisposalExpiredByCostCentre(data),
   EquipmentDisposalExpiredSummary: (data) => EquipmentDisposalExpiredSummary(data),
-  EquipmentDisposalNotRequiredByCostCentre: (data) =>
-    EquipmentDisposalNotRequiredByCostCentre(data),
+  EquipmentDisposalNotRequiredCostCentre: (data) => EquipmentDisposalNotRequiredCostCentre(data),
   EquipmentDisposalNotRequiredSummary: (data) => EquipmentDisposalNotRequiredSummary(data),
   EquipmentFleetByCostCentre: (data) => EquipmentFleetByCostCentre(data),
   EquipmentFleetSummary: (data) => EquipmentFleetSummary(data),
@@ -51,6 +51,7 @@ export const callExport = {
   MaterialsByCostCentre: (data) => MaterialsByCostCentre(data),
   MaterialsServicesByCostCentre: (data) => MaterialsServicesByCostCentre(data),
   MaterialsServicesConsumedByEquipment: (data) => MaterialsServicesConsumedByEquipment(data),
+  MaterialsServicesNotConsumedByEquipment: (data) => MaterialsServicesNotConsumedByEquipment(data),
   MaterialsServicesSummary: (data) => MaterialsServicesSummary(data),
   ServicesByCostCentre: (data) => ServicesByCostCentre(data),
 }
