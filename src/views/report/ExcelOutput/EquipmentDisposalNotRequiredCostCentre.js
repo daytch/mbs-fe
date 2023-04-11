@@ -1,29 +1,29 @@
 import FileSaver from 'file-saver'
 import XLSX from 'sheetjs-style'
 
-const MaterialsServicesConsumedByEquipment = ({excelData, project, projectRepresentation}) => {
-  const listPeriods = excelData[0]?.rptMaterialServiceSchedulePeriodDtos?.map((x) => {
+const EquipmentDisposalNotRequiredByCostCentre = ({excelData, project, projectRepresentation}) => {
+  const listPeriods = excelData[0]?.rptEquipmentSchedulePeriodDtos?.map((x) => {
     return { periodId: x.periodId, positionN: x.positionN, periodName: x.periodName }
   })
 
   const listData = []
   const listParent = []
   let parentTemp = ''
-  
+
   excelData.forEach((item, idx) => {
     let i = listParent.filter((x) => x.costCentreCode === item.costCentreCode)
     if (i.length < 1) {
       listParent.push({ costCentreCode: item.costCentreCode, costCentreName: item.costCentreName })
     }
-    const tempData = item.rptMaterialServiceSchedulePeriodDtos.map((item) => item.value)
+    const tempData = item.rptEquipmentSchedulePeriodDtos.map((item) => item.value)
     if (parentTemp === '') {
       parentTemp = item.costCentreCode
       listData.push([item.costCentreCode, item.costCentreName, ...tempData.map(() => ''), ''])
     } else if (parentTemp !== item.costCentreCode) {
       parentTemp = item.costCentreCode
-      listData.push([item.costCentreCode, item.costCentreName, ...tempData.map(() => ''), ''])
+      listData.push([item.costCentreCode, item.fleetName, ...tempData.map(() => ''), ''])
     }
-    listData.push(['', item.matServName, ...tempData, Math.max(...tempData)])
+    listData.push(['', item.fleetName, ...tempData, Math.max(...tempData)])
   })
 
   const headerCol = ['Code', 'Description']
@@ -48,7 +48,7 @@ const MaterialsServicesConsumedByEquipment = ({excelData, project, projectRepres
   const wb = { Sheets: { data: ws }, SheetNames: ['data'] }
   const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' })
   const data = new Blob([excelBuffer], { type: fileType })
-  FileSaver.saveAs(data, "MaterialsServicesConsumedByEquipment", +fileExtension)
+  FileSaver.saveAs(data, "EquipmentDisposalNotRequiredByCostCentre", +fileExtension)
 }
 
-export default MaterialsServicesConsumedByEquipment
+export default EquipmentDisposalNotRequiredByCostCentre

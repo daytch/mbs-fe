@@ -1,9 +1,7 @@
 import FileSaver from 'file-saver'
 import XLSX from 'sheetjs-style'
 
-const EquipmentDisposalNotRequiredByCostCentre = ({excelData, project, projectRepresentation}) => {
-  console.log('project',project)
-  console.log('projectRepresentation',projectRepresentation)
+const EmployeeRequiredReliefByCostCentre = ({ excelData, project, projectRepresentation }) => {
   const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
   const fileExtension = '.xlsx'
   const merge = XLSX.utils.decode_range('A1:C1')
@@ -14,9 +12,9 @@ const EquipmentDisposalNotRequiredByCostCentre = ({excelData, project, projectRe
     ['Project Representation', '', '', projectRepresentation.projectRepresentationName],
     [''],
     ['Equipment Disposal Expired By Cost Centre'],
-    ["Code","Description"]
+    ['Code', 'Description'],
   ])
-  XLSX.utils.sheet_add_json(ws, excelData, { origin: 'A5' , skipHeader: true})
+  XLSX.utils.sheet_add_json(ws, excelData, { origin: 'A5', skipHeader: true })
   if (!ws['!merges']) ws['!merges'] = []
   ws['!merges'].push(merge)
   ws['!merges'].push(merge1)
@@ -24,7 +22,7 @@ const EquipmentDisposalNotRequiredByCostCentre = ({excelData, project, projectRe
   const wb = { Sheets: { data: ws }, SheetNames: ['data'] }
   const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' })
   const data = new Blob([excelBuffer], { type: fileType })
-  FileSaver.saveAs(data, "EquipmentDisposalNotRequiredByCostCentre", +fileExtension)
+  FileSaver.saveAs(data, 'EmployeeRequiredReliefByCostCentre', +fileExtension)
 }
 
-export default EquipmentDisposalNotRequiredByCostCentre
+export default EmployeeRequiredReliefByCostCentre
