@@ -98,6 +98,7 @@ import {
 
 import './print.css'
 import ContextMenu from './../../components/ContextMenu'
+import { combineDataByCostCentreCode } from './CostOutput/ConvertFunction'
 
 const Styles = styled.div`
   padding: 1rem;
@@ -534,30 +535,31 @@ const CostOutput = ({
     }, [code, title])
 
     useEffect(() => {
+        let hardcode = 57
+        // projRep.projectRepresentationId
+        dispatch(getEquipmentCommissioningByCostCentre(hardcode))
+        dispatch(getEquipmentCommissioningSummary(hardcode))
 
-        dispatch(getEquipmentCommissioningByCostCentre(projRep.projectRepresentationId))
-        dispatch(getEquipmentCommissioningSummary(projRep.projectRepresentationId))
+        dispatch(getEquipmentReplacementByCostCentre(hardcode))
+        dispatch(getEquipmentReplacementSummary(hardcode))
 
-        dispatch(getEquipmentReplacementByCostCentre(projRep.projectRepresentationId))
-        dispatch(getEquipmentReplacementSummary(projRep.projectRepresentationId))
+        dispatch(getEquipmentDisposalValueByCostCentre(hardcode))
+        dispatch(getEquipmentDisposalValueSummary(hardcode))
 
-        dispatch(getEquipmentDisposalValueByCostCentre(projRep.projectRepresentationId))
-        dispatch(getEquipmentDisposalValueSummary(projRep.projectRepresentationId))
-
-        dispatch(getMaterialsServicesCostByCostCentre(projRep.projectRepresentationId))
-        dispatch(getMaterialsCostByCostCentre(projRep.projectRepresentationId))
-        dispatch(getServicesCostByCostCentre(projRep.projectRepresentationId))
-        dispatch(getMaterialsServicesCostConsumedByEquipment(projRep.projectRepresentationId))
-        dispatch(getMaterialsServicesCostNotConsumedByEquipment(projRep.projectRepresentationId))
-        dispatch(getMaterialsServicesCostSummary(projRep.projectRepresentationId))
-        dispatch(getEmployeeExcludingReliefCostByCostCentre(projRep.projectRepresentationId))
-        dispatch(getEmployeeExcludingReliefCostSummary(projRep.projectRepresentationId))
-        dispatch(getEmployeeRequiredForReliefCostByCostCentre(projRep.projectRepresentationId))
-        dispatch(getEmployeeRequiredForReliefCostSummary(projRep.projectRepresentationId))
-        dispatch(getEmployeeTotalCostByCostCentre(projRep.projectRepresentationId))
-        dispatch(getEmployeeTotalCostSummary(projRep.projectRepresentationId))
-        dispatch(getInfrastructureCostByCostCentre(projRep.projectRepresentationId))
-        dispatch(getInfrastructureCostSummary(projRep.projectRepresentationId))
+        dispatch(getMaterialsServicesCostByCostCentre(hardcode))
+        dispatch(getMaterialsCostByCostCentre(hardcode))
+        dispatch(getServicesCostByCostCentre(hardcode))
+        dispatch(getMaterialsServicesCostConsumedByEquipment(hardcode))
+        dispatch(getMaterialsServicesCostNotConsumedByEquipment(hardcode))
+        dispatch(getMaterialsServicesCostSummary(hardcode))
+        dispatch(getEmployeeExcludingReliefCostByCostCentre(hardcode))
+        dispatch(getEmployeeExcludingReliefCostSummary(hardcode))
+        dispatch(getEmployeeRequiredForReliefCostByCostCentre(hardcode))
+        dispatch(getEmployeeRequiredForReliefCostSummary(hardcode))
+        dispatch(getEmployeeTotalCostByCostCentre(hardcode))
+        dispatch(getEmployeeTotalCostSummary(hardcode))
+        dispatch(getInfrastructureCostByCostCentre(hardcode))
+        dispatch(getInfrastructureCostSummary(hardcode))
         // dispatch(getTotalCapitalCosts(projRep.projectRepresentationId))
         // dispatch(getTotalOperatingCosts(projRep.projectRepresentationId))
         // dispatch(getTotalProjectCosts(projRep.projectRepresentationId))
@@ -598,6 +600,8 @@ const CostOutput = ({
     const dtTotalCapitalCosts = useSelector(state => state.CostOutput.dtTotalCapitalCosts)
     const dtTotalOperationCosts = useSelector(state => state.CostOutput.dtTotalOperationCosts)
     const dtTotalProjectsCosts = useSelector(state => state.CostOutput.dtTotalProjectsCosts)
+
+    console.log(combineDataByCostCentreCode(dtEmployeeRequiredForReliefCostByCostCentre))
 
     const renderCostOutputData = {
         EquipmentCommissioningCostByCostCentre: () =>
