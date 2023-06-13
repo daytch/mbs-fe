@@ -1133,42 +1133,44 @@ const PyshicalOutput = ({
         <NoData />
       ),
   }
-  console.log('code: ', code)
-  const onPreviewPDF = () => {}
 
   const handleExport = () => {
     const excelDataExport = {
       EquipmentRequiredByCostCentre: dtEquipmentRequiredByCostCentre,
-      EquipmentRequiredSummary:dtEquipmentRequiredSummary,
+      EquipmentRequiredSummary: dtEquipmentRequiredSummary,
       EquipmentReplacementByCostCentre: dtEquipmentReplacementByCostCentre,
-      EquipmentReplacementSummary:dtEquipmentReplacementSummary,
-      EquipmentDisposalExpiredByCostCentre:dtEquipmentDisposalExpiredByCostCentre,
-      EquipmentDisposalExpiredSummary:dtEquipmentDisposalExpiredSummary,
-      EquipmentDisposalNotRequiredCostCentre:dtEquipmentDisposalNotRequiredByCostCentre,
-      EquipmentDisposalNotRequiredSummary:dtEquipmentDisposalNotRequiredSummary,
-      EquipmentTotalDisposalByCostCentre:dtEquipmentTotalDisposalByCostCentre,
+      EquipmentReplacementSummary: dtEquipmentReplacementSummary,
+      EquipmentDisposalExpiredByCostCentre: dtEquipmentDisposalExpiredByCostCentre,
+      EquipmentDisposalExpiredSummary: dtEquipmentDisposalExpiredSummary,
+      EquipmentDisposalNotRequiredCostCentre: dtEquipmentDisposalNotRequiredByCostCentre,
+      EquipmentDisposalNotRequiredSummary: dtEquipmentDisposalNotRequiredSummary,
+      EquipmentTotalDisposalByCostCentre: dtEquipmentTotalDisposalByCostCentre,
       EquipmentTotalDisposalSummary: dtEquipmentTotalDisposalSummary,
       EquipmentFleetByCostCentre: dtEquipmentFleetByCostCentre,
       EquipmentFleetSummary: dtEquipmentFleetSummary,
-      EquipmentUtilisationByCostCentre:dtEquipmentFleetByCostCentre,
-      EquipmentUtilisationSummary:dtEquipmentUtilisationSummary,
-      MaterialsServicesByCostCentre:dtMaterialsServicesByCostCentre,
-      MaterialsByCostCentre:dtMaterialsByCostCentre,
-      ServicesByCostCentre:dtServicesByCostCentre,
-      MaterialsServicesConsumedByEquipment:dtMaterialsConsumedByEquipment,
-      MaterialsServicesNotConsumedByEquipment:dtMaterialsNotConsumedByEquipment,
-      MaterialsServicesSummary:dtMaterialsServicesSummary,
-      EmployeeExcludingReliefByCostCentre:dtEmployeeExcludingReliefByCostCentre,
-      EmployeeExcludingReliefSummary:dtEmployeeExcludingReliefSummary,
-      EmployeeRequiredforReliefByCostCentre:dtEmployeeRequiredReliefByCostCentre,
-      EmployeeRequiredforReliefSummary:dtEmployeeRequiredReliefSummary,
-      EmployeeTotalByCostCentre:dtEmployeeTotalByCostCentre,
-      EmployeeTotalSummary:dtEmployeeTotalSummary,
-      GeneralFunction:dtGeneralFunction,
+      EquipmentUtilisationByCostCentre: dtEquipmentFleetByCostCentre,
+      EquipmentUtilisationSummary: dtEquipmentUtilisationSummary,
+      MaterialsServicesByCostCentre: dtMaterialsServicesByCostCentre,
+      MaterialsByCostCentre: dtMaterialsByCostCentre,
+      ServicesByCostCentre: dtServicesByCostCentre,
+      MaterialsServicesConsumedByEquipment: dtMaterialsConsumedByEquipment,
+      MaterialsServicesNotConsumedByEquipment: dtMaterialsNotConsumedByEquipment,
+      MaterialsServicesSummary: dtMaterialsServicesSummary,
+      EmployeeExcludingReliefByCostCentre: dtEmployeeExcludingReliefByCostCentre,
+      EmployeeExcludingReliefSummary: dtEmployeeExcludingReliefSummary,
+      EmployeeRequiredforReliefByCostCentre: dtEmployeeRequiredReliefByCostCentre,
+      EmployeeRequiredforReliefSummary: dtEmployeeRequiredReliefSummary,
+      EmployeeTotalByCostCentre: dtEmployeeTotalByCostCentre,
+      EmployeeTotalSummary: dtEmployeeTotalSummary,
+      GeneralFunction: dtGeneralFunction,
     }
-    console.log('code',code)
-    console.log('excelDataExport',excelDataExport[code])
-    callExport[code]({ excelData: excelDataExport[code], project: proj, projectRepresentation: projRep })
+    console.log('code', code)
+    console.log('excelDataExport', excelDataExport[code])
+    callExport[code]({
+      excelData: excelDataExport[code],
+      project: proj,
+      projectRepresentation: projRep,
+    })
   }
 
   return (
