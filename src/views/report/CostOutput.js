@@ -560,9 +560,9 @@ const CostOutput = ({
         dispatch(getEmployeeTotalCostSummary(hardcode))
         dispatch(getInfrastructureCostByCostCentre(hardcode))
         dispatch(getInfrastructureCostSummary(hardcode))
-        // dispatch(getTotalCapitalCosts(projRep.projectRepresentationId))
-        // dispatch(getTotalOperatingCosts(projRep.projectRepresentationId))
-        // dispatch(getTotalProjectCosts(projRep.projectRepresentationId))
+        dispatch(getTotalCapitalCosts(hardcode))
+        dispatch(getTotalOperatingCosts(hardcode))
+        dispatch(getTotalProjectCosts(hardcode))
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
