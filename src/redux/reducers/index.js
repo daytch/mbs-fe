@@ -39,6 +39,7 @@ import { MaterialFunction } from './materialFunctionReducer'
 import { FunctionBuilder } from './functionBuilderReducer'
 import { PhysicalOutput } from './physicalOutputReducer'
 import { CostOutput } from './costOutputReducer'
+import { Analysis } from './analysisReducer'
 
 const appReducer = combineReducers({
   getLogin,
@@ -81,6 +82,7 @@ const appReducer = combineReducers({
   FunctionBuilder,
   PhysicalOutput,
   CostOutput,
+  Analysis,
 })
 
 const rootReducer = (state, action) => {

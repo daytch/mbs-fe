@@ -352,10 +352,17 @@ const Home = () => {
       })
       .catch((err) => {
         setLoading(false)
-        if (err.response.status === 401) {
+        debugger
+        if (err.message && err?.response?.status === 401) {
           Swal.fire({
             title: 'Validation Error',
             text: 'Your Email or Password wrong!',
+            icon: 'error',
+          })
+        } else {
+          Swal.fire({
+            title: 'Validation Error',
+            text: err.message,
             icon: 'error',
           })
         }
@@ -440,7 +447,7 @@ const Home = () => {
         alignment="center"
         scrollable
         visible={visible}
-        onClose={() => setVisible(false)}
+        // onClose={() => setVisible(false)}
         className="login-card"
       >
         <CCol md={12}>
@@ -643,7 +650,7 @@ const Home = () => {
       </CModal>
     )
   }
-
+  console.log('visible:', visible)
   return (
     <React.Fragment>
       <Spinner loading={loading} />

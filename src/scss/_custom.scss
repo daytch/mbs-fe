@@ -2,30 +2,67 @@
 .simplebar-mask {
   background-color: #fff500 !important;
 }
+
 .sidebar-nav {
   background-color: #fff500 !important;
 }
+
 .sidebar-toggler {
   background-color: #fff500 !important;
 }
+
 .nav-icon {
   color: black !important;
 }
+
 ul li {
   color: #141527 !important;
 }
+
 ul li a {
   color: #141527 !important;
 }
+
 .sidebar-brand {
   background-color: #e6e27c !important;
 }
+
 .disabled-cursor {
   cursor: default;
 }
+
 .breadcrumb {
   font-size: small;
 }
+
 .breadcrumb-item a {
   text-decoration: none;
+}
+
+fieldset {
+  display: block !important;
+  margin-inline-start: 2px !important;
+  margin-inline-end: 2px !important;
+  padding-block-start: 0.35em !important;
+  padding-inline-start: 0.75em !important;
+  padding-inline-end: 0.75em !important;
+  padding-block-end: 0.625em !important;
+  min-inline-size: min-content !important;
+  border-width: 2px !important;
+  border-style: groove !important;
+  border-color: rgb(192, 192, 192) !important;
+  border-image: initial !important;
+}
+
+legend {
+  display: block !important;
+  padding-inline-start: 2px !important;
+  padding-inline-end: 2px !important;
+  border-width: initial !important;
+  border-style: none !important;
+  border-color: initial !important;
+  border-image: initial !important;
+  float: none !important;
+  width: inherit !important;
+  font-size: 1em !important;
 }
