@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import {
   CCol,
   CRow,
@@ -14,8 +14,15 @@ import {
   CNavLink,
   CTabContent,
   CTabPane,
+  CToastBody,
+  CToastClose,
+  CToast,
+  CToaster,
 } from '@coreui/react'
 import { makeStyles } from '@material-ui/core/styles'
+import { useDispatch, useSelector } from 'react-redux'
+import { postAnalysis } from '../../redux/actions'
+import Spinner from '../../components/Spinner'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
 import TableRow from '@material-ui/core/TableRow'
@@ -32,12 +39,15 @@ const useStyles = makeStyles({
 })
 
 const Analysis = () => {
+  const toaster = useRef()
   const classes = useStyles()
+  const dispatch = useDispatch()
   const [radioTop, setRadioTop] = useState({ full: true, physical: false, cost: false })
   const [radioLeft, setRadioLeft] = useState({ from: true, restart: false, one: false })
   const [visible, setVisible] = useState(false)
   const [isEquipment, setIsEquipment] = useState(true)
   const [eActiveTab, setEActiveTab] = useState(1)
+  const [toast, addToast] = useState(0)
   const [pActiveTab, setPActiveTab] = useState(1)
   const [fleetpotential, setFleetPotential] = useState(1)
   const [insufficientPeriod, setInsufficientPeriod] = useState(2)
@@ -49,10 +59,47 @@ const Analysis = () => {
   const [round, setRound] = useState(1)
   const [separateRound, setSeparateRound] = useState(1)
   const [allocationMaintenance, setAllocationMaintenance] = useState(1)
+  const [analysisStart, setAnalysisStart] = useState(1)
+
+  const isLoading = useSelector((state) => state.Analysis.loading)
+  const error = useSelector((state) => state.Analysis.error)
+  const message = useSelector((state) => state.Analysis.message)
+  const isChangeState = useSelector((state) => state.Analysis.isChangeState)
+
+  const setMessageProcess = (isOnProcess) => {
+    if (isOnProcess === false) {
+      if (message !== '' && !isChangeState) {
+        addToast(ToastSuccessDelete)
+      } else if (error !== '') {
+        addToast(ToastError(error))
+      } else if (isChangeState) {
+        setVisible(false)
+        addToast(ToastSuccess(message))
+      }
+    }
+  }
+
+  useEffect(() => {
+    setMessageProcess(isLoading)
+    // eslint-disable-next-line
+  }, [isLoading])
 
   const handleOpen = (e) => {
     e.nativeEvent.stopImmediatePropagation()
     setVisible(true)
+  }
+
+  const handleCompute = (e) => {
+    const project = JSON.parse(localStorage.getItem('project'))
+
+    var payload = {
+      projectRepresentationN: project.projectSubCategoryID,
+      analysisType: radioTop.full ? 1 : radioTop.physical ? 2 : 3,
+      analysisStart: radioLeft.from ? 1 : radioLeft.restart ? 2 : 3,
+      listTask: analysisStart,
+      currency: project.currencyAbbr,
+    }
+    dispatch(postAnalysis(payload))
   }
 
   const renderTab = () => (
@@ -573,162 +620,266 @@ const Analysis = () => {
       </CModal>
     )
   }
-  console.log('visible:', visible)
-  return (
-    <CRow>
-      <CCol xs={12}>
-        <CCard className="p-4">
-          {renderModal()}
-          <div className="container">
-            <div className="row border border-dark p-2">
-              <div className="row">
-                <div className="col-3 form-check">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    name="radiotop"
-                    id="radiotop1"
-                    // value={actMenu}
-                    checked={radioTop.full}
-                    onChange={() => setRadioTop({ full: true, physical: false, cost: false })}
-                  />
-                  <label className="form-check-label" htmlFor="reportType1">
-                    Full Analysis
-                  </label>
-                </div>
-                <div className="col-5 form-check">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    name="radiotop"
-                    id="radiotop2"
-                    // value={actMenu}
-                    checked={radioTop.physical}
-                    onChange={() => setRadioTop({ full: false, physical: true, cost: false })}
-                  />
-                  <label className="form-check-label" htmlFor="reportType2">
-                    Pyshical Analysis only
-                  </label>
-                </div>
-                <div className="col-4 form-check">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    name="radiotop"
-                    id="radiotop3"
-                    // value={actMenu}
-                    checked={radioTop.cost}
-                    onChange={() => setRadioTop({ full: false, physical: false, cost: true })}
-                  />
-                  <label className="form-check-label" htmlFor="reportType3">
-                    Cost Analysis only
-                  </label>
-                </div>
-              </div>
-            </div>
 
-            <div className="row border border-dark mt-2 p-2">
-              <div className="col-3">
+  const handleClickAnalysis = (e) => {
+    var analysis =
+      typeof Number(e.currentTarget.dataset.id) !== 'number'
+        ? analysisStart
+        : Number(e.currentTarget.dataset.id)
+    setAnalysisStart(analysis)
+  }
+
+  useEffect(() => {
+    console.log('analysisStart:', analysisStart)
+  }, [analysisStart])
+
+  const ToastSuccess = (msg) => (
+    <CToast className="align-items-center" color="success">
+      <div className="d-flex">
+        <CToastBody>{msg ? msg : 'Data has been saved!'}</CToastBody>
+        <CToastClose className="me-2 m-auto" />
+      </div>
+    </CToast>
+  )
+
+  const ToastSuccessDelete = (
+    <CToast className="align-items-center" color="success">
+      <div className="d-flex">
+        <CToastBody>Data has been deleted!</CToastBody>
+        <CToastClose className="me-2 m-auto" />
+      </div>
+    </CToast>
+  )
+
+  const ToastError = (errorText) => {
+    return (
+      <CToast className="align-items-center" color="warning">
+        <div className="d-flex">
+          <CToastBody>{errorText}</CToastBody>
+          <CToastClose className="me-2 m-auto" />
+        </div>
+      </CToast>
+    )
+  }
+
+  return (
+    <>
+      <Spinner loading={isLoading} />
+      <CRow>
+        <CCol xs={12}>
+          <CToaster ref={toaster} push={toast} placement="bottom-end" />
+          <CCard className="p-4">
+            {renderModal()}
+            <div className="container">
+              <div className="row border border-dark p-2">
                 <div className="row">
-                  <div className="col-12 form-check">
+                  <div className="col-3 form-check">
                     <input
                       className="form-check-input"
                       type="radio"
-                      name="radioleft"
+                      name="radiotop"
                       id="radiotop1"
                       // value={actMenu}
-                      checked={radioLeft.from}
-                      onChange={() => setRadioLeft({ from: true, restart: false, one: false })}
+                      checked={radioTop.full}
+                      onChange={() => setRadioTop({ full: true, physical: false, cost: false })}
                     />
-                    <label className="form-check-label" htmlFor="reportType1">
-                      From beginning
+                    <label className="form-check-label" htmlFor="radiotop1">
+                      Full Analysis
                     </label>
                   </div>
-                  <div className="col-12 mt-4 form-check">
+                  <div className="col-5 form-check">
                     <input
                       className="form-check-input"
                       type="radio"
-                      name="radioleft"
+                      name="radiotop"
                       id="radiotop2"
                       // value={actMenu}
-                      checked={radioLeft.restart}
-                      onChange={() => setRadioLeft({ from: false, restart: true, one: false })}
+                      checked={radioTop.physical}
+                      onChange={() => setRadioTop({ full: false, physical: true, cost: false })}
                     />
-                    <label className="form-check-label" htmlFor="reportType1">
-                      Restart from:
+                    <label className="form-check-label" htmlFor="radiotop2">
+                      Pyshical Analysis only
                     </label>
                   </div>
-                  <div className="col-12 mt-4 form-check">
+                  <div className="col-4 form-check">
                     <input
                       className="form-check-input"
                       type="radio"
-                      name="radioleft"
+                      name="radiotop"
                       id="radiotop3"
                       // value={actMenu}
-                      checked={radioLeft.one}
-                      onChange={() => setRadioLeft({ from: false, restart: false, one: true })}
+                      checked={radioTop.cost}
+                      onChange={() => setRadioTop({ full: false, physical: false, cost: true })}
                     />
-                    <label className="form-check-label" htmlFor="reportType1">
-                      Do one part only
+                    <label className="form-check-label" htmlFor="radiotop3">
+                      Cost Analysis only
                     </label>
                   </div>
                 </div>
               </div>
-              <div className="col-9">
-                <div className="overflow-auto">
-                  <Table className={classes.table} aria-label="Project table" size="small">
-                    <TableBody>
-                      {radioTop.full || radioTop.physical ? (
-                        <>
-                          <TableRow hover>
-                            <TableCell>Equipment Operating Hours</TableCell>
+
+              <div className="row border border-dark mt-2 p-2">
+                <div className="col-3">
+                  <div className="row">
+                    <div className="col-12 form-check">
+                      <input
+                        className="form-check-input"
+                        type="radio"
+                        name="radioleft"
+                        id="radioleft1"
+                        // value={actMenu}
+                        checked={radioLeft.from}
+                        onChange={() => setRadioLeft({ from: true, restart: false, one: false })}
+                      />
+                      <label className="form-check-label" htmlFor="radioleft1">
+                        From beginning
+                      </label>
+                    </div>
+                    <div className="col-12 mt-4 form-check">
+                      <input
+                        className="form-check-input"
+                        type="radio"
+                        name="radioleft"
+                        id="radioleft2"
+                        // value={actMenu}
+                        checked={radioLeft.restart}
+                        onChange={() => setRadioLeft({ from: false, restart: true, one: false })}
+                      />
+                      <label className="form-check-label" htmlFor="radioleft2">
+                        Restart from:
+                      </label>
+                    </div>
+                    <div className="col-12 mt-4 form-check">
+                      <input
+                        className="form-check-input"
+                        type="radio"
+                        name="radioleft"
+                        id="radioleft3"
+                        // value={actMenu}
+                        checked={radioLeft.one}
+                        onChange={() => setRadioLeft({ from: false, restart: false, one: true })}
+                      />
+                      <label className="form-check-label" htmlFor="radioleft3">
+                        Do one part only
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-9">
+                  <div className="overflow-auto">
+                    <Table className={classes.table} aria-label="Project table" size="small">
+                      <TableBody>
+                        {radioTop.full || radioTop.physical ? (
+                          <>
+                            <TableRow
+                              onClick={handleClickAnalysis}
+                              selected={analysisStart === 1}
+                              data-id="1"
+                              hover
+                            >
+                              <TableCell style={{ cursor: 'pointer' }}>
+                                Equipment Operating Hours
+                              </TableCell>
+                            </TableRow>
+                            <TableRow
+                              onClick={handleClickAnalysis}
+                              selected={analysisStart === 2}
+                              data-id="2"
+                              hover
+                            >
+                              <TableCell style={{ cursor: 'pointer' }}>
+                                Materials and Services
+                              </TableCell>
+                            </TableRow>
+                            <TableRow
+                              onClick={handleClickAnalysis}
+                              selected={analysisStart === 3}
+                              data-id="3"
+                              hover
+                            >
+                              <TableCell style={{ cursor: 'pointer' }}>
+                                Required Equipment
+                              </TableCell>
+                            </TableRow>
+                            <TableRow
+                              onClick={handleClickAnalysis}
+                              selected={analysisStart === 4}
+                              data-id="4"
+                              hover
+                            >
+                              <TableCell style={{ cursor: 'pointer' }}>
+                                Commissioning and Disposal
+                              </TableCell>
+                            </TableRow>
+                            <TableRow
+                              onClick={handleClickAnalysis}
+                              selected={analysisStart === 5}
+                              data-id="5"
+                              hover
+                            >
+                              <TableCell>Equipment</TableCell>
+                            </TableRow>
+                            <TableRow
+                              onClick={handleClickAnalysis}
+                              selected={analysisStart === 6}
+                              data-id="6"
+                              hover
+                            >
+                              <TableCell>Equipment Utilization</TableCell>
+                            </TableRow>
+                            <TableRow
+                              onClick={handleClickAnalysis}
+                              selected={analysisStart === 7}
+                              data-id="7"
+                              hover
+                            >
+                              <TableCell>Employees</TableCell>
+                            </TableRow>
+                            <TableRow
+                              onClick={handleClickAnalysis}
+                              selected={analysisStart === 8}
+                              data-id="8"
+                              hover
+                            >
+                              <TableCell>General Functiomn Output</TableCell>
+                            </TableRow>
+                          </>
+                        ) : null}
+                        {radioTop.full || radioTop.cost ? (
+                          <TableRow
+                            onClick={handleClickAnalysis}
+                            selected={analysisStart === 9}
+                            data-id="9"
+                            hover
+                          >
+                            <TableCell>Costs</TableCell>
                           </TableRow>
-                          <TableRow hover>
-                            <TableCell>Materials and Services</TableCell>
-                          </TableRow>
-                          <TableRow hover>
-                            <TableCell>Required Equipment</TableCell>
-                          </TableRow>
-                          <TableRow hover>
-                            <TableCell>Commissioning and Disposal</TableCell>
-                          </TableRow>
-                          <TableRow hover>
-                            <TableCell>Equipment</TableCell>
-                          </TableRow>
-                          <TableRow hover>
-                            <TableCell>Equipment Utilization</TableCell>
-                          </TableRow>
-                          <TableRow hover>
-                            <TableCell>Employees</TableCell>
-                          </TableRow>
-                          <TableRow hover>
-                            <TableCell>General Functiomn Output</TableCell>
-                          </TableRow>
-                        </>
-                      ) : null}
-                      {radioTop.full || radioTop.cost ? (
-                        <TableRow hover>
-                          <TableCell>Costs</TableCell>
-                        </TableRow>
-                      ) : null}
-                    </TableBody>
-                  </Table>
+                        ) : null}
+                      </TableBody>
+                    </Table>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <CModalFooter className="mt-2">
-            <CButton color="secondary" onClick={handleOpen} size="sm">
-              Options
-            </CButton>
-            <CButton color="primary" type="submit" size="sm" className="ms-2">
-              Compute
-            </CButton>
-          </CModalFooter>
-        </CCard>
-      </CCol>
-    </CRow>
+            <CModalFooter className="mt-2">
+              <CButton color="secondary" onClick={handleOpen} size="sm">
+                Options
+              </CButton>
+              <CButton
+                color="primary"
+                onClick={handleCompute}
+                type="submit"
+                size="sm"
+                className="ms-2"
+              >
+                Compute
+              </CButton>
+            </CModalFooter>
+          </CCard>
+        </CCol>
+      </CRow>
+    </>
   )
 }
 

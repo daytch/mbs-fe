@@ -1,7 +1,7 @@
 import FileSaver from 'file-saver'
 import XLSX from 'sheetjs-style'
 
-const MaterialsServicesConsumedByEquipment = ({excelData, project, projectRepresentation}) => {
+const MaterialsServicesNotConsumedByEquipment = ({excelData, project, projectRepresentation}) => {
   const listPeriods = excelData[0]?.rptMaterialServiceSchedulePeriodDtos?.map((x) => {
     return { periodId: x.periodId, positionN: x.positionN, periodName: x.periodName }
   })
@@ -48,7 +48,7 @@ const MaterialsServicesConsumedByEquipment = ({excelData, project, projectRepres
   const wb = { Sheets: { data: ws }, SheetNames: ['data'] }
   const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' })
   const data = new Blob([excelBuffer], { type: fileType })
-  FileSaver.saveAs(data, "MaterialsServicesConsumedByEquipment", +fileExtension)
+  FileSaver.saveAs(data, "MaterialsServicesNotConsumedByEquipment", +fileExtension)
 }
 
-export default MaterialsServicesConsumedByEquipment
+export default MaterialsServicesNotConsumedByEquipment

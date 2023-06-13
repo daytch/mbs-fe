@@ -1,9 +1,33 @@
 import FileSaver from 'file-saver'
 import XLSX from 'sheetjs-style'
 
-const EquipmentFleetByCostCentre = ({excelData, project, projectRepresentation}) => {
-  console.log('project',project)
-  console.log('projectRepresentation',projectRepresentation)
+const EquipmentFleetByCostCentre = ({ excelData, project, projectRepresentation }) => {
+  const listPeriods = excelData[0]?.rptEquipmentSchedulePeriodDtos?.map((x) => {
+    return { periodId: x.periodId, positionN: x.positionN, periodName: x.periodName }
+  })
+
+  const listData = []
+  const listParent = []
+  let parentTemp = ''
+
+  excelData.forEach((item, idx) => {
+    let i = listParent.filter((x) => x.costCentreCode === item.costCentreCode)
+    if (i.length < 1) {
+      listParent.push({ costCentreCode: item.costCentreCode, costCentreName: item.costCentreName })
+    }
+    const tempData = item.rptEquipmentSchedulePeriodDtos.map((item) => item.value)
+    if (parentTemp === '') {
+      parentTemp = item.costCentreCode
+      listData.push([item.costCentreCode, item.costCentreName, ...tempData.map(() => ''), ''])
+    } else if (parentTemp !== item.costCentreCode) {
+      parentTemp = item.costCentreCode
+      listData.push([item.costCentreCode, item.fleetName, ...tempData.map(() => ''), ''])
+    }
+    listData.push(['', item.fleetName, ...tempData, Math.max(...tempData)])
+  })
+
+  const headerCol = ['Code', 'Description']
+
   const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
   const fileExtension = '.xlsx'
   const merge = XLSX.utils.decode_range('A1:C1')
@@ -13,10 +37,10 @@ const EquipmentFleetByCostCentre = ({excelData, project, projectRepresentation})
     ['Project', '', '', project.projectName],
     ['Project Representation', '', '', projectRepresentation.projectRepresentationName],
     [''],
-    ['Equipment Total Disposal Summary'],
-    ["No","Country Name","Full Currency Name","Currency Abbreviation"]
+    ['Equipment Disposal Expired By Cost Centre'],
+    [...headerCol, ...listPeriods.map((item) => item.periodName), 'Max'],
   ])
-  XLSX.utils.sheet_add_json(ws, excelData, { origin: 'A5' , skipHeader: true})
+  XLSX.utils.sheet_add_aoa(ws, listData, { origin: 'A6' })
   if (!ws['!merges']) ws['!merges'] = []
   ws['!merges'].push(merge)
   ws['!merges'].push(merge1)
@@ -24,7 +48,7 @@ const EquipmentFleetByCostCentre = ({excelData, project, projectRepresentation})
   const wb = { Sheets: { data: ws }, SheetNames: ['data'] }
   const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' })
   const data = new Blob([excelBuffer], { type: fileType })
-  FileSaver.saveAs(data, "EquipmentFleetByCostCentre", +fileExtension)
+  FileSaver.saveAs(data, 'EquipmentFleetByCostCentre', +fileExtension)
 }
 
 export default EquipmentFleetByCostCentre

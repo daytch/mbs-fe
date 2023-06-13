@@ -352,10 +352,17 @@ const Home = () => {
       })
       .catch((err) => {
         setLoading(false)
-        if (err.response.status === 401) {
+        debugger
+        if (err.message && err?.response?.status === 401) {
           Swal.fire({
             title: 'Validation Error',
             text: 'Your Email or Password wrong!',
+            icon: 'error',
+          })
+        } else {
+          Swal.fire({
+            title: 'Validation Error',
+            text: err.message,
             icon: 'error',
           })
         }

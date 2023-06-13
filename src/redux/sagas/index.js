@@ -39,6 +39,7 @@ import MaterialFunction from './materialFunctionSaga'
 import FunctionBuilder from './functionBuilderSaga'
 import PhysicalOutput from './physicalOutputSaga'
 import CostOutput from './costOutputSaga'
+import Analysis from './analysisSaga'
 
 export default function* rootSaga() {
   yield all([
@@ -82,5 +83,6 @@ export default function* rootSaga() {
     FunctionBuilder(),
     PhysicalOutput(),
     CostOutput(),
+    Analysis(),
   ])
 }

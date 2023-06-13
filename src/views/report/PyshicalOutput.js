@@ -145,41 +145,6 @@ const Styles = styled.div`
   }
 `
 
-const excelExportData = [
-  {
-    'first name': 'arul',
-    'Last Name': 'prasat',
-    'employee code': '001',
-    'mobile phone': '1234567890',
-    DOB: '01-01-1995',
-    Address: 'Chennai',
-  },
-  {
-    'first name': 'arul',
-    'Last Name': 'prasat',
-    'employee code': '001',
-    'mobile phone': '1234567890',
-    DOB: '01-01-1995',
-    Address: 'Chennai',
-  },
-  {
-    'first name': 'arul',
-    'Last Name': 'prasat',
-    'employee code': '001',
-    'mobile phone': '1234567890',
-    DOB: '01-01-1995',
-    Address: 'Chennai',
-  },
-  {
-    'first name': 'arul',
-    'Last Name': 'prasat',
-    'employee code': '001',
-    'mobile phone': '1234567890',
-    DOB: '01-01-1995',
-    Address: 'Chennai',
-  },
-]
-
 const EditableCell = ({
   updateEquipmentModelCosts,
   currencies,
