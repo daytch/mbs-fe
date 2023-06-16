@@ -1,9 +1,25 @@
 import FileSaver from 'file-saver'
 import XLSX from 'sheetjs-style'
 
-const EmployeeTotalSummary = ({excelData, project, projectRepresentation}) => {
-  console.log('project',project)
-  console.log('projectRepresentation',projectRepresentation)
+const EmployeeTotalSummary = ({ excelData, project, projectRepresentation }) => {
+  console.log('project', project)
+  console.log('projectRepresentation', projectRepresentation)
+  console.log('excelData', excelData)
+
+  const listPeriods = excelData[0]?.rptEmployeeSchedulePeriodSummaryDtos?.map((x) => {
+    return { periodId: x.periodId, positionN: x.value, periodName: x.periodName }
+  })
+
+  const listData = []
+  const listParent = []
+  let parentTemp = ''
+
+  excelData.forEach((item, idx) => {
+    const tempData = item.rptEmployeeSchedulePeriodSummaryDtos.map((item) => item.value)
+    listData.push([item.groupName, ...tempData, Math.max(...tempData)])
+  })
+
+  const headerCol = ['Employee Name']
   const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
   const fileExtension = '.xlsx'
   const merge = XLSX.utils.decode_range('A1:C1')
@@ -14,9 +30,9 @@ const EmployeeTotalSummary = ({excelData, project, projectRepresentation}) => {
     ['Project Representation', '', '', projectRepresentation.projectRepresentationName],
     [''],
     ['Employee Total Summary'],
-    ["Employee Name"]
+    [...headerCol, ...listPeriods.map((item) => item.periodName), 'Max'],
   ])
-  XLSX.utils.sheet_add_json(ws, excelData, { origin: 'A5' , skipHeader: true})
+  XLSX.utils.sheet_add_aoa(ws, listData, { origin: 'A6' })
   if (!ws['!merges']) ws['!merges'] = []
   ws['!merges'].push(merge)
   ws['!merges'].push(merge1)
@@ -24,7 +40,7 @@ const EmployeeTotalSummary = ({excelData, project, projectRepresentation}) => {
   const wb = { Sheets: { data: ws }, SheetNames: ['data'] }
   const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' })
   const data = new Blob([excelBuffer], { type: fileType })
-  FileSaver.saveAs(data, "EmployeeTotalSummary", +fileExtension)
+  FileSaver.saveAs(data, 'EmployeeTotalSummary', +fileExtension)
 }
 
 export default EmployeeTotalSummary

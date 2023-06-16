@@ -1,9 +1,10 @@
 import FileSaver from 'file-saver'
 import XLSX from 'sheetjs-style'
 
-const EquipmentFleetSummary = ({excelData, project, projectRepresentation}) => {
-  console.log('project',project)
-  console.log('projectRepresentation',projectRepresentation)
+const EquipmentFleetSummary = ({ excelData, project, projectRepresentation }) => {
+  console.log('project', project)
+  console.log('projectRepresentation', projectRepresentation)
+  console.log('excelData', excelData)
   const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
   const fileExtension = '.xlsx'
   const merge = XLSX.utils.decode_range('A1:C1')
@@ -14,9 +15,9 @@ const EquipmentFleetSummary = ({excelData, project, projectRepresentation}) => {
     ['Project Representation', '', '', projectRepresentation.projectRepresentationName],
     [''],
     ['Equipment Total Disposal Summary'],
-    ["No","Country Name","Full Currency Name","Currency Abbreviation"]
+    ['No', 'Country Name', 'Full Currency Name', 'Currency Abbreviation'],
   ])
-  XLSX.utils.sheet_add_json(ws, excelData, { origin: 'A5' , skipHeader: true})
+  XLSX.utils.sheet_add_json(ws, excelData, { origin: 'A5', skipHeader: true })
   if (!ws['!merges']) ws['!merges'] = []
   ws['!merges'].push(merge)
   ws['!merges'].push(merge1)
@@ -24,7 +25,7 @@ const EquipmentFleetSummary = ({excelData, project, projectRepresentation}) => {
   const wb = { Sheets: { data: ws }, SheetNames: ['data'] }
   const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' })
   const data = new Blob([excelBuffer], { type: fileType })
-  FileSaver.saveAs(data, "EquipmentFleetSummary", +fileExtension)
+  FileSaver.saveAs(data, 'EquipmentFleetSummary', +fileExtension)
 }
 
 export default EquipmentFleetSummary
